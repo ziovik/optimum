@@ -1,12 +1,5 @@
 <?php
 
-function get_login() {
-    include_once 'db.php';
-    $con = get_db_connection();
-    $res = $con->query('select * from credentials where id = 1');
-    return $res->fetch_assoc()['login'];
-}
-
 
 // create cart
 function cart(){

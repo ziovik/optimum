@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <?php
 session_start();
-include 'inc/db.php';
-include 'inc/functions.php';
-
-echo get_login();
+//include 'inc/db.php';
+include_once 'inc/db_functions.php';
+include_once 'inc/functions.php';
 ?>
 
 <html lang="en">

@@ -9,6 +9,8 @@
 						<li><h3 class="list-links-title"><a href="products/allcosm.php?allcosm=1" name="allcosm">Косметология</a>  </h3></li>
 
 						<?php
+
+
 						if (!isset($_GET['cosm'])) {
 
 
