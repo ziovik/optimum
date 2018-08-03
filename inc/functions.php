@@ -1,11 +1,17 @@
 <?php
-  
-$con = mysqli_connect("localhost","root","","opt_shop");
-mysqli_set_charset($con,"utf8");
+
+function get_login() {
+    include_once 'db.php';
+    $con = get_db_connection();
+    $res = $con->query('select * from credentials where id = 1');
+    return $res->fetch_assoc()['login'];
+}
+
 
 // create cart
 function cart(){
-	global $con;
+    include_once 'db.php';
+	$con = get_db_connection();
 
 	if (isset($_GET['add_cart'])) {
        
