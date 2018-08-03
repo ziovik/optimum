@@ -61,7 +61,7 @@
             <div class="pull-left">
                 <!-- Logo -->
                 <div class="header-logo">
-                    <a class="logo" href="optimum_beauty.php">
+                    <a class="logo" href="../optimum_beauty.php">
                         <img src="./img/logo.png" alt="">
                     </a>
                 </div>

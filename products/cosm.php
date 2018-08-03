@@ -76,7 +76,7 @@
                                 <div class="row">
                                     <div class="col-md-4">
                                         <ul class="list-links">
-                                            <li><h3 class="list-links-title"><a href="products/allcosm.php?allcosm=1" name="allcosm">Косметология</a>  </h3></li>
+                                            <li><h3 class="list-links-title"><a href="allcosm.php?allcosm=1" name="allcosm">Косметология</a>  </h3></li>
 
                                             <?php
                                             if (isset($_GET['cosm'])) {
@@ -92,7 +92,7 @@
                                                     $cosm_id= $row_cosm['id'];
                                                     $cosm_name = $row_cosm['name'];
 
-                                                    echo " <li style='width:300px;'><a href='products/cosm.php?cosm=$cosm_id'>$cosm_name</a></li>";
+                                                    echo " <li style='width:300px;'><a href='cosm.php?cosm=$cosm_id'>$cosm_name</a></li>";
 
                                                 }
 
@@ -127,7 +127,7 @@
                                                     $depil_id = $row_depils['id'];
                                                     $depil_name = $row_depils['name'];
 
-                                                    echo " <li style='width:300px;'><a href='products/depil.php?depil=$depil_id'>$depil_name</a></li>";
+                                                    echo " <li style='width:300px;'><a href='depil.php?depil=$depil_id'>$depil_name</a></li>";
                                                 }
                                             }
                                             ?>
@@ -160,7 +160,7 @@
                                                     $solar_id = $row_solars['id'];
                                                     $solar_name = $row_solars['name'];
 
-                                                    echo " <li style='width:300px;'><a href='products/solar.php?solar=$solar_id'>$solar_name</a></li>";
+                                                    echo " <li style='width:300px;'><a href='solar.php?solar=$solar_id'>$solar_name</a></li>";
                                                 }
                                             }
                                             ?>
@@ -193,7 +193,7 @@
                                                     $massag_id = $row_massags['id'];
                                                     $massag_name = $row_massags['name'];
 
-                                                    echo " <li style='width:300px;'><a href='products/massag.php?massag=$massag_id'>$massag_name</a></li>";
+                                                    echo " <li style='width:300px;'><a href='massag.php?massag=$massag_id'>$massag_name</a></li>";
                                                 }
                                             }
                                             ?>
@@ -214,7 +214,7 @@
                                     <div class="col-md-4">
                                         <ul class="list-links">
                                             <li>
-                                                <h3 class="list-links-title" style="width: 300px;"><a href="products/allparak.php?allpar=5" name="allnail">Парикмахерская Продукция</a>  </h3></li>
+                                                <h3 class="list-links-title" style="width: 300px;"><a href="allparak.php?allpar=5" name="allnail">Парикмахерская Продукция</a>  </h3></li>
                                             <?php
                                             if (!isset($_GET['par'])) {
 
@@ -227,7 +227,7 @@
 
 
 
-                                                    echo " <li style='width:300px;'><a href='products/parak.php?par=$par_id'>$par_name</a></li>";
+                                                    echo " <li style='width:300px;'><a href='parak.php?par=$par_id'>$par_name</a></li>";
                                                 }
                                             }
                                             ?>
@@ -249,7 +249,7 @@
                                     <div class="col-md-4">
                                         <ul class="list-links">
                                             <li>
-                                                <h3 class="list-links-title"><a href="products/allnail.php?allnail=6" name="allnail">Ногтевой сервис</a>  </h3></li>
+                                                <h3 class="list-links-title"><a href="allnail.php?allnail=6" name="allnail">Ногтевой сервис</a>  </h3></li>
 
                                             <?php
                                             if (!isset($_GET['nail'])) {
@@ -262,7 +262,7 @@
                                                     $nail_id = $row_nails['id'];
                                                     $nail_name = $row_nails['name'];
 
-                                                    echo " <li style='width:300px;'><a href='products/nail.php?nail=$nail_id'>$nail_name</a></li>";
+                                                    echo " <li style='width:300px;'><a href='nail.php?nail=$nail_id'>$nail_name</a></li>";
                                                 }
                                             }
                                             ?>
@@ -285,7 +285,7 @@
                                     <div class="col-md-4">
                                         <ul class="list-links">
                                             <li>
-                                                <h3 class="list-links-title"><a href="products/alleye.php?alleye=7" name="allnail">Ресницы и брови</a>  </h3></li>
+                                                <h3 class="list-links-title"><a href="alleye.php?alleye=7" name="allnail">Ресницы и брови</a>  </h3></li>
 
                                             <?php
                                             if (!isset($_GET['eye'])) {
@@ -298,7 +298,7 @@
                                                     $eye_id = $row_eye['id'];
                                                     $eye_name = $row_eye['name'];
 
-                                                    echo " <li style='width:300px;'><a href='products/eye.php?eye=$eye_id'>$eye_name</a></li>";
+                                                    echo " <li style='width:300px;'><a href='eye.php?eye=$eye_id'>$eye_name</a></li>";
                                                 }
                                             }
                                             ?>
@@ -318,7 +318,7 @@
                                     <div class="col-md-4">
                                         <ul class="list-links">
                                             <li>
-                                                <h3 class="list-links-title"><a href="products/allviz.php?allviz=8" name="allviz">Визаж</a>  </h3></li>
+                                                <h3 class="list-links-title"><a href="allviz.php?allviz=8" name="allviz">Визаж</a>  </h3></li>
                                             <?php
                                             if (!isset($_GET['viz'])) {
 
@@ -330,7 +330,7 @@
                                                     $viz_id = $row_viz['id'];
                                                     $viz_name = $row_viz['name'];
 
-                                                    echo " <li style='width:500px;'><a href='products/viz.php?viz=$viz_id'>$viz_name</a></li>";
+                                                    echo " <li style='width:500px;'><a href='viz.php?viz=$viz_id'>$viz_name</a></li>";
                                                 }
                                             }
                                             ?>
@@ -350,7 +350,7 @@
                                         <ul class="list-links">
 
                                             <li>
-                                                <h3 class="list-links-title"><a href="products/alltatu.php?alltatu=9" name="alltatu">Татуаж и пирсинг</a>  </h3></li>
+                                                <h3 class="list-links-title"><a href="alltatu.php?alltatu=9" name="alltatu">Татуаж и пирсинг</a>  </h3></li>
                                             <?php
                                             if (!isset($_GET['tatu'])) {
 
@@ -362,7 +362,7 @@
                                                     $tatu_id = $row_tatu['id'];
                                                     $tatu_name = $row_tatu['name'];
 
-                                                    echo " <li style='width:500px;'><a href='products/tatu.php?tatu=$tatu_id'>$tatu_name</a></li>";
+                                                    echo " <li style='width:500px;'><a href='tatu.php?tatu=$tatu_id'>$tatu_name</a></li>";
                                                 }
                                             }
                                             ?>
@@ -382,7 +382,7 @@
                                         <ul class="list-links">
 
                                             <li>
-                                                <h3 class="list-links-title"><a href="products/allmat.php?allmat=10" name="allmat">Расходники</a>  </h3></li>
+                                                <h3 class="list-links-title"><a href="allmat.php?allmat=10" name="allmat">Расходники</a>  </h3></li>
                                             <?php
                                             if (!isset($_GET['mat'])) {
 
@@ -394,7 +394,7 @@
                                                     $mat_id = $row_mat['id'];
                                                     $mat_name = $row_mat['name'];
 
-                                                    echo " <li style='width:500px;'><a href='products/mat.php?mat=$mat_id'>$mat_name</a></li>";
+                                                    echo " <li style='width:500px;'><a href='mat.php?mat=$mat_id'>$mat_name</a></li>";
                                                 }
                                             }
                                             ?>
@@ -414,7 +414,7 @@
                                         <ul class="list-links">
 
                                             <li style="width: 300px;">
-                                                <h3 class="list-links-title"><a href="products/allster.php?allster=11" name="allster">Стерилизация и дезинфекция</a>  </h3></li>
+                                                <h3 class="list-links-title"><a href="allster.php?allster=11" name="allster">Стерилизация и дезинфекция</a>  </h3></li>
                                             <?php
                                             if (!isset($_GET['ster'])) {
 
@@ -426,7 +426,7 @@
                                                     $ster_id = $row_ster['id'];
                                                     $ster_name = $row_ster['name'];
 
-                                                    echo " <li style='width:500px;'><a href='products/ster.php?ster=$ster_id'>$ster_name</a></li>";
+                                                    echo " <li style='width:500px;'><a href='ster.php?ster=$ster_id'>$ster_name</a></li>";
                                                 }
                                             }
                                             ?>
@@ -451,14 +451,6 @@
                     </ul>
                 </div>
 
-                <div class="menu-nav">
-					<span class="menu-header">Menu <i class="fa fa-bars"></i></span>
-					<ul class="menu-list">
-
-						<li id="center1" ><a href="../all_products.php?all_products" title="живой пойск"></a></li>
-					</ul>
-				</div>
-				<!-- menu nav -->
 			</div>
 		</div>
 		<!-- /container -->
@@ -469,8 +461,8 @@
 	<div id="breadcrumb">
 		<div class="container">
 			<ul class="breadcrumb">
-				<li><a href="../optimum_beauty.php">Home</a></li>
-				<li class="active">Products of This Sub category</li>
+				<li><a href="../optimum_beauty.php">Главная</a></li>
+				<li class="active">Продукты</li>
 			</ul>
 		</div>
 	</div>
@@ -479,88 +471,117 @@
 	
 	<!-- HOME -->
 	<div id="home"  >
-		<!-- container -->
-		<div class="container" style="min-height: 600px;" >
-			<!-- home wrap -->
-			<div class="home-wrap">
-				<!-- home slick -->
-				<div >
-				
-	
-				<?php  cart();?>
-				<!-- banner -->
-					<div class="banner banner-1">
-						<div class="table-responsive" data-pattern="priority-columns">
-                           <table cellspacing="0" id="group-test" class="table table-small-font table-bordered table-striped">
+        <!-- container -->
+        <div class="container" style="min-height: 600px;" >
+            <!-- home wrap -->
+            <div class="home-wrap">
+                <!-- home slick -->
+                <div >
+
+
+                    <?php  cart();?>
+                    <!-- banner -->
+                    <div class="banner banner-1">
+                        <div class="table-responsive" data-pattern="priority-columns">
+                            <table cellspacing="0" id="group-test" class="table table-small-font table-bordered table-striped">
                                 <thead>
-                                      <tr >
+                                    <tr >
 
-                                          <th colspan="1" data-priority="1">Product Name</th>
+                                        <th colspan="1" data-priority="1" >Дистрибьютор</th>
 
-                                          <th colspan="1" data-priority="2">Product Price</th>
-                                          <th colspan="1" data-priority="3">Manufacturer</th>
+                                        <th colspan="1" data-priority="2" style="width:400px;">Найменование</th>
+                                        <th colspan="1" data-priority="3">Производитель/<br>Страна производства</th>
+                                        <th colspan="1" data-priority="4">Цена</th>
+                                        <th colspan="1" data-priority="5">Годен до</th>
+                                        <th colspan="1" data-priority="6">Остаток</th>
+                                        <th colspan="1" data-priority="7">Примечание</th>
 
-                                          <th colspan="1" data-priority="7">Description</th>
-                                          
-                
-                                      </tr>
-                                      <?php	
-                                          if (isset($_GET['cosm'])) {
-     	
-      
-                                           $cosm_id = $_GET['cosm'];
 
-	                                       global $con;
+                                    </tr>
+                                    <?php	
+                                    include("inc/db.php");
+                                    if(isset($_SESSION['login'])){
+                                        $login = $_SESSION['login'];
 
-	                                       $get_cosm_pro = "select * from products where product_sub_cat='$cosm_id'";
-	                                       $run_cosm_pro = mysqli_query($con, $get_cosm_pro);
+                                        $get_c =
+                                        "select c.id as customer_id from credentials crd join customer c on crd.id = c.credentials_id where crd.login = '$login'";
 
-	                                       $count_cosm = mysqli_num_rows($run_cosm_pro);
-	                                       if ($count_cosm == 0) {
-	   	                                      echo "<h2 style='text-align:center;'>'No Product'</h2>";
-	                                        }else{
+                                        $run_c = mysqli_query($con, $get_c);
+                                        $array = mysqli_fetch_array($run_c);
+                                        $c_id = $array['customer_id'];
 
-	                                           while($row_cosm_pro=mysqli_fetch_array($run_cosm_pro)){
-		                                            $pro_id = $row_cosm_pro['product_id'];
-		                                            $pro_cat = $row_cosm_pro['product_cat'];
-		                                            $pro_sub_cat = $row_cosm_pro['product_sub_cat'];
-		  
-		                                            $pro_name = $row_cosm_pro['product_title'];
-		                                            $pro_price = $row_cosm_pro['product_price'];
-		                                            $pro_desc = $row_cosm_pro['product_desc'];
-		                                            $pro_dist = $row_cosm_pro['dist_id'];
-		                                            $pro_manu = $row_cosm_pro['product_manu'];
-		                              ?>
 
-                                             <tr>
-                                                 <th data-priority="1" style="background: white; color: #400040;"><a href="../details.php?pro_id=<?php  echo $pro_id ?>"><?php echo $pro_name ?></a></th>
-                                                 <th data-priority="2"style="background: white; color: #400040;"><?php echo $pro_price ?></th>
-                                                 <th data-priority="3" style="background: white; color: #400040;"><?php echo $pro_manu ?></th>
-                
-                                                 <th data-priority="7" style="background: white; color: #400040;"><?php echo $pro_desc ?></th>
-                                                 
-               
+                                        if (isset($_GET['cosm'])) {
+                                            $cosm_id = $_GET['cosm'];
+                                            $get_cosm_pro =
+                                            "select 
+                                            p.id as product_id, 
+                                            p.name as product_name, 
+                                            p.manufacturer as product_manufacturer,
+                                            p.price as product_price, 
+                                            p.min_order as product_min_order,
+                                            p.expires as expires,
+                                            p.description as discription,
+                                            p.discount as discount,
+                                            cm.name as company_name
 
-                                             </tr>
-                                            </thead>
-	
+                                            from
+                                            store s
+                                            join distributor d on d.id = s.distributor_id
+                                            join product p on p.distributor_id = d.id
+                                            join customer c on c.region_id = s.region_id
+                                            join company cm on cm.id = d.company_id
 
-		                           <?php } } } ?>	
+                                            where c.id ='$c_id' and p.sub_category_id= '$cosm_id'";
 
-		                    </table>
-              <div >      </div>	
-				
-				
-		</div>
-		<br>
-		
-	</div>
-	<!-- /section -->
-			</div>
-			<!-- /row -->
-		</div>
-		<!-- /container -->
-	</div>
-	<!-- /section -->
+                                            $run_cosm_pro = mysqli_query($con, $get_cosm_pro);
+
+                                            $count_cosm = mysqli_num_rows($run_cosm_pro);
+                                            if ($count_cosm == 0) {
+                                                echo "<h2 style='text-align:center;'>'Нет продукта'</h2>";
+                                            }else{
+
+                                                while($row_cosm_pro=mysqli_fetch_array($run_cosm_pro)){
+                                                    $pro_id = $row_cosm_pro['product_id'];
+                                                    $pro_name = $row_cosm_pro['product_name'];
+                                                    $pro_manu = $row_cosm_pro['product_manufacturer'];
+                                                    $pro_price = $row_cosm_pro['product_price'];
+                                                    $pro_dist = $row_cosm_pro['company_name'];
+                                                    $pro_min_order = $row_cosm_pro['product_min_order'];
+                                                    $pro_expires = $row_cosm_pro['expires'];
+                                                    $pro_desc = $row_cosm_pro['discription'];
+                                                    ?>
+
+                                                    <tr>
+                                                        <th data-priority="1" style="background: white; color: #400040;"><?php echo $pro_dist ?></th>
+                                                        <th data-priority="2" style="background: white; color: #400040; width: 400px;"><a href="../details.php?pro_id=<?php echo $pro_id ?>"><?php echo $pro_name ?></a></th>
+                                                        <th data-priority="3"style="background: white; color: #400040;"><?php echo $pro_manu ?></th>
+                                                        <th data-priority="4" style="background: white; color: #400040;"><?php echo $pro_price ?></th>
+
+                                                        <th data-priority="5" style="background: white; color: #400040;"><?php echo $pro_expires ?></th>
+                                                        <th data-priority="5" style="background: white; color: #400040;"><?php echo $pro_min_order ?></th>
+                                                        <th data-priority="5" style="background: white; color: #400040;"><?php echo $pro_desc ?></th>
+                                                    </tr>
+                                                </thead>
+
+
+                                            <?php } } } }?>	
+
+                                        </table>
+                                        <div >    
+                                      </div>	
+
+
+                                    </div>
+                                    <br>
+
+                                </div>
+                                <!-- /section -->
+                            </div>
+                            <!-- /row -->
+                        </div>
+                        <!-- /container -->
+                    </div>
+                    <!-- /section -->
 
 	<?php  include("inc/footer1.php"); ?>

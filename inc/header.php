@@ -72,7 +72,7 @@
 					<div class="header-search">
 						<div class="input-group">
                            <span class="input-group-addon">Пойск</span>
-                           <input type="text" name="search_text" id="search_text" placeholder="Search by Product Details" class="form-control" style="width: 600px; float: left;" />
+                           <input type="text" name="search_text" id="search_text" placeholder="искать продукт..." class="form-control" style="width: 500px; float: left;" />
                         </div>
 					</div>
 					<!-- /Search -->
@@ -94,7 +94,7 @@
 								<li><a href="customer/my_account.php"><i class="fa fa-user-o"></i> личный кабинет</a></li>
 								
 								<li><a href="checkout.php"><i class="fa fa-check"></i> Checkout</a></li>
-								<li><a href="customer_login.php"><i class="fa fa-unlock-alt"></i> Выйти</a></li>
+								<li><a href="customer/customer_login.php"><i class="fa fa-unlock-alt"></i> Выйти</a></li>
 								
 							</ul>
 						</li>

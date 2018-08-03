@@ -5,9 +5,30 @@
 				<div class="pull-left">
 					<?php
 
-					if (isset($_SESSION['customer_email'])) {
-						echo "<span>Welcome to OPTIMUM BEAUTY   :    </span>". $_SESSION['customer_email'] ."<span></span>";
-					
+					if (isset($_SESSION['login'])) {
+						include("inc/db.php");
+						$login = $_SESSION['login'];
+
+						$get_info = "select
+						cc.name as name
+						from 
+						credentials c
+						join customer cc on cc.credentials_id = c.id
+						where  c.login = '$login' ";
+
+						$run_name = mysqli_query($con, $get_info);
+
+						$row = mysqli_fetch_array($run_name);
+
+						$customer_name = $row['name'];
+
+						echo "<span>Добро пожаловать  в OPTIMUM BEAUTY   :    </span>". $customer_name ."<span></span>";
+
+						echo "<span>   :    </span>". $_SESSION['login'] ."<span></span>";
+
+
+					}else{
+						echo "<b>Добро пожаловать Гость</b>";
 					}
 
 					?>
@@ -15,25 +36,17 @@
 				</div>
 				<div class="pull-right">
 					<ul class="header-top-links">
-						<li><a href="#">Store</a></li>
-						<li><a href="#">Newsletter</a></li>
-						<li><a href="#">FAQ</a></li>
-						<li class="dropdown default-dropdown">
-							<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">ENG <i class="fa fa-caret-down"></i></a>
-							<ul class="custom-menu">
-								<li><a href="#">English (ENG)</a></li>
-								<li><a href="#">Russian (Ru)</a></li>
-								<li><a href="#">French (FR)</a></li>
-								<li><a href="#">Spanish (Es)</a></li>
-							</ul>
-						</li>
-						<li class="dropdown default-dropdown">
-							<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">USD <i class="fa fa-caret-down"></i></a>
-							<ul class="custom-menu">
-								<li><a href="#">USD ($)</a></li>
-								<li><a href="#">EUR (€)</a></li>
-							</ul>
-						</li>
+						<?php
+
+						if (!isset($_SESSION['login'])) {
+							echo "<button style='width:100px;' background:#800080; border-radius:5px;' class='btn next-btn'><a href='#' class='text-uppercase' style='color:#fff;'>Войти</a></buuton>";
+						}
+						else{
+							echo "<button style='width:100px;' background:#800080; border-radius:5px;' class='btn next-btn'><a href='logout.php' class='text-uppercase' style='color:#fff;'>Выити</a></buuton>";
+
+						}
+
+						?>
 					</ul>
 				</div>
 			</div>
@@ -65,17 +78,6 @@
 								</div>
 								<strong class="text-uppercase">My Account <i class="fa fa-caret-down"></i></strong>
 							</div>
-							<?php
-
-                                            if (!isset($_SESSION['customer_email'])) {
-                                            	echo "<a href='../checkout.php'>Login</a>";
-                                            }
-                                            else{
-                                            	echo "<a href='logout.php' class='text-uppercase'>Logout</a> ";
-
-                                            }
-                                         
-						     ?>
 							
 							<ul class="custom-menu">
 								<li><a href="my_account.php"><i class="fa fa-user-o"></i> My Account</a></li>

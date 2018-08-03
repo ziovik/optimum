@@ -5,12 +5,13 @@
   	<tr style="text-align: center;">
   		<th >S/N</th>
       
-  		<th>Product Name</th>
+  		<th>Наимнование </th>
       
-  		<th>Quantity</th>
-  		<th>Distributor</th>
-  		<th>Status</th>
-      <th>Delete</th>
+  		<th>количество</th>
+  		<th>Дистрибьютор</th>
+      <th>Цена</th>
+  		<th>Положение</th>
+     
   		
   	</tr>
        
@@ -19,44 +20,65 @@
          include("inc/db.php");
 
         
-        if (isset($_SESSION['customer_email'])) {
+        if (isset($_SESSION['login'])) {
          
      // this is for customer details
-          $user = $_SESSION['customer_email'];
+          $user = $_SESSION['login'];
 
          
           $i= 0;
 
-          $get_c = "select *from customers where customer_email = '$user' ";
+          $get_c = "select
+                          cc.name as name,
+                          cc.id as c_id,
+                          c.login as login
+                    from 
+                          credentials c
+                          join customer cc on cc.credentials_id = c.id
+                    where  c.login = '$login' ";
 
           $run_c = mysqli_query($con, $get_c);
 
           while($row_c = mysqli_fetch_array($run_c)){
-            $c_id = $row_c['customer_id'];
-            $customer_email = $row_c['customer_email'];
+            $c_id = $row_c['c_id'];
+            $customer_login = $row_c['login'];
             
-            $get_cart = "select * from cart where customer_email = '$customer_email' ";
+            $get_cart = "select 
+                             c.status as status,
+                             pt.product_id as product_id,
+                             c.id as cart_id,
+                             pt.quantity as qty
+
+                         from 
+                              cart c
+                              join product_item pt on pt.cart_id = c.id
+                         where c.customer_id = '$c_id' ";
 
             $run_cart = mysqli_query($con, $get_cart);
 
             while ($row_cart = mysqli_fetch_array($run_cart)) {
-               $cart_status = $row_cart['cart_status'];
-               $product_id = $row_cart['p_id'];
+               $cart_status = $row_cart['status'];
+               $product_id = $row_cart['product_id'];
                $cart_id =$row_cart['cart_id'];
 
-               $qty = $row_cart['qty'];
+              $qty = $row_cart['qty'];
 
-            $get_pro ="select * from products where product_id = '$product_id'";
+            $get_pro ="select * from product where id = '$product_id'";
 
             $run_pro = mysqli_query($con, $get_pro);
 
             while ($rows = mysqli_fetch_array($run_pro)) {
-              $product_name = $rows['product_title'];
-              
-              $dist_id = $rows['dist_id'];
+              $product_name = $rows['name'];
+              $product_price = $rows['price'];
+              $dist_id = $rows['distributor_id'];
 
 
-              $get_dist_name = "select * from distributors where dist_id = '$dist_id'";
+              $get_dist_name = "select 
+                                   c.name as dist_name
+                                from 
+                                     distributor d
+                                     join company c on c.id = d.company_id
+                                 where d.id = '$dist_id'";
 
               $run_dist = mysqli_query($con, $get_dist_name);
 
@@ -74,9 +96,9 @@
 
             <td><?php echo $qty; ?></td>
             <td><?php echo $dist_name; ?></td>
-
+            <td><?php echo $product_price; ?></td>
             <td><?php echo $cart_status; ?></td>
-            <td><a href="my_orders.php?remove=<?php echo $cart_id; ?>">Remove</a></td>
+            
             </tr>
           <?php }} } }}?>
 
@@ -87,24 +109,7 @@
 
   </table>
 
-    <?php
-    if (isset($_GET['remove'])) {
-
-     $remove_id = $_GET['remove'];
-     $user = $_SESSION['customer_email'];
-
-     $delete_item = "delete from cart where p_id = '$remove_id' AND customer_email='$user' ";
-
-     $run_delete_item = mysqli_query($con, $delete_item);
-
-
-     echo "<script>alert('Product deleted')</script>";
-     echo "<script>window.open('my_account.php','_self')</script>";
-
-   }
-
-
-   ?>
+  
 
   
 

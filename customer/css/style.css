@@ -1770,9 +1770,10 @@ textarea.input {
 
 
 #center1{
- float: left
-  transform: translate(1%, 1%);
+   float: right;
+  transform: translate(0%, 0%);
   width: 200px;
+
 }
 
 #center1  a{
@@ -1791,7 +1792,7 @@ textarea.input {
   position: absolute;
   top: 0;
   left: 0;
-  padding: 15px 40px;
+  padding: 12px 30px;
   background: #fff;
   color: #800080;
   border:3px solid #400040;
@@ -1804,7 +1805,7 @@ textarea.input {
   position: absolute;
   top: 0;
   left: 0;
-  padding: 15px 40px;
+  padding: 12px 30px;
   background: #800080;
   color: #fff;
   border:3px solid #400040;

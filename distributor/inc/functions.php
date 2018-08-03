@@ -1,6 +1,6 @@
 <?php
   
-$con = mysqli_connect("localhost","root","","opt_shop");
+$con = mysqli_connect("localhost","root","","super_optimum");
 mysqli_set_charset($con,"utf8");
 
 // create cart

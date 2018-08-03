@@ -34,6 +34,7 @@
 	<!-- Custom stlylesheet -->
 	<link type="text/css" rel="stylesheet" href="css/style.css" />
 	<link type="text/css" rel="stylesheet" href="css/table.css" />
+	<link type="text/css" rel="stylesheet" href="css/checkout_style.css" />
 
 	
 
@@ -59,20 +60,20 @@
 					<span class="category-header">My Account <i class="fa fa-list"></i></span>
 					<ul class="category-list">
 						<?php
-                           $user = $_SESSION['customer_email'];
+                           $login = $_SESSION['login'];
 
-                           $get_img = "select *from customers where customer_email = '$user' ";
+                           $get_img = "select
+											cc.name as name
+										from 
+											credentials c
+											join customer cc on cc.credentials_id = c.id
+										where  c.login = '$login' ";
+							$run_name = mysqli_query($con, $get_img);
 
-                           $run_img = mysqli_query($con, $get_img);
+						    $row = mysqli_fetch_array($run_name);
 
-                           $row_img = mysqli_fetch_array($run_img);
+						    $customer_name = $row['name'];
 
-                           $c_image = $row_img['customer_image'];
-                           $c_name = $row_img['customer_name'];
-
-                           echo "
-                                <img src='customer_images/$c_image'  width='268px' height='150px' style='align:center;' />
-                           ";
 
 						?>
 
@@ -104,8 +105,8 @@
 	<div id="breadcrumb">
 		<div class="container">
 			<ul class="breadcrumb">
-				<li><a href="index.php">Home</a></li>
-				<li class="active">My Account</li>
+				<li><a href="../optimum_beauty.php">Главная</a></li>
+				<li class="active">Личный Кабинет</li>
 			</ul>
 		</div>
 	</div>
@@ -121,15 +122,15 @@
 	<div class="section">
 		
 		
-		<h2 style="text-align: center;">Welcome : <?php echo $c_name;  ?></h2>
+		<h2 style="text-align: center;">Welcome : <?php echo $customer_name;  ?></h2>
 		<p style="text-align: center;">You can see your orders progress by clicking <a href="my_account.php?my_orders"><b>HERE</b></a></p>
 
 		<?php
 
 							
-							  if (isset($_GET['my_orders'])) {
-							  	include("my_orders.php");
-							  }
+				  if (isset($_GET['my_orders'])) {
+				  	include("my_orders.php");
+				  }
 		?>
 		
 	</div>

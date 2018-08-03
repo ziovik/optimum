@@ -1,9 +1,9 @@
 
 <!DOCTYPE html>
 <?php  
-       session_start();
-       include("inc/db.php");
-       include("inc/functions.php");
+session_start();
+include("inc/db.php");
+include("inc/functions.php");
 ?>
 <html lang="en">
 
@@ -37,20 +37,20 @@
 	<link type="text/css" rel="stylesheet" href="css/checkout_style.css" />
 
 	<!--table resp-->
-    <link rel="stylesheet" href="css/rwd-table.min.css?v=5.3.1">
-        <link rel="stylesheet" href="css/docs.min.css?v=5.3.1">
+	<link rel="stylesheet" href="css/rwd-table.min.css?v=5.3.1">
+	<link rel="stylesheet" href="css/docs.min.css?v=5.3.1">
 
-        <script type="text/javascript">
-        var _gaq = _gaq || [];
-        _gaq.push(['_setAccount', 'UA-19870163-1']);
-        _gaq.push(['_trackPageview']);
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-19870163-1']);
+		_gaq.push(['_trackPageview']);
 
-        (function() {
-            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-        })();
-        </script>
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
 
 
 
@@ -66,15 +66,15 @@
 					<?php
 
 					if (isset($_SESSION['login'])) {
-					    include("inc/db.php");
+						include("inc/db.php");
 						$login = $_SESSION['login'];
 
 						$get_info = "select
-                                          cc.name as name
-                                    from 
-                                       credentials c
-                                       join customer cc on cc.credentials_id = c.id
-                                    where  c.login = '$login' ";
+										cc.name as name
+									 from 
+										credentials c
+										join customer cc on cc.credentials_id = c.id
+									 where  c.login = '$login' ";
 
 						$run_name = mysqli_query($con, $get_info);
 
@@ -92,22 +92,22 @@
 					}
 
 					?>
-					
+
 				</div>
 				<div class="pull-right">
 					<ul class="header-top-links">
 						<?php
 
-				if (!isset($_SESSION['login'])) {
-					echo "<button style='width:100px;' background:#800080; border-radius:5px;' class='btn next-btn'><a href='#' class='text-uppercase' style='color:#fff;'>Войти</a></buuton>";
-				}
-				else{
-					echo "<button style='width:100px;' background:#800080; border-radius:5px;' class='btn next-btn'><a href='logout.php' class='text-uppercase' style='color:#fff;'>Выити</a></buuton>";
+						if (!isset($_SESSION['login'])) {
+							echo "<button style='width:100px;' background:#800080; border-radius:5px;' class='btn next-btn'><a href='#' class='text-uppercase' style='color:#fff;'>Войти</a></buuton>";
+						}
+						else{
+							echo "<button style='width:100px;' background:#800080; border-radius:5px;' class='btn next-btn'><a href='logout.php' class='text-uppercase' style='color:#fff;'>Выити</a></buuton>";
 
-				}
+						}
 
-				?>
-						
+						?>
+
 					</ul>
 				</div>
 			</div>
@@ -126,8 +126,8 @@
 					</div>
 					<!-- /Logo -->
 
-					
-					
+
+
 				</div>
 				<div class="pull-right">
 					<ul class="header-btns">
@@ -139,14 +139,14 @@
 								</div>
 								<strong >Личный кабинет <i class="fa fa-caret-down"></i></strong>
 							</div>
-							
-							
+
+
 							<ul class="custom-menu">
 								<li><a href="customer/my_account.php"><i class="fa fa-user-o"></i> личный кабинет</a></li>
-								
+
 								<li><a href="checkout.php"><i class="fa fa-check"></i> Checkout</a></li>
-								<li><a href="customer_login.php"><i class="fa fa-unlock-alt"></i> Выити</a></li>
-								
+								<li><a href="customer/customer_login.php"><i class="fa fa-unlock-alt"></i> Выити</a></li>
+
 							</ul>
 						</li>
 						<!-- /Account -->
@@ -165,7 +165,7 @@
 							<div class="custom-menu">
 								<div id="shopping-cart">
 									<div class="shopping-cart-list">
-										
+
 									</div>
 									<div class="shopping-cart-btns">
 										<a href="cart.php"><button class="main-btn">Заказы</button></a>
@@ -187,12 +187,12 @@
 				</div>
 			</div>
 			<!-- header -->
-			
+
 		</div>
 		<!-- container -->
 	</header>
 	<!-- /HEADER -->
-    
+
 	<!-- NAVIGATION -->
 	<div id="navigation">
 		<!-- container -->
@@ -201,272 +201,272 @@
 				<!-- category nav -->
 				<div class="category-nav">
 					<?php include("inc/menu.php") ?>
-			</div>
-		</div>
-		<!-- /container -->
-	</div>
-	<!-- /NAVIGATION -->
-
-	<!-- HOME -->
-	<div id="home">
-		<!-- container -->
-		<div class="container">
-			<!-- home wrap -->
-			<div class="home-wrap">
-				<!-- home slick -->
-				<div id="home-slick">
-					<!-- banner -->
-					<div class="banner banner-1">
-						<img src="./img/banner01.jpg" alt="">
-						<div class="banner-caption text-center">
-							<h1 style="color: #800080;">Optimum Beauty</h1>
-							<h3 class="white-color font-weak">Up to 50% Discount</h3>
-							<button class="primary-btn">Shop Now</button>
-						</div>
-					</div>
-					<!-- /banner -->
-
-					<!-- banner -->
-					<div class="banner banner-1">
-						<img src="./img/banner02.jpg" alt="">
-						<div class="banner-caption">
-							<h1 class="primary-color">HOT DEAL<br><span class="white-color font-weak">Up to 50% OFF</span></h1>
-							<button class="primary-btn">Shop Now</button>
-						</div>
-					</div>
-					<!-- /banner -->
-
-					<!-- banner -->
-					<div class="banner banner-1">
-						<img src="./img/banner03.jpg" alt="">
-						<div class="banner-caption">
-							<h1 class="white-color">New Product <span>Collection</span></h1>
-							<button class="primary-btn">Shop Now</button>
-						</div>
-					</div>
-					<!-- /banner -->
 				</div>
-				<!-- /home slick -->
 			</div>
-			<!-- /home wrap -->
+			<!-- /container -->
 		</div>
-		<!-- /container -->
-	</div>
-	<!-- /HOME -->
+		<!-- /NAVIGATION -->
 
-	<!-- section -->
-	<div class="section">
-		
-		<div id="products_box">
-				
-				
+		<!-- HOME -->
+		<div id="home">
+			<!-- container -->
+			<div class="container">
+				<!-- home wrap -->
+				<div class="home-wrap">
+					<!-- home slick -->
+					<div id="home-slick">
+						<!-- banner -->
+						<div class="banner banner-1">
+							<img src="./img/banner01.jpg" alt="">
+							<div class="banner-caption text-center">
+								<h1 style="color: #800080;">Optimum Beauty</h1>
+								<h3 class="white-color font-weak">Up to 50% Discount</h3>
+								<button class="primary-btn">Shop Now</button>
+							</div>
+						</div>
+						<!-- /banner -->
+
+						<!-- banner -->
+						<div class="banner banner-1">
+							<img src="./img/banner02.jpg" alt="">
+							<div class="banner-caption">
+								<h1 class="primary-color">HOT DEAL<br><span class="white-color font-weak">Up to 50% OFF</span></h1>
+								<button class="primary-btn">Shop Now</button>
+							</div>
+						</div>
+						<!-- /banner -->
+
+						<!-- banner -->
+						<div class="banner banner-1">
+							<img src="./img/banner03.jpg" alt="">
+							<div class="banner-caption">
+								<h1 class="white-color">New Product <span>Collection</span></h1>
+								<button class="primary-btn">Shop Now</button>
+							</div>
+						</div>
+						<!-- /banner -->
+					</div>
+					<!-- /home slick -->
+				</div>
+				<!-- /home wrap -->
+			</div>
+			<!-- /container -->
+		</div>
+		<!-- /HOME -->
+
+		<!-- section -->
+		<div class="section">
+
+			<div id="products_box">
+
+
 				<?php cart();?>
-				
-		</div>
-		<br>
-		
-	</div>
-	<!-- /section -->
 
-	<!-- section -->
-	<div class="section">
-		<!-- container -->
-		<div class="container">
-			
-
-			<!-- row -->
-			<div class="row">
-				<!-- section title -->
-				<div class="col-md-12">
-					<div class="section-title">
-						<h2 class="title">Наши дистрибьюторы</h2>
-						<div class="pull-right">
-							<div class="product-slick-dots-2 custom-dots">
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- section title -->
-
-				<!-- Product Single -->
-				<div class="col-md-3 col-sm-6 col-xs-6">
-					<div class="product product-single product-hot">
-						<div class="product-thumb">
-							<div class="product-label">
-								
-							</div>
-							
-							<button class="main-btn quick-view"><i class="fa fa-search-plus"></i> Quick view</button>
-							<img src="./img/logo1.jpg" alt="">
-						</div>
-						<div class="product-body">
-							
-							<div class="product-rating">
-								<i class="fa fa-star"></i>
-								<i class="fa fa-star"></i>
-								<i class="fa fa-star"></i>
-								<i class="fa fa-star"></i>
-								<i class="fa fa-star-o empty"></i>
-							</div>
-							
-							<div class="product-btns">
-								
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- /Product Single -->
-
-				<!-- Product Slick -->
-				<div class="col-md-9 col-sm-6 col-xs-6">
-					<div class="row">
-						<div id="product-slick-2" class="product-slick">
-							<!-- Product Single -->
-							<div class="product product-single">
-								<div class="product-thumb">
-									<button class="main-btn quick-view"><i class="fa fa-search-plus"></i> Quick view</button>
-									<img src="./img/d1.png" alt="">
-								</div>
-								<div class="product-body">
-									<h3 class="product-price" style="width: 300px;">Индустрия Красоты</h3>
-									<div class="product-rating">
-										<i class="fa fa-star"></i>
-										<i class="fa fa-star"></i>
-										<i class="fa fa-star"></i>
-										<i class="fa fa-star"></i>
-										<i class="fa fa-star-o empty"></i>
-									</div>
-									<h2 class="product-name"><a href="#">Дистрибьютор</a></h2>
-									<div class="product-btns">
-										<button class="main-btn icon-btn"><i class="fa fa-heart"></i></button>
-										<button class="main-btn icon-btn"><i class="fa fa-exchange"></i></button>
-										<button class="primary-btn add-to-cart"><i class="fa fa-search" aria-hidden="true"></i> Products</button>
-									</div>
-								</div>
-							</div>
-							<!-- /Product Single -->
-
-							<!-- Product Single -->
-							<div class="product product-single">
-								<div class="product-thumb">
-									<div class="product-label">
-										<span class="sale">-20%</span>
-									</div>
-									<button class="main-btn quick-view"><i class="fa fa-search-plus"></i> Quick view</button>
-									<img src="./img/d2.jpg" alt="">
-								</div>
-								<div class="product-body">
-									<h3 class="product-price">Эстетик <del class="product-old-price"></del></h3>
-									<div class="product-rating">
-										<i class="fa fa-star"></i>
-										<i class="fa fa-star"></i>
-										<i class="fa fa-star"></i>
-										<i class="fa fa-star"></i>
-										<i class="fa fa-star-o empty"></i>
-									</div>
-									<h2 class="product-name"><a href="#">Дистрибьютор</a></h2>
-									<div class="product-btns">
-										<button class="main-btn icon-btn"><i class="fa fa-heart"></i></button>
-										<button class="main-btn icon-btn"><i class="fa fa-exchange"></i></button>
-										<button class="primary-btn add-to-cart"><i class="fa fa-search" aria-hidden="true"></i>Products</button>
-									</div>
-								</div>
-							</div>
-							<!-- /Product Single -->
-
-							<!-- Product Single -->
-							<div class="product product-single">
-								<div class="product-thumb">
-									<button class="main-btn quick-view"><i class="fa fa-search-plus"></i> Quick view</button>
-									<img src="./img/d3.jpg" alt="">
-								</div>
-								<div class="product-body">
-									<h3 class="product-price">COSCO</h3>
-									<div class="product-rating">
-										<i class="fa fa-star"></i>
-										<i class="fa fa-star"></i>
-										<i class="fa fa-star"></i>
-										<i class="fa fa-star"></i>
-										<i class="fa fa-star-o empty"></i>
-									</div>
-									<h2 class="product-name"><a href="#">Дистрибьютор</a></h2>
-									<div class="product-btns">
-										<button class="main-btn icon-btn"><i class="fa fa-heart"></i></button>
-										<button class="main-btn icon-btn"><i class="fa fa-exchange"></i></button>
-										<button class="primary-btn add-to-cart"><i class="fa fa-search" aria-hidden="true"></i> Products</button>
-									</div>
-								</div>
-							</div>
-							<!-- /Product Single -->
-
-							<!-- Product Single -->
-							<div class="product product-single">
-								<div class="product-thumb">
-									<div class="product-label">
-										<span>New</span>
-										<span class="sale">-20%</span>
-									</div>
-									<button class="main-btn quick-view"><i class="fa fa-search-plus"></i> Quick view</button>
-									<img src="./img/d4.jpg" alt="">
-								</div>
-								<div class="product-body">
-									<h3 class="product-price">ПрофКосМатериалы <del class="product-old-price"></del></h3>
-									<div class="product-rating">
-										<i class="fa fa-star"></i>
-										<i class="fa fa-star"></i>
-										<i class="fa fa-star"></i>
-										<i class="fa fa-star"></i>
-										<i class="fa fa-star-o empty"></i>
-									</div>
-									<h2 class="product-name"><a href="#">Дистрибьютор</a></h2>
-									<div class="product-btns">
-										<button class="main-btn icon-btn"><i class="fa fa-heart"></i></button>
-										<button class="main-btn icon-btn"><i class="fa fa-exchange"></i></button>
-										<button class="primary-btn add-to-cart"><i class="fa fa-search" aria-hidden="true"></i> Products</button>
-									</div>
-								</div>
-							</div>
-							<!-- /Product Single -->
-							<!-- Product Single -->
-							<div class="product product-single">
-								<div class="product-thumb">
-									<div class="product-label">
-										<span>New</span>
-										<span class="sale">-20%</span>
-									</div>
-									<button class="main-btn quick-view"><i class="fa fa-search-plus"></i> Quick view</button>
-									<img src="./img/d5.jpg" alt="">
-								</div>
-								<div class="product-body">
-									<h3 class="product-price">MeSoProff <del class="product-old-price"></del></h3>
-									<div class="product-rating">
-										<i class="fa fa-star"></i>
-										<i class="fa fa-star"></i>
-										<i class="fa fa-star"></i>
-										<i class="fa fa-star"></i>
-										<i class="fa fa-star-o empty"></i>
-									</div>
-									<h2 class="product-name"><a href="#">Дистрибьютор</a></h2>
-									<div class="product-btns">
-										<button class="main-btn icon-btn"><i class="fa fa-heart"></i></button>
-										<button class="main-btn icon-btn"><i class="fa fa-exchange"></i></button>
-										<button class="primary-btn add-to-cart"><i class="fa fa-search" aria-hidden="true"></i> Products</button>
-									</div>
-								</div>
-							</div>
-							<!-- /Product Single -->
-
-						</div>
-					</div>
-				</div>
-				<!-- /Product Slick -->
 			</div>
-			<!-- /row -->
+			<br>
+
 		</div>
-		<!-- /container -->
-	</div>
-	<!-- /section -->
+		<!-- /section -->
 
-	
+		<!-- section -->
+		<div class="section">
+			<!-- container -->
+			<div class="container">
 
-	<?php include("inc/footer1.php");?>
+
+				<!-- row -->
+				<div class="row">
+					<!-- section title -->
+					<div class="col-md-12">
+						<div class="section-title">
+							<h2 class="title">Наши дистрибьюторы</h2>
+							<div class="pull-right">
+								<div class="product-slick-dots-2 custom-dots">
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- section title -->
+
+					<!-- Product Single -->
+					<div class="col-md-3 col-sm-6 col-xs-6">
+						<div class="product product-single product-hot">
+							<div class="product-thumb">
+								<div class="product-label">
+
+								</div>
+
+								<button class="main-btn quick-view"><i class="fa fa-search-plus"></i> Quick view</button>
+								<img src="./img/logo1.jpg" alt="">
+							</div>
+							<div class="product-body">
+
+								<div class="product-rating">
+									<i class="fa fa-star"></i>
+									<i class="fa fa-star"></i>
+									<i class="fa fa-star"></i>
+									<i class="fa fa-star"></i>
+									<i class="fa fa-star-o empty"></i>
+								</div>
+
+								<div class="product-btns">
+
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- /Product Single -->
+
+					<!-- Product Slick -->
+					<div class="col-md-9 col-sm-6 col-xs-6">
+						<div class="row">
+							<div id="product-slick-2" class="product-slick">
+								<!-- Product Single -->
+								<div class="product product-single">
+									<div class="product-thumb">
+										<button class="main-btn quick-view"><i class="fa fa-search-plus"></i> Quick view</button>
+										<img src="./img/d1.png" alt="">
+									</div>
+									<div class="product-body">
+										<h3 class="product-price" style="width: 300px;">Индустрия Красоты</h3>
+										<div class="product-rating">
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star-o empty"></i>
+										</div>
+										<h2 class="product-name"><a href="#">Дистрибьютор</a></h2>
+										<div class="product-btns">
+											<button class="main-btn icon-btn"><i class="fa fa-heart"></i></button>
+											<button class="main-btn icon-btn"><i class="fa fa-exchange"></i></button>
+											<button class="primary-btn add-to-cart"><i class="fa fa-search" aria-hidden="true"></i> Products</button>
+										</div>
+									</div>
+								</div>
+								<!-- /Product Single -->
+
+								<!-- Product Single -->
+								<div class="product product-single">
+									<div class="product-thumb">
+										<div class="product-label">
+											<span class="sale">-20%</span>
+										</div>
+										<button class="main-btn quick-view"><i class="fa fa-search-plus"></i> Quick view</button>
+										<img src="./img/d2.jpg" alt="">
+									</div>
+									<div class="product-body">
+										<h3 class="product-price">Эстетик <del class="product-old-price"></del></h3>
+										<div class="product-rating">
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star-o empty"></i>
+										</div>
+										<h2 class="product-name"><a href="#">Дистрибьютор</a></h2>
+										<div class="product-btns">
+											<button class="main-btn icon-btn"><i class="fa fa-heart"></i></button>
+											<button class="main-btn icon-btn"><i class="fa fa-exchange"></i></button>
+											<button class="primary-btn add-to-cart"><i class="fa fa-search" aria-hidden="true"></i>Products</button>
+										</div>
+									</div>
+								</div>
+								<!-- /Product Single -->
+
+								<!-- Product Single -->
+								<div class="product product-single">
+									<div class="product-thumb">
+										<button class="main-btn quick-view"><i class="fa fa-search-plus"></i> Quick view</button>
+										<img src="./img/d3.jpg" alt="">
+									</div>
+									<div class="product-body">
+										<h3 class="product-price">COSCO</h3>
+										<div class="product-rating">
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star-o empty"></i>
+										</div>
+										<h2 class="product-name"><a href="#">Дистрибьютор</a></h2>
+										<div class="product-btns">
+											<button class="main-btn icon-btn"><i class="fa fa-heart"></i></button>
+											<button class="main-btn icon-btn"><i class="fa fa-exchange"></i></button>
+											<button class="primary-btn add-to-cart"><i class="fa fa-search" aria-hidden="true"></i> Products</button>
+										</div>
+									</div>
+								</div>
+								<!-- /Product Single -->
+
+								<!-- Product Single -->
+								<div class="product product-single">
+									<div class="product-thumb">
+										<div class="product-label">
+											<span>New</span>
+											<span class="sale">-20%</span>
+										</div>
+										<button class="main-btn quick-view"><i class="fa fa-search-plus"></i> Quick view</button>
+										<img src="./img/d4.jpg" alt="">
+									</div>
+									<div class="product-body">
+										<h3 class="product-price">ПрофКосМатериалы <del class="product-old-price"></del></h3>
+										<div class="product-rating">
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star-o empty"></i>
+										</div>
+										<h2 class="product-name"><a href="#">Дистрибьютор</a></h2>
+										<div class="product-btns">
+											<button class="main-btn icon-btn"><i class="fa fa-heart"></i></button>
+											<button class="main-btn icon-btn"><i class="fa fa-exchange"></i></button>
+											<button class="primary-btn add-to-cart"><i class="fa fa-search" aria-hidden="true"></i> Products</button>
+										</div>
+									</div>
+								</div>
+								<!-- /Product Single -->
+								<!-- Product Single -->
+								<div class="product product-single">
+									<div class="product-thumb">
+										<div class="product-label">
+											<span>New</span>
+											<span class="sale">-20%</span>
+										</div>
+										<button class="main-btn quick-view"><i class="fa fa-search-plus"></i> Quick view</button>
+										<img src="./img/d5.jpg" alt="">
+									</div>
+									<div class="product-body">
+										<h3 class="product-price">MeSoProff <del class="product-old-price"></del></h3>
+										<div class="product-rating">
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star-o empty"></i>
+										</div>
+										<h2 class="product-name"><a href="#">Дистрибьютор</a></h2>
+										<div class="product-btns">
+											<button class="main-btn icon-btn"><i class="fa fa-heart"></i></button>
+											<button class="main-btn icon-btn"><i class="fa fa-exchange"></i></button>
+											<button class="primary-btn add-to-cart"><i class="fa fa-search" aria-hidden="true"></i> Products</button>
+										</div>
+									</div>
+								</div>
+								<!-- /Product Single -->
+
+							</div>
+						</div>
+					</div>
+					<!-- /Product Slick -->
+				</div>
+				<!-- /row -->
+			</div>
+			<!-- /container -->
+		</div>
+		<!-- /section -->
+
+
+
+		<?php include("inc/footer1.php");?>

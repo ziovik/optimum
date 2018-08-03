@@ -144,7 +144,7 @@
 								<div class="col-md-4">
 									<ul class="list-links">
 										<li>
-											<h3 class="list-links-title" style="width: 300px;"><a href="allparak.php?allpar=5" name="allnail">Парикмахерская Продукция</a>  </h3></li>
+											<h3 class="list-links-title" style="width: 300px;"><a href="allparak.php?allpar=5" name="allpar">Парикмахерская Продукция</a>  </h3></li>
 											<?php
 											if (!isset($_GET['par'])) {
 
@@ -215,7 +215,7 @@
 											<div class="col-md-4">
 												<ul class="list-links">
 													<li>
-														<h3 class="list-links-title"><a href="alleye.php?alleye=7" name="allnail">Ресницы и брови</a>  </h3></li>
+														<h3 class="list-links-title"><a href="alleye.php?alleye=7" name="alleye">Ресницы и брови</a>  </h3></li>
 
 														<?php
 														if (!isset($_GET['eye'])) {

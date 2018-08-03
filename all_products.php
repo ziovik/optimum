@@ -34,6 +34,7 @@
 	<link type="text/css" rel="stylesheet" href="css/style.css" />
 
 	<link type="text/css" rel="stylesheet" href="css/table.css" />
+	<link type="text/css" rel="stylesheet" href="css/checkout_style.css" />
 
 	
 	<!--table resp-->

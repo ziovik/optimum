@@ -68,7 +68,7 @@
 			<div id="responsive-nav">
 				<!-- category nav -->
 				<div class="category-nav show-on-click">
-						<?php include("inc/menu.php")  ?>
+					<?php include("inc/menu.php")  ?>
 			</div>
 		</div>
 		<!-- /container -->
@@ -76,136 +76,130 @@
 	<!-- /NAVIGATION -->
 
 	<!-- BREADCRUMB -->
-	<div id="breadcrumb">
-		<div class="container">
-			<ul class="breadcrumb">
-				<li><a href="../optimum_beauty.php">Home</a></li>
-				<li class="active">Products of Косметология</li>
-			</ul>
-		</div>
-	</div>
-	<!-- /BREADCRUMB -->
+    <div id="breadcrumb">
+        <div class="container">
+            <ul class="breadcrumb">
+                <li><a href="../optimum_beauty.php">Главная</a></li>
+                <li class="active">Визаж </li>
+            </ul>
+        </div>
+    </div>
+    <!-- /BREADCRUMB -->
 
-	<!-- HOME -->
-	<div id="home"  >
-		<!-- container -->
-		<div class="container" style="min-height: 600px;" >
-			<!-- home wrap -->
-			<div class="home-wrap">
-				<!-- home slick -->
-				<div >
-				
-				<?php  cart();?>
-				<!-- banner -->
-					<div class="banner banner-1">
-						<div class="table-responsive" data-pattern="priority-columns">
-                           <table cellspacing="0" id="group-test" class="table table-small-font table-bordered table-striped">
+    <!-- HOME -->
+    <div id="home">
+        <!-- container -->
+        <div class="container" style="min-height: 600px;">
+            <!-- home wrap -->
+            <div class="home-wrap">
+                <!-- home slick -->
+                <div>
+
+					<?php cart(); ?>
+                    <!-- banner -->
+                    <div class="banner banner-1">
+                        <div class="table-responsive" data-pattern="priority-columns">
+                            <table cellspacing="0" id="group-test"
+                                   class="table table-small-font table-bordered table-striped">
                                 <thead>
-                                      <tr >
+                                <tr>
 
-                                          <th colspan="1" data-priority="1">Дистрибьютор</th>
+                                    <th colspan="1" data-priority="1" >Дистрибьютор</th>
 
-											<th colspan="1" data-priority="2">Найменование</th>
-											<th colspan="1" data-priority="3">Производитель/<br>Страна производства</th>
-											<th colspan="1" data-priority="4">Цена</th>
-											<th colspan="1" data-priority="5">Годен до</th>
-											<th colspan="1" data-priority="6">Остаток</th>
-											<th colspan="1" data-priority="7">Примечание</th>
+                                    <th colspan="1" data-priority="2" style="width:400px;">Найменование</th>
+                                    <th colspan="1" data-priority="3">Производитель/<br>Страна производства</th>
+                                    <th colspan="1" data-priority="4">Цена</th>
+                                    <th colspan="1" data-priority="5">Годен до</th>
+                                    <th colspan="1" data-priority="6">Остаток</th>
+                                    <th colspan="1" data-priority="7">Примечание</th>
+
+
+                                </tr>
+								<?php
+
+								include("inc/db.php");
+								if(isset($_SESSION['login'])){
+								$login = $_SESSION['login'];
+
+								$get_c =
+                                    "select c.id as customer_id from credentials crd join customer c on crd.id = c.credentials_id where crd.login = '$login'";
+
+								$run_c = mysqli_query($con, $get_c);
+								$array = mysqli_fetch_array($run_c);
+								$c_id = $array['customer_id'];
+
+
+								if (isset($_GET['allviz'])) {
+                                    $allviz_id = $_GET['allviz'];
+                                    $get_allviz_pro =
+                                        "select 
+                                          p.id as product_id, 
+                                          p.name as product_name, 
+                                          p.manufacturer as product_manufacturer,
+                                          p.price as product_price, 
+                                          p.min_order as product_min_order,
+                                          p.expires as expires,
+                                          p.description as discription,
+                                          p.discount as discount,
+                                          cm.name as company_name
                                           
-                
-                                      </tr>
-                                      <?php	
+                                     from
+                                        store s
+                                        join distributor d on d.id = s.distributor_id
+                                        join product p on p.distributor_id = d.id
+                                        join customer c on c.region_id = s.region_id
+                                        join company cm on cm.id = d.company_id
+                                        
+                                        where c.id ='$c_id' and p.category_id= '$allviz_id'";
 
-                                      global $con;
+                                    $run_allviz_pro = mysqli_query($con, $get_allviz_pro);
 
-										$user = $_SESSION['customer_email'];
+                                    
+									$count_allviz = mysqli_num_rows($run_allviz_pro);
 
-										$get_c = "select *from customers where customer_email = '$user' ";
+									if ($count_allviz == 0) {
+									    echo "<h2 style='text-align:center;'>Нет продукта</h2>";
+                                    } else {
+									    while($row_allviz_pro=mysqli_fetch_array($run_allviz_pro)) {
+											$pro_id = $row_allviz_pro['product_id'];
+											$pro_name = $row_allviz_pro['product_name'];
+											$pro_manu = $row_allviz_pro['product_manufacturer'];
+											$pro_price = $row_allviz_pro['product_price'];
+											$pro_dist = $row_allviz_pro['company_name'];
+                                            $pro_min_order = $row_allviz_pro['product_min_order'];
+                                            $pro_expires = $row_allviz_pro['expires'];
+                                            $pro_desc = $row_allviz_pro['discription'];
 
-										$run_c = mysqli_query($con, $get_c);
+											?>
 
-										$row_c = mysqli_fetch_array($run_c);
+                                            <tr>
+                                            <th data-priority="1" style="background: white; color: #400040;"><?php echo $pro_dist ?></th>
+                                                <th data-priority="2" style="background: white; color: #400040; width: 400px;"><a href="../details.php?pro_id=<?php echo $pro_id ?>"><?php echo $pro_name ?></a></th>
+                                                <th data-priority="3"style="background: white; color: #400040;"><?php echo $pro_manu ?></th>
+                                                <th data-priority="4" style="background: white; color: #400040;"><?php echo $pro_price ?></th>
 
-										$c_id = $row_c['customer_id'];
+                                                <th data-priority="5" style="background: white; color: #400040;"><?php echo $pro_expires ?></th>
+                                                <th data-priority="5" style="background: white; color: #400040;"><?php echo $pro_min_order ?></th>
+                                                <th data-priority="5" style="background: white; color: #400040;"><?php echo $pro_desc ?></th>
+                                            </tr>
+                                        </thead>
+                                        <?php
+										}}}}  ?>
 
-                                          if (isset($_GET['allviz'])) {
-     	
-      
-                                           $allviz_id = $_GET['allviz'];
-
-	                                      
-
-	                                       $get_allviz_pro = "select * from products p 
-
-											join distributors d on p.dist_id = d.dist_id 
-											join customers c on d.region_id = c.region_id 
-											where c.customer_id = $c_id AND product_cat='$allviz_id'";
-	                                       $run_allviz_pro = mysqli_query($con, $get_allviz_pro);
-
-	                                       $count_allviz = mysqli_num_rows($run_allviz_pro);
-	                                       if ($count_allviz == 0) {
-	   	                                      echo "<h2 style='text-align:center;'>'Нет продукта'</h2>";
-	                                        }else{
-
-	                                           while($row_allviz_pro=mysqli_fetch_array($run_allviz_pro)){
-		                                        $pro_id = $row_allviz_pro['product_id'];
-		                                        $pro_cat = $row_allviz_pro['product_cat'];
-		                                        $pro_sub_cat = $row_allviz_pro['product_sub_cat'];
-		                                        $pro_reg = $row_allviz_pro['region_id'];
-		                                        $pro_dist = $row_allviz_pro['dist_id'];
-		                                        $pro_name = $row_allviz_pro['product_title'];
-		                                        $pro_price = $row_allviz_pro['product_price'];
-		                                        $pro_manu = $row_allviz_pro['product_manu'];
-		                                        $pro_desc = $row_allviz_pro['product_desc'];
-		                                        $pro_min_order = $row_allcosm_pro['min_order'];
-													$pro_dist = $row_allcosm_pro['dist_id'];
-
-													$get_dist = "select * from distributors where dist_id = '$pro_dist'";
-
-													$run_dist = mysqli_query($con, $get_dist);
-
-													$row_dist = mysqli_fetch_array($run_dist);
-
-													$dist_name = $row_dist['dist_name'];
+                            </table>
+                        </div>
 
 
-		                                        
-		                              ?>
+                    </div>
+                    <br>
 
-                                             <tr>
-                                                 <th data-priority="1" style="background: white; color: #400040;"><?php echo $dist_name ?></th>
-														<th data-priority="2" style="background: white; color: #400040;"><a href="../details.php?pro_id=<?php  echo $pro_id ?>"><?php echo $pro_name ?></a></th>
-														<th data-priority="3"style="background: white; color: #400040;"><?php echo $pro_manu ?></th>
-														<th data-priority="4" style="background: white; color: #400040;"><?php echo $pro_price ?></th>
+                </div>
+                <!-- /section -->
+            </div>
+            <!-- /row -->
+        </div>
+        <!-- /container -->
+    </div>
+    <!-- /section -->
 
-														<th data-priority="5" style="background: white; color: #400040;">0</th>
-														<th data-priority="6" style="background: white; color: #400040;"><?php echo $pro_min_order ?></th>
-														<th data-priority="7" style="background: white; color: #400040;"><?php echo $pro_desc ?></th>
-                                                 
-               
-
-                                             </tr>
-                                            </thead>
-	
-
-		                           <?php } } } ?>	
-
-		                    </table>
-                    </div>	
-				
-				
-				
-				
-		</div>
-		<br>
-		
-	</div>
-	<!-- /section -->
-			</div>
-			<!-- /row -->
-		</div>
-		<!-- /container -->
-	</div>
-	<!-- /section -->
-
-	<?php  include("inc/footer1.php"); ?>
+<?php include("inc/footer1.php"); ?>

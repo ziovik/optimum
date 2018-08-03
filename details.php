@@ -32,6 +32,7 @@
 
 	<!-- Custom stlylesheet -->
 	<link type="text/css" rel="stylesheet" href="css/style.css" />
+	<link type="text/css" rel="stylesheet" href="css/checkout_style.css" />
 
 	
 </head>
@@ -48,10 +49,30 @@
 				<div class="pull-left">
 					<?php
 
-					if (isset($_SESSION['customer_email'])) {
-						echo "<span>Welcome to OPTIMUM BEAUTY   :    </span>". $_SESSION['customer_email'] ."<span></span>";
+					if (isset($_SESSION['login'])) {
+					    include("inc/db.php");
+						$login = $_SESSION['login'];
+
+						$get_info = "select
+                                          cc.name as name
+                                    from 
+                                       credentials c
+                                       join customer cc on cc.credentials_id = c.id
+                                    where  c.login = '$login' ";
+
+						$run_name = mysqli_query($con, $get_info);
+
+						$row = mysqli_fetch_array($run_name);
+
+						$customer_name = $row['name'];
+
+						echo "<span>Добро пожаловать  в OPTIMUM BEAUTY   :    </span>". $customer_name ."<span></span>";
+
+						echo "<span>   :    </span>". $_SESSION['login'] ."<span></span>";
+
+
 					}else{
-						echo "<b>Welcome Guest</b>";
+						echo "<b>Добро пожаловать Гость</b>";
 					}
 
 					?>
@@ -59,9 +80,17 @@
 				</div>
 				<div class="pull-right">
 					<ul class="header-top-links">
-						<li><a href="#">Store</a></li>
-						<li><a href="#">Newsletter</a></li>
-						<li><a href="#">FAQ</a></li>
+						<?php
+
+				if (!isset($_SESSION['login'])) {
+					echo "<button style='width:100px;' background:#800080; border-radius:5px;' class='btn next-btn'><a href='#' class='text-uppercase' style='color:#fff;'>Войти</a></buuton>";
+				}
+				else{
+					echo "<button style='width:100px;' background:#800080; border-radius:5px;' class='btn next-btn'><a href='logout.php' class='text-uppercase' style='color:#fff;'>Выити</a></buuton>";
+
+				}
+
+				?>
 						
 					</ul>
 				</div>
@@ -81,14 +110,7 @@
 					</div>
 					<!-- /Logo -->
 
-					<!-- Search -->
-					<div class="header-search">
-						<div class="input-group">
-                           <span class="input-group-addon">Search</span>
-                           <input type="text" name="search_text" id="search_text" placeholder="Search by Product Details" class="form-control" style="width: 600px; float: left;" />
-                        </div>
-					</div>
-					<!-- /Search -->
+					
 					
 				</div>
 				<div class="pull-right">
@@ -101,23 +123,13 @@
 								</div>
 								<strong class="text-uppercase">My Account <i class="fa fa-caret-down"></i></strong>
 							</div>
-							<?php
-
-                                            if (!isset($_SESSION['customer_email'])) {
-                                            	echo "<a href='checkout.php'>Login</a>";
-                                            }
-                                            else{
-                                            	echo "<a href='logout.php' class='text-uppercase'>Logout</a> ";
-
-                                            }
-                                         
-						     ?>
+							
 							
 							<ul class="custom-menu">
 								<li><a href="customer/my_account.php"><i class="fa fa-user-o"></i> My Account</a></li>
 								
 								<li><a href="checkout.php"><i class="fa fa-check"></i> Checkout</a></li>
-								<li><a href="customer_login.php"><i class="fa fa-unlock-alt"></i> Login</a></li>
+								<li><a href="customer/customer_login.php"><i class="fa fa-unlock-alt"></i> Login</a></li>
 								
 							</ul>
 						</li>
@@ -181,137 +193,137 @@
 				<div class="col-md-4">
 					<ul class="list-links">
 						<li><h3 class="list-links-title"><a href="products/allcosm.php?allcosm=1" name="allcosm">Косметология</a>  </h3></li>
-						
+
 						<?php
 						if (!isset($_GET['cosm'])) {
-							
 
-							$get_cosm = "select * from sub_cat where cat_id='1'";
+
+							$get_cosm = "select * from sub_category where category_id='1'";
 
 							$run_cosm = mysqli_query($con, $get_cosm);
 
-							
+
 							while ($row_cosm  = mysqli_fetch_array($run_cosm)){
 
-								$cosm_id= $row_cosm['sub_cat_id'];
-								$cosm_name = $row_cosm['sub_cat_name'];
+								$cosm_id= $row_cosm['id'];
+								$cosm_name = $row_cosm['name'];
 
 								echo " <li style='width:300px;'><a href='products/cosm.php?cosm=$cosm_id'>$cosm_name</a></li>";
-								
+
 							}
 
-							
-							
+
+
 						}
 						?>
 					</ul>
 					<hr class="hidden-md hidden-lg">
 				</div>
-				
-				
+
+
 			</div>
 		</li>
-		
+
 		<li class="dropdown side-dropdown">
 			<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true" name="depil">Депиляция <i class="fa fa-angle-right"></i></a>
 			<div class="custom-menu">
 				<div class="row">
 					<div class="col-md-4">
 						<ul class="list-links">
-							
+
 							<?php
 							if (!isset($_GET['depil'])) {
-								
-								
 
-								$get_depils = "select * from sub_cat where cat_id='2' ";
+
+
+								$get_depils = "select * from sub_category where category_id='2' ";
 								$run_depils = mysqli_query($con, $get_depils );
 
 								while ($row_depils  = mysqli_fetch_array($run_depils)){
-									$depil_id = $row_depils['sub_cat_id'];
-									$depil_name = $row_depils['sub_cat_name'];
+									$depil_id = $row_depils['id'];
+									$depil_name = $row_depils['name'];
 
 									echo " <li style='width:300px;'><a href='products/depil.php?depil=$depil_id'>$depil_name</a></li>";
 								}
 							}
 							?>
-							
-							
+
+
 						</ul>
 						<hr class="hidden-md hidden-lg">
 					</div>
-					
-					
+
+
 				</div>
 			</li>
-			
+
 			<li class="dropdown side-dropdown">
 				<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true" name="solar">Солярий <i class="fa fa-angle-right"></i></a>
 				<div class="custom-menu">
 					<div class="row">
 						<div class="col-md-4">
 							<ul class="list-links">
-								
+
 								<?php
 								if (!isset($_GET['solar'])) {
-									
-									
 
-									$get_solars = "select * from sub_cat where cat_id='3' ";
+
+
+									$get_solars = "select * from sub_category where category_id='3' ";
 									$run_solars = mysqli_query($con, $get_solars );
 
 									while ($row_solars  = mysqli_fetch_array($run_solars)){
-										$solar_id = $row_solars['sub_cat_id'];
-										$solar_name = $row_solars['sub_cat_name'];
+										$solar_id = $row_solars['id'];
+										$solar_name = $row_solars['name'];
 
 										echo " <li style='width:300px;'><a href='products/solar.php?solar=$solar_id'>$solar_name</a></li>";
 									}
 								}
 								?>
-								
-								
+
+
 							</ul>
 							<hr class="hidden-md hidden-lg">
 						</div>
-						
-						
+
+
 					</div>
 				</li>
-				
+
 				<li class="dropdown side-dropdown">
 					<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true" name="massag">Массаж <i class="fa fa-angle-right"></i></a>
 					<div class="custom-menu">
 						<div class="row">
 							<div class="col-md-4">
 								<ul class="list-links">
-									
+
 									<?php
 									if (!isset($_GET['massag'])) {
-										
-										
 
-										$get_massags = "select * from sub_cat where cat_id='4' ";
+
+
+										$get_massags = "select * from sub_category where category_id='4' ";
 										$run_massags = mysqli_query($con, $get_massags );
 
 										while ($row_massags  = mysqli_fetch_array($run_massags)){
-											$massag_id = $row_massags['sub_cat_id'];
-											$massag_name = $row_massags['sub_cat_name'];
+											$massag_id = $row_massags['id'];
+											$massag_name = $row_massags['name'];
 
 											echo " <li style='width:300px;'><a href='products/massag.php?massag=$massag_id'>$massag_name</a></li>";
 										}
 									}
 									?>
-									
-									
+
+
 								</ul>
 								<hr class="hidden-md hidden-lg">
 							</div>
-							
-							
+
+
 						</div>
 					</li>
-					
-					
+
+
 					<li class="dropdown side-dropdown"><a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true" name="par">Парикмахерская Продукция <i class="fa fa-angle-right"></i></a>
 						<div class="custom-menu">
 							<div class="row">
@@ -321,15 +333,15 @@
 											<h3 class="list-links-title" style="width: 300px;"><a href="products/allparak.php?allpar=5" name="allnail">Парикмахерская Продукция</a>  </h3></li>
 											<?php
 											if (!isset($_GET['par'])) {
-												
-												$get_pars = "select * from sub_cat where cat_id='5' ";
+
+												$get_pars = "select * from sub_category where category_id='5' ";
 												$run_pars = mysqli_query($con, $get_pars );
 
 												while ($row_pars  = mysqli_fetch_array($run_pars)){
-													$par_id = $row_pars['sub_cat_id'];
-													$par_name = $row_pars['sub_cat_name'];
+													$par_id = $row_pars['id'];
+													$par_name = $row_pars['name'];
 
-													
+
 
 													echo " <li style='width:300px;'><a href='products/parak.php?par=$par_id'>$par_name</a></li>";
 												}
@@ -338,14 +350,14 @@
 
 										</ul>
 										<hr>
-										
+
 										<hr class="hidden-md hidden-lg">
 									</div>
-									
-									
+
+
 								</div>
 							</li>
-							
+
 							<li class="dropdown side-dropdown">
 								<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true" name="nail">Ногтевой сервис <i class="fa fa-angle-right"></i></a>
 								<div class="custom-menu">
@@ -357,31 +369,31 @@
 
 													<?php
 													if (!isset($_GET['nail'])) {
-														
-														
-														$get_nails = "select * from sub_cat where cat_id='6' ";
+
+
+														$get_nails = "select * from sub_category where category_id='6' ";
 														$run_nails = mysqli_query($con, $get_nails );
 
 														while ($row_nails  = mysqli_fetch_array($run_nails)){
-															$nail_id = $row_nails['sub_cat_id'];
-															$nail_name = $row_nails['sub_cat_name'];	
+															$nail_id = $row_nails['id'];
+															$nail_name = $row_nails['name'];
 
 															echo " <li style='width:300px;'><a href='products/nail.php?nail=$nail_id'>$nail_name</a></li>";
 														}
 													}
 													?>
-													
+
 												</ul>
 												<hr>
-												
+
 												<hr class="hidden-md hidden-lg">
 											</div>
-											
-											
+
+
 										</div>
 									</div>
 								</li>
-								
+
 								<li class="dropdown side-dropdown">
 									<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true" name="eye">Ресницы и брови<i class="fa fa-angle-right"></i></a>
 									<div class="custom-menu">
@@ -393,26 +405,26 @@
 
 														<?php
 														if (!isset($_GET['eye'])) {
-															
-															
-															$get_eye = "select * from sub_cat where cat_id='7' ";
+
+
+															$get_eye = "select * from sub_category where category_id='7' ";
 															$run_eye = mysqli_query($con, $get_eye );
 
 															while ($row_eye  = mysqli_fetch_array($run_eye)){
-																$eye_id = $row_eye['sub_cat_id'];
-																$eye_name = $row_eye['sub_cat_name'];	
+																$eye_id = $row_eye['id'];
+																$eye_name = $row_eye['name'];
 
 																echo " <li style='width:300px;'><a href='products/eye.php?eye=$eye_id'>$eye_name</a></li>";
 															}
 														}
 														?>
-														
+
 													</ul>
 													<hr class="hidden-md hidden-lg">
 												</div>
-												
+
 											</div>
-											
+
 										</div>
 									</li>
 									<li class="dropdown side-dropdown">
@@ -422,17 +434,17 @@
 												<div class="col-md-4">
 													<ul class="list-links">
 														<li>
-															<h3 class="list-links-title"><a href="products/allviz.php?allviz=8" name="allviz">Визаж</a>  </h3></li>	
+															<h3 class="list-links-title"><a href="products/allviz.php?allviz=8" name="allviz">Визаж</a>  </h3></li>
 															<?php
 															if (!isset($_GET['viz'])) {
-																
-																
-																$get_viz = "select * from sub_cat where cat_id='8' ";
+
+
+																$get_viz = "select * from sub_category where category_id='8' ";
 																$run_viz = mysqli_query($con, $get_viz );
 
 																while ($row_viz  = mysqli_fetch_array($run_viz)){
-																	$viz_id = $row_viz['sub_cat_id'];
-																	$viz_name = $row_viz['sub_cat_name'];	
+																	$viz_id = $row_viz['id'];
+																	$viz_name = $row_viz['name'];
 
 																	echo " <li style='width:500px;'><a href='products/viz.php?viz=$viz_id'>$viz_name</a></li>";
 																}
@@ -441,9 +453,9 @@
 														</ul>
 														<hr class="hidden-md hidden-lg">
 													</div>
-													
+
 												</div>
-												
+
 											</div>
 										</li>
 										<li class="dropdown side-dropdown">
@@ -452,19 +464,19 @@
 												<div class="row">
 													<div class="col-md-4">
 														<ul class="list-links">
-															
+
 															<li>
-																<h3 class="list-links-title"><a href="products/alltatu.php?alltatu=9" name="alltatu">Татуаж и пирсинг</a>  </h3></li>	
+																<h3 class="list-links-title"><a href="products/alltatu.php?alltatu=9" name="alltatu">Татуаж и пирсинг</a>  </h3></li>
 																<?php
 																if (!isset($_GET['tatu'])) {
-																	
-																	
-																	$get_tatu = "select * from sub_cat where cat_id='9' ";
+
+
+																	$get_tatu = "select * from sub_category where category_id='9' ";
 																	$run_tatu = mysqli_query($con, $get_tatu );
 
 																	while ($row_tatu  = mysqli_fetch_array($run_tatu)){
-																		$tatu_id = $row_tatu['sub_cat_id'];
-																		$tatu_name = $row_tatu['sub_cat_name'];	
+																		$tatu_id = $row_tatu['id'];
+																		$tatu_name = $row_tatu['name'];
 
 																		echo " <li style='width:500px;'><a href='products/tatu.php?tatu=$tatu_id'>$tatu_name</a></li>";
 																	}
@@ -473,9 +485,9 @@
 															</ul>
 															<hr class="hidden-md hidden-lg">
 														</div>
-														
+
 													</div>
-													
+
 												</div>
 											</li>
 											<li class="dropdown side-dropdown">
@@ -484,19 +496,19 @@
 													<div class="row">
 														<div class="col-md-4">
 															<ul class="list-links">
-																
+
 																<li>
-																	<h3 class="list-links-title"><a href="products/allmat.php?allmat=10" name="allmat">Расходники</a>  </h3></li>	
+																	<h3 class="list-links-title"><a href="products/allmat.php?allmat=10" name="allmat">Расходники</a>  </h3></li>
 																	<?php
 																	if (!isset($_GET['mat'])) {
-																		
-																		
-																		$get_mat = "select * from sub_cat where cat_id='10' ";
+
+
+																		$get_mat = "select * from sub_category where category_id='10' ";
 																		$run_mat = mysqli_query($con, $get_mat );
 
 																		while ($row_mat  = mysqli_fetch_array($run_mat)){
-																			$mat_id = $row_mat['sub_cat_id'];
-																			$mat_name = $row_mat['sub_cat_name'];	
+																			$mat_id = $row_mat['id'];
+																			$mat_name = $row_mat['name'];
 
 																			echo " <li style='width:500px;'><a href='products/mat.php?mat=$mat_id'>$mat_name</a></li>";
 																		}
@@ -505,9 +517,9 @@
 																</ul>
 																<hr class="hidden-md hidden-lg">
 															</div>
-															
+
 														</div>
-														
+
 													</div>
 												</li>
 												<li class="dropdown side-dropdown">
@@ -516,19 +528,19 @@
 														<div class="row">
 															<div class="col-md-4">
 																<ul class="list-links">
-																	
+
 																	<li style="width: 300px;">
-																		<h3 class="list-links-title"><a href="products/allster.php?allster=11" name="allster">Стерилизация и дезинфекция</a>  </h3></li>	
+																		<h3 class="list-links-title"><a href="products/allster.php?allster=11" name="allster">Стерилизация и дезинфекция</a>  </h3></li>
 																		<?php
 																		if (!isset($_GET['ster'])) {
-																			
-																			
-																			$get_ster = "select * from sub_cat where cat_id='11' ";
+
+
+																			$get_ster = "select * from sub_category where category_id='11' ";
 																			$run_ster = mysqli_query($con, $get_ster );
 
 																			while ($row_ster  = mysqli_fetch_array($run_ster)){
-																				$ster_id = $row_ster['sub_cat_id'];
-																				$ster_name = $row_ster['sub_cat_name'];	
+																				$ster_id = $row_ster['id'];
+																				$ster_name = $row_ster['name'];
 
 																				echo " <li style='width:500px;'><a href='products/ster.php?ster=$ster_id'>$ster_name</a></li>";
 																			}
@@ -537,32 +549,24 @@
 																	</ul>
 																	<hr class="hidden-md hidden-lg">
 																</div>
-																
+
 															</div>
-															
+
 														</div>
 													</li>
-													
-													<li><a href="all_products.php?all_products">View All</a></li>
+
+													<li><a href="all_products.php?all_products">Все продукты</a></li>
 												</ul>
 											</div>
 											<!-- menu nav -->
 											<div class="menu-nav">
 												<span class="menu-header">Menu <i class="fa fa-bars"></i></span>
 												<ul class="menu-list">
-													
-													
-													
-													
-													<li class="dropdown default-dropdown"><a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true" name="region">Regions <i class="fa fa-caret-down"></i></a>
-														<ul class="custom-menu">
-															<?php echo getRegion();  ?>
-														</ul>
-													</li>
-													<li id="center1" ><a href="all_products.php?all_products" title="живой пойск"></a></li>
+
+													<li id="center1" ><a href="../all_products.php?all_products" title="живой пойск"></a></li>
 												</ul>
 											</div>
-				<!-- menu nav -->
+<!-- menu nav -->
 			</div>
 		</div>
 		<!-- /container -->
@@ -598,31 +602,31 @@
                         
 
 						<?php
+
 						include("inc/db.php");
+
 			            if (isset($_GET['pro_id'])) {
 			    	    $product_id = $_GET['pro_id'];
 			    
-				       $get_pro = "select * from products where product_id='$product_id'";
+				       $get_pro = "select * from product where id='$product_id'";
+
 	                   $run_pro = mysqli_query($con, $get_pro);
 
 	                   while($row_pro=mysqli_fetch_array($run_pro)){
-		              $pro_id = $row_pro['product_id'];
-		              $pro_name = $row_pro['product_title'];
-		              $pro_price = $row_pro['product_price'];
-		              $pro_dist = $row_pro['dist_id'];
-		              $pro_desc = $row_pro['product_desc'];
-		              $min_order = $row_pro['min_order'];
-		              $pro_manu = $row_pro['product_manu'];
-
-
-		           
+		                 $pro_id = $row_pro['id'];
+		                 $pro_name = $row_pro['name'];
+		                 $pro_price = $row_pro['price'];
+		                 $pro_dist = $row_pro['distributor_id'];
+		                 $pro_desc = $row_pro['description'];
+		                 $min_order = $row_pro['min_order'];
+		                $pro_manu = $row_pro['manufacturer'];
 
 	                  }
 
-	                  $get_dist = "select * from distributors ";
+	                  $get_dist = "select * from company where id = '$pro_dist' ";
 	                  $run_dist =mysqli_query($con,$get_dist);
 	                  while($row_dist=mysqli_fetch_array($run_dist)){
-	                  	$dist_name = $row_dist['dist_name'];
+	                  	$dist_name = $row_dist['name'];
 	                  }
 	                 }
 	                ?>
@@ -634,8 +638,8 @@
 								<span>New</span>
 								<span class="sale">-20%</span>
 							</div>
-							<h2 class="product-name"><?php echo $pro_name;   ?></h2>
-							<h3 class="product-price"><?php echo $pro_price; ?></h3>
+							<h2 class="product-name" style="width: 600px; font-size: 20px;"><?php echo $pro_name;   ?></h2>
+							<h3 class="product-price"><?php echo $pro_price; ?>руб</h3>
 							<div>
 								<div class="product-rating">
 									<i class="fa fa-star"></i>

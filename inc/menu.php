@@ -372,12 +372,12 @@
 													<li><a href="all_products.php?all_products">Все продукты</a></li>
 												</ul>
 											</div>
-<!-- menu nav -->
-<div class="menu-nav">
-    <span class="menu-header">Menu <i class="fa fa-bars"></i></span>
-    <ul class="menu-list">
+											<!-- menu nav -->
+											<div class="menu-nav">
+												<span class="menu-header">Menu <i class="fa fa-bars"></i></span>
+												<ul class="menu-list">
 
-        <li id="center1" ><a href="../all_products.php?all_products" title="живой пойск"></a></li>
-    </ul>
-</div>
+													<li id="center1" ><a href="../all_products.php?all_products" title="живой пойск"></a></li>
+												</ul>
+											</div>
 <!-- menu nav -->
