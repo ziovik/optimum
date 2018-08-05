@@ -12,12 +12,12 @@ class SubCategory
     public $name;
     public $category_id;
 
-    /**
-     * Category constructor.
-     * @param $id
-     * @param $name
-     * @param $category_id
-     */
+	/**
+	 * Category constructor.
+	 * @param $id
+	 * @param $name
+	 * @param $category_id
+	 */
     public function __construct($id, $name, $category_id)
     {
         $this->id = $id;

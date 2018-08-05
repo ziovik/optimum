@@ -1,5 +1,5 @@
 <?php
-include("inc/db.php");
+
 
  //for not acceessing this page by another person who is not in admin
 
@@ -38,7 +38,7 @@ if (isset($_GET['edit_sub_cat'])) {
 
 <?php
   
-  include("inc/db.php");
+  
 
   if (isset($_POST['update_sub_cat'])) {
   	

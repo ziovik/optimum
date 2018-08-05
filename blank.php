@@ -2,7 +2,6 @@
 <!DOCTYPE html>
 <?php  
        session_start();
-       include("inc/db.php");
        include("inc/functions.php");
 ?>
 <html lang="en">
@@ -48,7 +47,6 @@
 	
 		
 
-		<?php include("db.php");?>
 
        
        <header>

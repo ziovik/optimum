@@ -234,6 +234,13 @@ create table product (
   manufacturer varchar(255),
   keyword varchar(255),
   price double not null,
+
+  min_order double,
+  max_order double,
+  discount double,
+  expired date,
+  code varchar(50),
+
   distributor_id bigint not null,
   sub_category_id bigint not null,
 

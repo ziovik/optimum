@@ -1,7 +1,6 @@
 
 <?php  
        session_start();
-       include("inc/db.php");
        include("inc/functions.php");
 ?>
 <!DOCTYPE html>
@@ -635,7 +634,6 @@
 
    <?php
 
-    include("inc/db.php");
        
  
            if (isset($_POST['distributor'])) { 

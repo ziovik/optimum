@@ -2,7 +2,6 @@
 <!DOCTYPE html>
 <?php  
        session_start();
-       include("inc/db.php");
        include("inc/functions.php");
 ?>
 <html lang="en">
@@ -45,10 +44,7 @@
 
 <body>
 	<!-- HEADER -->
-	
-		
 
-		<?php include("db.php");?>
 
        
        <header>
@@ -553,7 +549,7 @@
                     <h4>$pro_title</h4>
                     <img src='admin_area/product_images/$pro_image' width='200px' height='200px' >
                     <p ><b>$pro_price</b></p>
-                    <a href='details.php?pro_id=$pro_id' style='float:left'><button>Details</button></a>
+                    <a href='product_details.php?pro_id=$pro_id' style='float:left'><button>Details</button></a>
 
                     <a href='index.php?add_cart=$pro_id'><button style='float:right'>Add to cart</button></a>
                    

@@ -93,7 +93,7 @@ $count_result = mysqli_num_rows($result);
                 <tr >
                    <td colspan='1' data-priority='7'>$dist_name</td>
                    
-                   <td colspan='1' data-priority='1'><a href='details.php?pro_id= $pro_id '>$pro_name  </td>
+                   <td colspan='1' data-priority='1'><a href='product_details.php?pro_id= $pro_id '>$pro_name  </td>
                    <td colspan='1' data-priority='3'>$pro_manu </td>
                    <td colspan='1' data-priority='2'>$pro_price</td>
                    <td colspan='1' data-priority='2'>0</td>

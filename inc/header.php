@@ -1,60 +1,41 @@
-<?php include("db.php");
-
-       ?>
 <header>
-		<!-- top Header -->
-		<div id="top-header">
-			<div class="container">
-				<div class="pull-left">
-                    <?php
+	<!-- top Header -->
+	<div id="top-header">
+		<div class="container">
+			<div class="pull-left">
+				<?php
 
-                    if (isset($_SESSION['login'])) {
-                        include("inc/db.php");
-                        $login = $_SESSION['login'];
+				if (isset($_SESSION['login'])) {
+					$login = $_SESSION['login'];
+					$customer_name = get_customer_by_login($login)->name;
 
-                        $get_info = "select
-                                          cc.name as name
-                                    from 
-                                       credentials c
-                                       join customer cc on cc.credentials_id = c.id
-                                    where  c.login = '$login' ";
-
-                        $run_name = mysqli_query($con, $get_info);
-
-                        $row = mysqli_fetch_array($run_name);
-
-                        $customer_name = $row['name'];
-
-                        echo "<span>Добро пожаловать  в OPTIMUM BEAUTY   :    </span>". $customer_name ."<span></span>";
-
-                        echo "<span>   :    </span>". $_SESSION['login'] ."<span></span>";
-
-
-                    }else{
-                        echo "<b>Добро пожаловать Гость</b>";
-                    }
-                    ?>
-					
-				</div>
-				<div class="pull-right">
-					<ul class="header-top-links">
-						<?php
-
-				if (!isset($_SESSION['login'])) {
-					echo "<button style='width:100px;' background:#800080; border-radius:5px;' class='btn next-btn'><a href='checkout.php' class='text-uppercase' style='color:#fff;'>Войти</a></buuton>";
-				}
-				else{
-					echo "<button style='width:100px;' background:#800080; border-radius:5px;' class='btn next-btn'><a href='logout.php' class='text-uppercase' style='color:#fff;'>Выити</a></buuton>";
-
+					echo "<span>Добро пожаловать  в OPTIMUM BEAUTY   :    </span>" . $customer_name . "<span></span>";
+					echo "<span>   :    </span>" . $_SESSION['login'] . "<span></span>";
+				} else {
+					echo "<b>Добро пожаловать Гость</b>";
 				}
 
 				?>
-						
-					</ul>
-				</div>
+
+			</div>
+			<div class="pull-right">
+				<ul class="header-top-links">
+					<?php
+
+					if (!isset($_SESSION['login'])) {
+						echo "<button style='width:100px;' background:#800080; border-radius:5px;' class='btn next-btn'><a href='#' class='text-uppercase' style='color:#fff;'>Войти</a></buuton>";
+					} else {
+						echo "<button style='width:100px;' background:#800080; border-radius:5px;' class='btn next-btn'><a href='logout.php' class='text-uppercase' style='color:#fff;'>Выити</a></buuton>";
+
+					}
+
+					?>
+
+				</ul>
 			</div>
 		</div>
-		<!-- /top Header -->
+	</div>
+	<!-- /top Header -->
 
 		<!-- header -->
 		<div id="header">
@@ -105,11 +86,11 @@
 							<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
 								<div class="header-btns-icon">
 									<i class="fa fa-shopping-cart"></i>
-									<span class="qty"><?php total_items();  ?></span>
+									<span class="qty"></span>
 								</div>
 								<strong class="text-uppercase">Мой заказы:</strong>
 								<br>
-								<span><?php total_price() ?></span>
+								<span></span>
 							</a>
 							<div class="custom-menu">
 								<div id="shopping-cart">

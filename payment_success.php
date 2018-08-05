@@ -1,114 +1,105 @@
+<form action="" method="post">
+	<tr>
+		<td><input type="text" name="dist"></td>
+	</tr>
+</form>
 
-  <form action="" method="post">
-      <tr>
-        <td><input type="text" name="dist"></td>
-      </tr>
-  </form>
-
-    <?php
-
-    include("inc/db.php");
- 
-           if (isset($_POST['dist'])) {
+<?php
 
 
-        // this for product details
-        $total = 0;
-        
-    global $con;
-        
-        $ip = getIP();
-
-        $sel_price = "select * from cart where ip_add = '$ip'";
-
-        $run_price = mysqli_query($con, $sel_price);
-
-        while($p_price = mysqli_fetch_array($run_price)){
-          $pro_id =$p_price['p_id'];
-
-          $pro_price = "select * from products where product_id ='$pro_id'";
-
-          $run_pro_price =mysqli_query($con, $pro_price);
-
-          while ($pp_price = mysqli_fetch_array($run_pro_price)){
-            $product_price = array($pp_price['product_price']); // getting all price
-            $product_id = $pp_price['product_id'];
-                $product_name = $pp_price['product_title'];
-            $values = array_sum($product_price);  // sum the price
-
-            $total += $values;
-
-          }
-        }
-
-        // getting quantity of product
-
-        $get_qty = "select * from  cart where p_id = '$pro_id'";
-        $run_qty = mysqli_query($con,$get_qty);
-
-        $row_qty = mysqli_fetch_array($run_qty);
-       
-        $qty = $row_qty['qty'];
-
-        if ($qty==0) {
-          $qty =1;
-
-        }else{
-          $qty=$qty;
-            $total =$total*$qty;
-        }
-
-        // this is for customer details
-        $user = $_SESSION['customer_email'];
-
-        $get_c = "select *from customers where customer_email = '$user' ";
-
-        $run_c = mysqli_query($con, $get_c);
-
-        $row_c = mysqli_fetch_array($run_c);
-
-        $c_id = $row_c['customer_id'];
-        $c_email = $row_c['customer_email'];
-        $c_name = $row_c['customer_name'];
-
-        
-        //inserting the payment to table
-
-        $insert_orders ="insert into orders (p_id,c_id,customer_email,qty,amount,order_date,status) values ('$pro_id','$c_id','$user','$qty','$total',NOW(),'in Progress')";
-
-        $run_orders = mysqli_query($con, $insert_orders);
-
-       
+if (isset($_POST['dist'])) {
 
 
-        //removing cart to empty
+	// this for product details
+	$total = 0;
+
+	global $con;
+
+	$ip = getIP();
+
+	$sel_price = "select * from cart where ip_add = '$ip'";
+
+	$run_price = mysqli_query($con, $sel_price);
+
+	while ($p_price = mysqli_fetch_array($run_price)) {
+		$pro_id = $p_price['p_id'];
+
+		$pro_price = "select * from products where product_id ='$pro_id'";
+
+		$run_pro_price = mysqli_query($con, $pro_price);
+
+		while ($pp_price = mysqli_fetch_array($run_pro_price)) {
+			$product_price = array($pp_price['product_price']); // getting all price
+			$product_id = $pp_price['product_id'];
+			$product_name = $pp_price['product_title'];
+			$values = array_sum($product_price);  // sum the price
+
+			$total += $values;
+
+		}
+	}
+
+	// getting quantity of product
+
+	$get_qty = "select * from  cart where p_id = '$pro_id'";
+	$run_qty = mysqli_query($con, $get_qty);
+
+	$row_qty = mysqli_fetch_array($run_qty);
+
+	$qty = $row_qty['qty'];
+
+	if ($qty == 0) {
+		$qty = 1;
+
+	} else {
+		$qty = $qty;
+		$total = $total * $qty;
+	}
+
+	// this is for customer details
+	$user = $_SESSION['customer_email'];
+
+	$get_c = "select *from customers where customer_email = '$user' ";
+
+	$run_c = mysqli_query($con, $get_c);
+
+	$row_c = mysqli_fetch_array($run_c);
+
+	$c_id = $row_c['customer_id'];
+	$c_email = $row_c['customer_email'];
+	$c_name = $row_c['customer_name'];
 
 
-        $empty_cart = "delete from cart";
-        $run_cart = mysqli_query($con,$empty_cart);
-        
+	//inserting the payment to table
+
+	$insert_orders = "insert into orders (p_id,c_id,customer_email,qty,amount,order_date,status) values ('$pro_id','$c_id','$user','$qty','$total',NOW(),'in Progress')";
+
+	$run_orders = mysqli_query($con, $insert_orders);
 
 
-     if (mysqli_num_rows($run_cart)==0 ) {
-      echo "<h2>Welcome :".$_SESSION['customer_email']."<br>"."Your Order was successfull. Please wait for confirmation from the Distributor.</h2>";
-      echo "<script>window.open('customer/my_account.php','_self')</script> ";
-     }else{
-      echo "<h2>Payment Failed</h2><br>";
-      echo "<a href='index.php'>Go To Back To Optimum Beauty</a>";
-     }
+	//removing cart to empty
 
 
+	$empty_cart = "delete from cart";
+	$run_cart = mysqli_query($con, $empty_cart);
 
 
+	if (mysqli_num_rows($run_cart) == 0) {
+		echo "<h2>Welcome :" . $_SESSION['customer_email'] . "<br>" . "Your Order was successfull. Please wait for confirmation from the Distributor.</h2>";
+		echo "<script>window.open('customer/my_account.php','_self')</script> ";
+	} else {
+		echo "<h2>Payment Failed</h2><br>";
+		echo "<a href='index.php'>Go To Back To Optimum Beauty</a>";
+	}
 
 
-   $headers = "MIME-Version: 1.0" ."\r\n";
-   $headers = "Content-type:text/html;charset=UTF-8". "\r\n";
-   $headers = 'From: <veloxkursk@yandex.ru>' ."\r\n";
+	$headers = "MIME-Version: 1.0" . "\r\n";
+	$headers = "Content-type:text/html;charset=UTF-8" . "\r\n";
+	$headers = 'From: <veloxkursk@yandex.ru>' . "\r\n";
 
-   $subject ="Order Details";
+	$subject = "Order Details";
 
-   $message = "<html>
+	$message = "<html>
     <p>
       hello <b>$c_name</b> you product was confirmed 
 
@@ -141,7 +132,6 @@
 
    ";
 
-  mail($c_email,$subject,$message,$headers);
+	mail($c_email, $subject, $message, $headers);
+}
 
-?>
-</body>

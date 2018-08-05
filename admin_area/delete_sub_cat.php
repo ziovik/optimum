@@ -1,5 +1,5 @@
 <?php
-   include("inc/db.php");
+
   
  //for not acceessing this page by another person who is not in admin
 

@@ -16,7 +16,7 @@
        
        <?php
 
-         include("inc/db.php");
+         
 
         
         if (isset($_SESSION['customer_email'])) {
