@@ -5,7 +5,7 @@ use super_optimum;
 
 -- roles table
 create table role (
-  id int not null auto_increment,
+  id   int                not null auto_increment,
   name varchar(10) unique not null,
 
   primary key (id)
@@ -16,12 +16,15 @@ insert into role values
   (2, 'user');
 
 create table credentials (
-  id int not null auto_increment,
-  login varchar(30) unique not null,
-  password varchar(100) not null,
-  role_id int not null,
+  id       int                not null auto_increment,
+  login    varchar(30) unique not null,
+  password varchar(100)       not null,
+  role_id  int                not null,
 
-  primary key (id)
+  primary key (id),
+  foreign key (role_id) references role (id)
+    on delete cascade
+    on update cascade
 );
 
 insert into credentials values
@@ -34,8 +37,8 @@ insert into credentials values
 
 -- country table
 create table country (
-  id bigint not null auto_increment,
-  name varchar (100) unique not null,
+  id   bigint              not null auto_increment,
+  name varchar(100) unique not null,
 
   primary key (id)
 );
@@ -46,16 +49,18 @@ insert into country (id, name) values
 
 -- region table --
 create table region (
-  id bigint not null auto_increment,
-  name varchar(255) unique not null,
-  code int unique not null,
-  country_id bigint not null,
+  id         bigint              not null auto_increment,
+  name       varchar(255) unique not null,
+  code       int unique          not null,
+  country_id bigint              not null,
 
   primary key (id),
   foreign key (country_id) references country (id)
+    on delete cascade
+    on update cascade
 );
 
-insert into region(id, name, code, country_id) values
+insert into region (id, name, code, country_id) values
   (1, 'Курск', 46, 1),
   (2, 'Белгород', 31, 1),
   (3, 'Воронеж', 36, 1),
@@ -64,12 +69,14 @@ insert into region(id, name, code, country_id) values
 
 -- street table
 create table street (
-  id bigint not null auto_increment,
-  name varchar(255) unique not null,
-  region_id bigint not null,
+  id        bigint              not null auto_increment,
+  name      varchar(255) unique not null,
+  region_id bigint              not null,
 
   primary key (id),
-  foreign key(region_id) references region (id)
+  foreign key (region_id) references region (id)
+    on delete cascade
+    on update cascade
 );
 
 insert into street values
@@ -82,14 +89,16 @@ insert into street values
 
 -- address table, address_id
 create table address (
-  id bigint not null auto_increment,
+  id         bigint      not null auto_increment,
   index_code varchar(10) not null,
-  street_id bigint not null,
-  building varchar(10) not null,
-  house varchar(10),
+  street_id  bigint      not null,
+  building   varchar(10) not null,
+  house      varchar(10),
 
   primary key (id),
   foreign key (street_id) references street (id)
+    on delete cascade
+    on update cascade
 );
 
 insert into address (id, index_code, street_id, building, house) values
@@ -102,10 +111,10 @@ insert into address (id, index_code, street_id, building, house) values
 
 -- table company --
 create table company (
-  id bigint not null auto_increment,
+  id   bigint       not null auto_increment,
   name varchar(255) not null,
   ogrn varchar(255) not null,
-  inn varchar(255) not null,
+  inn  varchar(255) not null,
 
   primary key (id)
 );
@@ -118,9 +127,9 @@ insert into company (id, name, ogrn, inn) values
 
 -- contact table --
 create table contact (
-  id bigint not null auto_increment,
-  email varchar(255) not null,
-  telephone varchar(50) not null,
+  id        bigint       not null auto_increment,
+  email     varchar(255) not null,
+  telephone varchar(50)  not null,
 
   primary key (id)
 );
@@ -134,20 +143,34 @@ insert into contact (id, email, telephone) values
 
 -- table customer
 create table customer (
-  id bigint not null auto_increment,
-  name varchar(255) not null,
-  company_id bigint,
-  contact_id bigint not null,
-  region_id bigint not null,
-  address_id bigint not null,
-  credentials_id int unique not null,
+  id             bigint       not null auto_increment,
+  name           varchar(255) not null,
+  company_id     bigint,
+  contact_id     bigint,
+  region_id      bigint,
+  address_id     bigint,
+  credentials_id int,
 
   primary key (id),
-  foreign key (company_id) references company (id),
-  foreign key (contact_id) references contact (id),
-  foreign key (region_id) references region (id),
-  foreign key (address_id) references address (id),
+  foreign key (company_id) references company (id)
+    on delete set null
+    on update cascade,
+
+  foreign key (contact_id) references contact (id)
+    on delete set null
+    on update cascade,
+
+  foreign key (region_id) references region (id)
+    on delete set null
+    on update cascade,
+
+  foreign key (address_id) references address (id)
+    on delete set null
+    on update cascade,
+
   foreign key (credentials_id) references credentials (id)
+    on delete set null
+    on update cascade
 );
 
 insert into customer (id, name, company_id, contact_id, region_id, address_id, credentials_id) values
@@ -155,19 +178,33 @@ insert into customer (id, name, company_id, contact_id, region_id, address_id, c
   (2, 'Daniel', 4, 2, 1, 1, 3); -- 1 is Kursk
 
 create table distributor (
-  id bigint not null auto_increment,
-  contact_id bigint not null,
-  company_id bigint not null,
-  credentials_id int unique not null,
-  region_id bigint not null, -- hometown of distr
-  address_id bigint not null,
+  id             bigint not null auto_increment,
+  contact_id     bigint,
+  company_id     bigint not null,
+  credentials_id int,
+  region_id      bigint,
+  address_id     bigint,
 
   primary key (id),
-  foreign key (company_id) references company (id),
-  foreign key (contact_id) references contact (id),
-  foreign key (credentials_id) references credentials (id),
-  foreign key (region_id) references region (id),
+
+  foreign key (company_id) references company (id)
+    on update cascade,
+
+  foreign key (contact_id) references contact (id)
+    on delete set null
+    on update cascade,
+
+  foreign key (credentials_id) references credentials (id)
+    on delete set null
+    on update cascade,
+
+  foreign key (region_id) references region (id)
+    on delete set null
+    on update cascade,
+
   foreign key (address_id) references address (id)
+    on delete set null
+    on update cascade
 );
 
 insert into distributor (id, contact_id, company_id, credentials_id, region_id, address_id) values
@@ -177,11 +214,16 @@ insert into distributor (id, contact_id, company_id, credentials_id, region_id, 
 
 -- store place of products
 create table store (
-  region_id bigint not null,
+  region_id      bigint not null,
   distributor_id bigint not null,
 
-  foreign key (region_id) references region (id),
-  foreign key (distributor_id) references distributor(id)
+  foreign key (region_id) references region (id)
+    on delete cascade
+    on update cascade,
+
+  foreign key (distributor_id) references distributor (id)
+    on delete cascade
+    on update cascade
 );
 
 insert into store (region_id, distributor_id) values
@@ -197,7 +239,7 @@ insert into store (region_id, distributor_id) values
 
 
 create table category (
-  id bigint not null auto_increment,
+  id   bigint              not null auto_increment,
   name varchar(255) unique not null,
 
   primary key (id)
@@ -209,12 +251,15 @@ insert into category values
   (3, 'Одежда');
 
 create table sub_category (
-  id bigint not null auto_increment,
-  name varchar(255) unique not null,
-  category_id bigint not null,
+  id          bigint       not null auto_increment,
+  name        varchar(255) not null,
+  category_id bigint       not null,
 
   primary key (id),
+
   foreign key (category_id) references category (id)
+    on delete cascade
+    on update cascade
 );
 
 insert into sub_category values
@@ -228,28 +273,34 @@ insert into sub_category values
   (6, 'Кроссовки', 3);
 
 create table product (
-  id bigint not null auto_increment,
-  name varchar(255) unique not null,
-  description varchar(255),
-  manufacturer varchar(255),
-  keyword varchar(255),
-  price double not null,
+  id              bigint              not null auto_increment,
+  name            varchar(255) unique not null,
+  description     varchar(255),
+  manufacturer    varchar(255),
+  keyword         varchar(255),
+  price           double              not null,
 
-  min_order double,
-  max_order double,
-  discount double,
-  expired date,
-  code varchar(50),
+  min_order       double,
+  max_order       double,
+  discount        double,
+  expired         date,
+  code            varchar(50),
 
-  distributor_id bigint not null,
-  sub_category_id bigint not null,
+  distributor_id  bigint              not null,
+  sub_category_id bigint,
 
   primary key (id),
-  foreign key (distributor_id) references distributor (id),
+
+  foreign key (distributor_id) references distributor (id)
+    on delete cascade
+    on update cascade,
+
   foreign key (sub_category_id) references sub_category (id)
+    on delete set null
+    on update cascade
 );
 
-insert  into product (id, name, description, manufacturer, keyword, price, distributor_id, sub_category_id) value
+insert into product (id, name, description, manufacturer, keyword, price, distributor_id, sub_category_id) value
   (1, 'Крем для бритья', null, null, null, 100, 2, 1),
   (2, 'Крем для рук', null, null, null, 8, 2, 1),
 
@@ -257,28 +308,19 @@ insert  into product (id, name, description, manufacturer, keyword, price, distr
   (4, 'iMac', null, null, null, 1000, 1, 4),
 
   (5, 'Крутая красная футболка', null, null, null, 100, 3, 5),
-  (6, 'Очень классные синие шорты', null, null, null, 80, 3, 6);
-
-create table simple_order (
-  id bigint not null auto_increment,
-  registration_date datetime not null,
-
-  primary key (id)
-);
-
-insert into simple_order values
-  (1, now() - interval 10 day), -- my order in past
-  (2, now()), -- my order
-  (3, now() + interval 3 day); -- your order
+  (6, 'Очень классные синие кроссовки', null, null, null, 80, 3, 6);
 
 -- cart table --
 create table cart (
-  id bigint not null auto_increment,
-  customer_id bigint not null,
-  status varchar(20) not null, -- active/inactive (inactive is in history)
+  id          bigint      not null auto_increment,
+  customer_id bigint      not null,
+  status      varchar(20) not null, -- active/inactive (inactive is in history)
 
   primary key (id),
-  foreign key (customer_id) references customer(id)
+
+  foreign key (customer_id) references customer (id)
+    on delete cascade
+    on update cascade
 );
 
 insert into cart (id, customer_id, status) values
@@ -288,17 +330,23 @@ insert into cart (id, customer_id, status) values
 
 -- product_item table --
 create table product_item (
-  id bigint not null auto_increment,
+  id         bigint not null auto_increment,
   product_id bigint not null,
-  quantity double not null,
-  cart_id bigint not null,
+  quantity   double not null,
+  cart_id    bigint not null,
 
   primary key (id),
-  foreign key (product_id) references product(id),
-  foreign key (cart_id) references cart(id)
+
+  foreign key (product_id) references product (id)
+    on delete cascade
+    on update cascade,
+
+  foreign key (cart_id) references cart (id)
+    on delete cascade
+    on update cascade
 );
 
-insert  into product_item (id, product_id, quantity, cart_id) values
+insert into product_item (id, product_id, quantity, cart_id) values
   (1, 2, 1, 1), -- i bought cream for hands in past
   (2, 6, 3, 1), -- i bought 3 pans in past
 
@@ -308,16 +356,19 @@ insert  into product_item (id, product_id, quantity, cart_id) values
   (5, 5, 1, 2), -- one red t-shirt (your cart)
   (6, 4, 3, 2); -- three imacs (your cart)
 
+create table simple_order (
+  id                bigint   not null auto_increment,
+  registration_date datetime not null,
+  cart_id           bigint   not null,
 
-create table cart_n_order (
-  simple_order_id bigint not null,
-  cart_id bigint not null,
+  primary key (id),
 
-  foreign key (simple_order_id) references simple_order(id),
   foreign key (cart_id) references cart (id)
+    on delete no action
+    on update cascade
 );
 
-insert into cart_n_order(simple_order_id, cart_id) values
-  (1, 1), -- my cart in first order in past,
-  (2, 3), -- your cart now
-  (3, 2); -- my cart now
+insert into simple_order values
+  (1, now() - interval 10 day, 1), -- my order in past
+  (2, now(), 3), -- my order
+  (3, now() + interval 3 day, 2); -- your order
