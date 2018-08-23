@@ -377,7 +377,7 @@
 												<span class="menu-header">Menu <i class="fa fa-bars"></i></span>
 												<ul class="menu-list">
 
-													<li id="center1" ><a href="../all_products.php?all_products" title="живой пойск"></a></li>
+													<li id="center1" ><a href="all_products.php?all_products" title="живой пойск"></a></li>
 												</ul>
 											</div>
 <!-- menu nav -->

@@ -103,6 +103,18 @@
 	<script src="js/nouislider.min.js"></script>
 	<script src="js/jquery.zoom.min.js"></script>
 	<script src="js/main.js"></script>
+	<script src="js/checkout.js"></script>
+	<script src="js/book.js"></script>
+	<script src="js/rwd-table.js?v=5.3.1"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<!--<script src="js/global.js"></script>-->
+        <script>
+            $(function() {
+                $('#bs-deps').on('hide.bs.collapse show.bs.collapse', function () {
+                    $('#bs-deps-toggle').children('span').toggleClass('fa-chevron-down').toggleClass('fa-chevron-up');
+                })
+            });
+        </script>
 
 </body>
 

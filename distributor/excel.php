@@ -4,96 +4,137 @@
     
     $output = '<meta http-equiv=Content-Type content="text/html; charset=utf-8">';
     $i = 0;
+
+    if (isset($_SESSION['distributor_id'])) {
+
+      $dist_id= $_SESSION['distributor_id'];
+
     if (isset($_POST['export_excel'])) {
-      if (isset($_SESSION['dist_email'])) {
-       $dist_email= $_SESSION['dist_email'];
+      
+
+       
+
+       $total = 0;
+         $get = "select 
+                      com.name as company_name,
+                      so.id as order_id,
+                      cc.name as customer_name,
+                      con.email as customer_email,
+                      con.telephone as customer_telephone,
+                      r.name as customer_region,
+                      st.name as street_name,
+                      a.building as customer_building,
+                      a.house as customer_house,
+                      a.index_code as index_code,
+
+                      p.name as product_name,
+                      p.manufacturer as manufacturer,
+                      p.expires as expires,
+                      p.price as price,
+                      pt.quantity as quantity
+
+
+                   from 
+                       cart c 
+                        join product_item pt on pt.cart_id = c.id
+                        join product p on p.id = pt.product_id
+                        join distributor d on d.id = p.distributor_id
+                        join company com on com.id = d.company_id
+                        join customer cc on cc.id = c.customer_id
+                        join simple_order so on so.cart_id = pt.cart_id
+                        join address a on a.id = cc.address_id
+                        join region r on r.id = cc.region_id
+                        join contact con on con.id = cc.contact_id
+                        join street st on st.id = a.street_id
+
+                    where d.id = '$dist_id'  AND (pt.onscreen_status = 'Отправил' OR pt.onscreen_status = 'Смотрел' )";     
+
+
+
+
+
+                  $run = mysqli_query($con, $get);
+                
+
+                  $rows = mysqli_fetch_array($run);
+                 
+                  $order_id = $rows['order_id'];
+
+
+
+
 
        $output .='
-       <h2 style = "text-align: center">Your orders</h2>
-       <table class="table" bordered = "2">
-       <tr>
-       <th style="width : 300px;">customer email</th>
+        <div style="text-align:center;">
 
-       <th style="width : 200px;">Price</th>
-       <th style="width : 100px;">Quantity</th>
-       <th style="width : 100px;">Action</th>
+       <h2 style="text-align:center;">'.$rows['company_name'].' </h2 ><h4 >заказ № '.$rows['order_id'].'</h4>
+       </div>
+       <div>
+       <p>От "'.$rows['customer_name'].'" </p>
+       <table>
+           <tr>
+             <td>Контактное лицо:</td>
+             <td style="padding-left:100px;"><h4 > '.$rows['customer_name'].'<br> '.$rows['customer_email'].', '.$rows['customer_telephone'].'</h4></td>
+           </tr>
+       </table>
+       <br>
+      <table>
+           <tr>
+              <td>Адрес Доставки:</td>
+              <td style="padding-left:100px;"><h4>'.$rows['customer_region'].'<br> ул.: '.$rows['street_name'].', дом: '.$rows['customer_building'].', кв. : '.$rows['customer_house'].', почтовой адресс: '.$rows['index_code'].'</h4></td>
+
+       </tr>
+       </table>
+
+       </div>
+
+       
+       <br>
+       
+       <table class="table" style= "font-family: arial, sans-serif; border-collapse: collapse; width: 100%;">
+       <tr>
+          <th style="width : 500px;  border: 1px solid #ddd; padding: 8px;  padding-top: 12px;padding-bottom: 12px; text-align: left; background-color: #800080;color: white;">наименование</th>
+          <th style="width : 200px;  border: 1px solid #ddd; padding: 8px;  padding-top: 12px;padding-bottom: 12px; text-align: left; background-color: #800080;color: white;">Производитель</th>
+          <th style="width : 50px;  border: 1px solid #ddd; padding: 8px;  padding-top: 12px;padding-bottom: 12px; text-align: left; background-color: #800080;color: white;">годен_до</th>
+          <th style="width : 100px;  border: 1px solid #ddd; padding: 8px;  padding-top: 12px;padding-bottom: 12px; text-align: left; background-color: #800080;color: white;">Цена</th>
+          <th style="width : 100px;  border: 1px solid #ddd; padding: 8px;  padding-top: 12px;padding-bottom: 12px; text-align: left; background-color: #800080;color: white;">количество</th>
+          <th style="width : 100px;  border: 1px solid #ddd; padding: 8px;  padding-top: 12px;padding-bottom: 12px; text-align: left; background-color: #800080;color: white;">Cумма</th>
        </tr>
 
        ';
 
 
-       $get_d = "select *from distributors where dist_email = '$dist_email' ";
 
-       $run_d = mysqli_query($con, $get_d);
-
-       $row_d = mysqli_fetch_array($run_d);
-
-       $dist_id = $row_d['dist_id'];
-
-       $dist_email = $row_d['dist_email'];
-
-
-
-       $i= 0;
-
-
-       $get_pro = "select * from products  where dist_id = '$dist_id' ";
-
-       $run_pro =mysqli_query($con,$get_pro);
-
-       while( $row_pro =mysqli_fetch_array($run_pro)){
-        $product_name = $row_pro['product_title'];
-
-        $p_id =$row_pro['product_id'];
-        $product_price = $row_pro['product_price'];
-
-
-
-
-        $get_email = "select * from cart where p_id = '$p_id'";
-
-        $run_email = mysqli_query($con, $get_email);
-
-        while ($row_email = mysqli_fetch_array($run_email)) {
-          $customer_email = $row_email['customer_email'];
-          $qty = $row_email['qty'];
-
-
-          $get_date = "select * from orders where customer_email ='$customer_email'";
-
-          $run_date = mysqli_query($con, $get_date);
-
-          while ($row_date = mysqli_fetch_array($run_date)) {
-            $date = $row_date['order_date'];
-            $order_id =$row_date['order_id'];
-
+  while ( $row = mysqli_fetch_array($run)) {
+    
+  
 
             $output .= '
+            
             <tr >
 
-            <td style="width : 300px; text-align:center;">'.$row_email['customer_email'].'</td>
+            <td style="width : 500px; text-align:left;  border: 1px solid #ddd;padding: 8px;">'.$row['product_name'].'</td>
 
-            <td style="width : 200px; text-align:center;"">'.$row_pro['product_price'].'</td>
-            <td style="width : 100px; text-align:center;"">'.$row_email['qty'].'</td>
-            <td style="width : 100px; text-align:center;"">'.$row_date['order_date'].'</td>
+            <td  style="width : 50px; text-align:center; border: 1px solid #ddd; padding: 8px;"">'.$row['manufacturer'].'</td>
+            <td  style="width : 50px; text-align:center; border: 1px solid #ddd; padding: 8px;"">'.$row['expires'].'</td>
+            <td  style="width : 50px; text-align:center; border: 1px solid #ddd; padding: 8px;"">'.$row['price'].'</td>
+            <td  style="width : 50px; text-align:center; border: 1px solid #ddd; padding: 8px;"">'.$row['quantity'].'</td>
+            <td  style="width : 50px; text-align:center; border: 1px solid #ddd; padding: 8px;"">'.($row['quantity']) * ($rows['price'] ).'</td>
 
             </tr>
             ';
-          }
-        }
-
-     }
-
-    }
-  }
-        $output .= '</table>';
+    
+        
 
         
-        header("Content-Disposition: attachment; filename=download.cvs");
+      }
+     }
 
-        echo $output;
+     $output .= '</table>';
+     
+    header("Content-Type: text/cvs; charset=utf-8");
+    header("Content-Disposition: attachment; filename=download.cvs");
+    echo $output;
 
-      
-
-
-      ?>
+   }
+?>

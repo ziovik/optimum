@@ -35,6 +35,18 @@
 	<link type="text/css" rel="stylesheet" href="css/style.css" />
 	<link type="text/css" rel="stylesheet" href="css/table.css" />
 	<link type="text/css" rel="stylesheet" href="css/checkout_style.css" />
+	<link type="text/css" rel="stylesheet" href="css/chat.css" />
+
+
+	<script
+			  src="https://code.jquery.com/jquery-3.3.1.js"
+			  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+			  crossorigin="anonymous">
+  	
+  </script>
+
+
+ 
 
 	
 
@@ -59,28 +71,49 @@
 				<div class="category-nav show-on-click">
 					<span class="category-header">My Account <i class="fa fa-list"></i></span>
 					<ul class="category-list">
-						<?php
-                           $login = $_SESSION['login'];
+							<?php
+                           $customer_id = $_SESSION['id'];
 
-                           $get_img = "select
-											cc.name as name
-										from 
-											credentials c
-											join customer cc on cc.credentials_id = c.id
-										where  c.login = '$login' ";
-							$run_name = mysqli_query($con, $get_img);
+                           $get_customer = "select 
+                                                c.name as customer_name,
+                                                r.name as region_name,
+                                                a.index_code as index_code,
+                                                a.building as building,
+                                                a.house as house,
+                                                con.email as email,
+                                                con.telephone as telephone,
+                                                s.name as street_name
+                                            from customer c
+	                                            join region r on r.id = c.region_id
+	                                            join address a on a.id = c.address_id 
+	                                            join street s on s.id =a.street_id
+	                                            join contact con on con.id = c.contact_id
+                                            where  c.id = '$customer_id' ";
+											
+									
+										
+							$run_name = mysqli_query($con, $get_customer);
 
 						    $row = mysqli_fetch_array($run_name);
 
-						    $customer_name = $row['name'];
+						    $customer_name = $row['customer_name'];
+						    $region_name = $row['region_name'];
+						    $building = $row['building'];
+						    $index_code = $row['index_code'];
+						    $house= $row['house'];
+						    $email = $row['email'];
+						    $telephone = $row['telephone'];
+						    $street_name = $row['street_name'];
 
 
 						?>
 
 
-						<li><a href="my_account.php?my_orders">My Orders</a></li>
-						<li><a href="my_account.php?my_info">My Information</a></li>
-						<li><a href="my_account.php?view_dist">View Distributors</a></li>
+						<li><a href="my_account.php?active_orders">Активный заказа  <i class="fa fa-spinner fa-spin" style="font-size:24px"></i></a></li>
+						<li><a href="my_account.php?my_history">История заказов  <i class="fa fa-history" style="font-size:26px"></i></a></li>
+						<li><a href="logout.php">Выити  <i class="fa fa-sign-out" style="font-size:24px"></i></a></li>
+						
+						
 
 						
 					</ul>
@@ -122,14 +155,22 @@
 	<div class="section">
 		
 		
-		<h2 style="text-align: center;">Welcome : <?php echo $customer_name;  ?></h2>
-		<p style="text-align: center;">You can see your orders progress by clicking <a href="my_account.php?my_orders"><b>HERE</b></a></p>
+		
 
 		<?php
 
 							
 				  if (isset($_GET['my_orders'])) {
 				  	include("my_orders.php");
+				  }
+				   if (isset($_GET['my_history'])) {
+				  	include("my_history.php");
+				  }
+				   if (isset($_GET['active_orders'])) {
+				  	include("active_orders.php");
+				  }
+				  if (isset($_GET['chat'])) {
+				  	include("chat.php");
 				  }
 		?>
 		
@@ -145,5 +186,3 @@
 	<?php  include("inc/footer1.php"); ?>
 
 
-
-	

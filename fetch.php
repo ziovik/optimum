@@ -1,6 +1,42 @@
+               
+<?php
+session_start();
+
+ include("inc/db.php"); 
+      
+        //getting customer details
+       $customer_id = $_SESSION['id'];
+
+       $query = "
+          select 
+            p.name,
+            p.id as product_id,
+            p.manufacturer ,
+            p.price , 
+            p.min_order ,
+            p.expires ,
+            p.description ,
+            p.discount ,
+            cm.name as company_name 
+          from 
+
+              store s
+              join distributor d on d.id = s.distributor_id
+              join product p on p.distributor_id = d.id
+              join customer c on c.region_id = s.region_id
+              join company cm on cm.id = d.company_id
+      
+     where c.id = '$customer_id'";
+     $run = mysqli_query($con, $query);
+     $row = mysqli_fetch_array($run);
+
+     $product_id = $row['product_id'];
+
+       ?>
 <div class="banner banner-1">
     <div class="table-responsive" data-pattern='priority-columns'>
-     <table cellspacing='0' id='group-test' class='table table-small-font table-bordered table-striped'>
+      <form method="post" action="all_products.php?action=add&id=<?php echo $row['product_id']; ?>">
+         <table cellspacing='0' id='group-test' class='table table-small-font table-bordered table-striped'>
         <thead>
           <tr >
 
@@ -8,36 +44,28 @@
 
               <th colspan='1' data-priority= "2" style="text-align: center;" >Найменование</th>
               <th colspan='1' data-priority= "3" style="text-align: center;">Производитель/<br>Страна производства</th>
-              <th colspan='1' data-priority= "4" style="text-align: center;">Цена</th>
+             
+              
+
+              <th colspan='1' data-priority= "4" style="text-align: center;">Цена<br>(руб.)</th>
               <th colspan='1' data-priority= "5" style="text-align: center;">Годен до</th>
               <th colspan='1' data-priority= "6" style="text-align: center;">Остаток</th>
               <th colspan='1' data-priority= "7" style="text-align: center;">Примечание</th>
+
+              <th colspan='1' data-priority= "8" style="text-align: center;">Количество</th>
+              <th colspan='1' data-priority= "9" style="text-align: center;">Добавить в корзине</th>
           </tr>
 
                
 <?php
-session_start();
+
 include("inc/functions.php");
  global $con;
        $output = '';
         //getting customer details
-       $login = $_SESSION['login'];
+       $customer_id = $_SESSION['id'];
 
-        $get_c = "select *from credentials where login = '$login' ";
-
-        $run_c = mysqli_query($con, $get_c);
-
-        $row_c = mysqli_fetch_array($run_c);
-
-        $credentials_id = $row_c['id'];
-
-        $get_customer = "select * from customer where credentials_id = '$credentials_id'";
-
-        $run_customer = mysqli_query($con, $get_customer);
-
-        $row_customer = mysqli_fetch_array($run_customer);
-
-        $customer_id = $row_customer['id'];
+        
 
 
 if(isset($_POST["query"]))
@@ -45,7 +73,15 @@ if(isset($_POST["query"]))
  $search = mysqli_real_escape_string($con, $_POST["query"]);
  $query = "
           select 
-              p.name 
+            p.name,
+            p.id as product_id,
+            p.manufacturer ,
+            p.price , 
+            p.min_order ,
+            p.expires ,
+            p.description ,
+            p.discount ,
+            cm.name as company_name 
           from 
 
               store s
@@ -63,14 +99,14 @@ else
 {
  $query = 
      "select 
-            p.id as product_id, 
-            p.name as product_name, 
-            p.manufacturer as product_manufacturer,
-            p.price as product_price, 
-            p.min_order as product_min_order,
-            p.expires as expires,
-            p.description as discription,
-            p.discount as discount,
+            p.id as product_id,
+            p.name , 
+            p.manufacturer ,
+            p.price , 
+            p.min_order ,
+            p.expires ,
+            p.description ,
+            p.discount ,
             cm.name as company_name
       from 
 
@@ -81,23 +117,28 @@ else
               join company cm on cm.id = d.company_id
       
       where c.id = '$customer_id'
-         ORDER BY product_id
+         ORDER BY p.id
  ";
 }
 $result = mysqli_query($con, $query);
+  if (!$result ) {
+             printf("Error: %s\n", mysqli_error($con));
+            exit();
+           }/// helps to check error
+
 $count_result = mysqli_num_rows($result);
  if ($count_result == 0) {
-	   	    echo "<h2>'нет продукта'</h2>";
-	      }else{
+          echo "<h2>'нет продукта'</h2>";
+        }else{
 
-	    while($row_pro=mysqli_fetch_array($result)){
-		  $pro_id = $row_pro['product_id'];
-		  $pro_expires = $row_pro['expires'];
-		  $pro_name = $row_pro['product_name'];
-		  $pro_price = $row_pro['product_price'];
-		  $pro_desc = $row_pro['discription'];
-		  $pro_manu = $row_pro['product_manufacturer'];
-      $pro_min_order = $row_pro['product_min_order'];
+      while($row_pro=mysqli_fetch_array($result)){
+      $pro_id = $row_pro['product_id'];
+      $pro_expires = $row_pro['expires'];
+      $pro_name = $row_pro['name'];
+      $pro_price = $row_pro['price'];
+      $pro_desc = $row_pro['description'];
+      $pro_manu = $row_pro['manufacturer'];
+      $pro_min_order = $row_pro['min_order'];
       $pro_dist = $row_pro['company_name'];
       $pro_discount = $row_pro['discount'];
 
@@ -105,23 +146,37 @@ $count_result = mysqli_num_rows($result);
        ?>
                 <tr >
                     <td data-priority='1' style='background: white; color: #400040;'><?php echo $pro_dist ?></td>
-                    <td data-priority='2' style='background: white; color: #400040; width: 400px;'><a href='../details.php?pro_id=<?php echo $pro_id ?>'><?php echo $pro_name ?></a></td>
+                    <td data-priority='2' style='background: white; color: #400040; width: 400px;'><a href='details.php?pro_id=<?php echo $pro_id ?>'><?php echo $pro_name ?></a></td>
                     <td data-priority='3'style='background: white; color: #400040;'><?php echo $pro_manu ?></td>
+
+                    
                     <td data-priority='4' style='background: white; color: #400040;'><?php echo $pro_price ?></td>
 
                     <td data-priority='5' style='background: white; color: #400040;'><?php echo $pro_expires ?></td>
                     <td data-priority='6' style='background: white; color: #400040;'><?php echo $pro_min_order ?></td>
                     <td data-priority='7' style='background: white; color: #400040;'><?php echo $pro_desc ?></td>
+
+                    <td><input type="text" name="quantity" class="form-control" value="1" /> </td> 
+                     <!-- hidden-->
+                      <input type="hidden" name="hidden_name" value="<?php echo $pro_name; ?>" />
+                      <input type="hidden" name="hidden_price" value="<?php echo $pro_price; ?>" /> 
+
+                    <td><input type="submit" name="add_to_cart" style="margin-top:5px; width: 70px; height: 30px; background: #800080; font-size: 14px;" class="btn btn-success" value="Add "  style="width: " /> </td> 
+
              
                 </tr>
 
+             
+
      
 <?php
-		}
+    }
 
-	}
+  }
 
 ?>
    </thead>
           </table>
+      </form>
+    
        </div>

@@ -4,18 +4,15 @@
     <div id="top-header">
         <div class="container">
             <div class="pull-left">
-                <?php
+                 <?php
 
-                if (isset($_SESSION['login'])) {
+                if (isset($_SESSION['id'])) {
                     include("inc/db.php");
-                    $login = $_SESSION['login'];
+                    $customer_id = $_SESSION['id'];
 
                     $get_info = "select
-                                          cc.name as name
-                                    from 
-                                       credentials c
-                                       join customer cc on cc.credentials_id = c.id
-                                    where  c.login = '$login' ";
+                                         name from customer 
+                                    where  id = '$customer_id' ";
 
                     $run_name = mysqli_query($con, $get_info);
 
@@ -23,12 +20,11 @@
 
                     $customer_name = $row['name'];
 
-                    echo "<span>Добро пожаловать  в OPTIMUM BEAUTY   :    </span>". $customer_name ."<span></span>";
-
-                    echo "<span>   :    </span>". $_SESSION['login'] ."<span></span>";
+                    echo "<span>Добро пожаловать  в OPTIMUM BEAUTY   :    </span>" . $customer_name . "<span></span>";
 
 
-                }else{
+
+                } else {
                     echo "<b>Добро пожаловать Гость</b>";
                 }
 
@@ -39,10 +35,9 @@
                 <ul class="header-top-links">
                     <?php
 
-                    if (!isset($_SESSION['login'])) {
+                    if (!isset($_SESSION['id'])) {
                         echo "<button style='width:100px;' background:#800080; border-radius:5px;' class='btn next-btn'><a href='#' class='text-uppercase' style='color:#fff;'>Войти</a></buuton>";
-                    }
-                    else{
+                    } else {
                         echo "<button style='width:100px;' background:#800080; border-radius:5px;' class='btn next-btn'><a href='logout.php' class='text-uppercase' style='color:#fff;'>Выити</a></buuton>";
 
                     }
@@ -83,7 +78,7 @@
 
 
                         <ul class="custom-menu">
-                            <li><a href="customer/my_account.php"><i class="fa fa-user-o"></i> личный кабинет</a></li>
+                            <li><a href="../customer/index.php"><i class="fa fa-user-o"></i> личный кабинет</a></li>
 
                             <li><a href="checkout.php"><i class="fa fa-check"></i> Checkout</a></li>
                             <li><a href="customer_login.php"><i class="fa fa-unlock-alt"></i> Выити</a></li>
@@ -109,7 +104,7 @@
 
                                 </div>
                                 <div class="shopping-cart-btns">
-                                    <a href="cart.php"><button class="main-btn">Заказы</button></a>
+                                    <a href="../cart.php"><button class="main-btn">Заказы</button></a>
                                     <button class="primary-btn">Checkout <i class="fa fa-arrow-circle-right"></i></button>
 
 

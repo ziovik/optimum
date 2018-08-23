@@ -1,6 +1,6 @@
-   <?php   
+<?php   
  session_start();  
- $connect = mysqli_connect("localhost", "root", "", "test");  
+ $connect = mysqli_connect("localhost", "root", "", "super_optimum");  
  if(isset($_POST["add_to_cart"]))  
  {  
       if(isset($_SESSION["shopping_cart"]))  
@@ -20,7 +20,7 @@
            else  
            {  
                 echo '<script>alert("Item Already Added")</script>';  
-                echo '<script>window.location="function.php"</script>';  
+                echo '<script>window.location="index.php"</script>';  
            }  
       }  
       else  
@@ -44,7 +44,7 @@
                 {  
                      unset($_SESSION["shopping_cart"][$keys]);  
                      echo '<script>alert("Item Removed")</script>';  
-                     echo '<script>window.location="function.php"</script>';  
+                     echo '<script>window.location="index.php"</script>';  
                 }  
            }  
       }  
@@ -71,7 +71,7 @@
                      {  
                 ?>  
                 <div class="col-md-4">  
-                     <form method="post" action="function.php?action=add&id=<?php echo $row["id"]; ?>">  
+                     <form method="post" action="index.php?action=add&id=<?php echo $row["id"]; ?>">  
                           <div style="border:1px solid #333; background-color:#f1f1f1; border-radius:5px; padding:16px;" align="center">  
                                <img src="<?php echo $row["image"]; ?>" class="img-responsive" /><br />  
                                <h4 class="text-info"><?php echo $row["name"]; ?></h4>  
@@ -111,7 +111,7 @@
                                <td><?php echo $values["item_quantity"]; ?></td>  
                                <td>$ <?php echo $values["item_price"]; ?></td>  
                                <td>$ <?php echo number_format($values["item_quantity"] * $values["item_price"], 2); ?></td>  
-                               <td><a href="function.php?action=delete&id=<?php echo $values["item_id"]; ?>"><span class="text-danger">Remove</span></a></td>  
+                               <td><a href="index.php?action=delete&id=<?php echo $values["item_id"]; ?>"><span class="text-danger">Remove</span></a></td>  
                           </tr>  
                           <?php  
                                     $total = $total + ($values["item_quantity"] * $values["item_price"]);  
@@ -131,3 +131,4 @@
            <br />  
       </body>  
  </html>
+   

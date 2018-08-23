@@ -1,96 +1,131 @@
 <table width="100%" align="center" >
-	<tr align="center">
-		<td colspan="7"><h2>View all Orders Here</h2></td>
-	</tr>
-	<tr style="text-align: center;">
-		<th >S/N</th>
-    <th>Customer Email</th>
-		<th>Product Name</th>
-		<th>Price</th>
-		<th>Quantity</th>
-		<th>Order Date</th>
-    <th>Action</th>
-		
-	</tr>
-     
-     <?php
+  <tr align="center">
+    <td colspan="7"><h2>Посмотреть все заявки здесь</h2></td>
+  </tr>
+  <tr style="text-align: center;">
+    <th >S/N</th>
+    <th>Имя Клиента</th>
+    <th>наименование товара</th>
+    <th>Цена</th>
+    <th>Количество</th>
+    <th>Дата заказа</th>
+    <th>действие</th>
+
+    
+  </tr>
+      <?php
+
+      
 
        include("inc/db.php");
-
-
-     // this is for customer details
-          $dist_email = $_SESSION['dist_email'];
-
-          $get_d = "select *from distributors where dist_email = '$dist_email' ";
-
-          $run_d = mysqli_query($con, $get_d);
-
-          $row_d = mysqli_fetch_array($run_d);
-
-          $dist_id = $row_d['dist_id'];
-
-          $dist_email = $row_d['dist_email'];
-
-
-          
-          $i= 0;
-
+         if (isset($_GET['check_order'])) {
+           $check_order = $_GET['check_order'];
          
-          $get_pro = "select * from products  where dist_id = '$dist_id' ";
 
-          $run_pro =mysqli_query($con,$get_pro);
+      $i=0;
+     // this is for order details
 
-         while( $row_pro =mysqli_fetch_array($run_pro)){
-              $product_name = $row_pro['product_title'];
+       if (isset($_SESSION['distributor_id'])) {
+         
+       
 
-              $p_id =$row_pro['product_id'];
-              $product_price = $row_pro['product_price'];
-              
+       $dist_id= $_SESSION['distributor_id'];
+
+       $total = 0;
+         $get = "select 
+
+                     com.name as company_name,
+                     so.registration_date as order_date,
+                     c.name as customer_name,
+                     ct.email as customer_email,
+                     ct.telephone as customer_telephone,
+                     r.name as customer_region,
+                     st.name as street_name,
+                     ad.index_code as index_code,
+                     ad.building as building,
+                     ad.house as house,
+                     p.name as product_name,
+                     p.price as price,
+                     p.manufacturer as manufacturer,
+                     p.expires as expires,
+                     pt.quantity as quantity,
+                     pt.id as product_item,
+                     ct.telephone as telephone,
+                     crt.id as cart_id,
+                     pt.id as product_id,
+                     pt.onscreen_status as status
 
 
 
-          $get_email = "select * from cart where p_id = '$p_id'";
 
-          $run_email = mysqli_query($con, $get_email);
+                  from 
+                       distributor d
+                    
+                       join company com on com.id = d.company_id
+                       join product p on p.distributor_id = d.id
+                       join product_item pt on pt.product_id = p.id
+                       join simple_order so on so.cart_id = pt.cart_id
+                       join cart crt on crt.id = so.cart_id
+                       join customer c on c.id = crt.customer_id
+                       join region r on r.id = c.region_id
+                       join address ad on ad.id = c.address_id
+                       join contact ct on ct.id = c.contact_id
+                       join street st on st.id = ad.street_id
 
-          while ($row_email = mysqli_fetch_array($run_email)) {
-                $customer_email = $row_email['customer_email'];
-                $qty = $row_email['qty'];
-                $cart_id = $row_email['cart_id'];
+
+                  where d.id = '$dist_id' AND so.id = '$check_order' AND (pt.onscreen_status='Отправил'  OR pt.onscreen_status='Смотрел')";
+
+                  $run = mysqli_query($con, $get);
+
+                  
+
+                 while($rows = mysqli_fetch_array($run)) {
+                   $cart_id = $rows['cart_id'];
+                   $status = $rows['status'];
+                  $order_date = $rows['order_date'];
+                  $customer_name = $rows['customer_name'];
+                  
+                  $product_name = $rows['product_name'];
+                  $pro_item_id = $rows['product_id'];
+                  
+                  $product_price = $rows['price'];
+                  $quantity = $rows['quantity'];
 
 
-                $get_date = "select * from orders where customer_email ='$customer_email'";
-
-                $run_date = mysqli_query($con, $get_date);
-
-                while ($row_date = mysqli_fetch_array($run_date)) {
-                  $date = $row_date['order_date'];
-                  $order_id =$row_date['order_id'];
-      
-                 $i++;
-  
-
+                                $i++;
+                      
+               
+           
+                              
      ?>
 
-     <tr align="center">
-     	<td><?php echo $i;  ?></td>
-      <td><?php echo $customer_email;  ?></td>
-     	<td><?php echo  $product_name ?><br> </td>
-      <td><?php echo  $product_price ?></td>
-     	<td><?php echo $qty; ?></td>
-     	<td><?php echo $date; ?></td>
-      
-     	<td>
-        <a href="my_account.php?seen_order=<?php echo $cart_id;  ?>">Seen</a><br><hr>
-        <a href="my_account.php?confirm_order=<?php echo $cart_id;  ?>">Complete</a><br><hr>
-        <a href="my_account.php?reject_order=<?php echo $cart_id;  ?>">Rejected</a><br><hr>
+      <tr align="center">
+            <td><?php echo $i;  ?></td>
+            <td><?php echo $customer_name; ?></td>
+            <td><?php echo $product_name; ?></td>
+            <td><?php echo $product_price; ?></td>
+            <td><?php echo $quantity; ?></td>  
+            <td><?php echo $order_date; ?></td> 
+           
+            
+            
+            <td>
+
+              <button type="submit"  class="btn btn-default  "> <a href="index1.php?seen_order=<?php echo $pro_item_id;  ?>" class="confirm">В обработку</a><i class="fa fa-spinner fa-spin" style="font-size:24px"></i></button>
+             <br><hr>
+
+              <button type="submit" id="roll" class="btn btn-default"> <a href="index1.php?confirm_order=<?php echo $pro_item_id;  ?>" class="confirm" >Выполнить</a><i class="fa fa-check" aria-hidden="true"></i></button>
+             <br><hr>
+
+               <button type="submit" name="clicked" id="clicked" class="btn btn-default"><a href="index1.php?reject_order=<?php echo $pro_item_id;  ?>" class="confirm"  >Отклонить</a> <i class="fa fa-close" style="font-size:28px;color:red"></i></button>
+              <br><hr>
+
+            </td>
+            <th><?php echo $status; ?></th>
+      </tr>
 
 
-      </td>
-     </tr>
-
-<?php } } } ?>
-
+<?php } } }?> 
 
 </table>
 <br>
@@ -100,5 +135,5 @@
   
 </form>
 
-         
+<!--onblur="validate()" disabled="false" -->
 

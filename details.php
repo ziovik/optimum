@@ -2,6 +2,9 @@
        session_start();
        include("inc/db.php");
        include("inc/functions.php");
+       //for not acceessing this page by another person who is not in admin
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -39,7 +42,7 @@
 
 <body>
 	<!-- HEADER -->
-	<?php include("db.php");
+	<?php include("inc/db.php");
 
        ?>
 <header>
@@ -49,48 +52,44 @@
 				<div class="pull-left">
 					<?php
 
-					if (isset($_SESSION['login'])) {
-					    include("inc/db.php");
-						$login = $_SESSION['login'];
+                if (isset($_SESSION['id'])) {
+                    include("inc/db.php");
+                    $customer_id = $_SESSION['id'];
 
-						$get_info = "select
-                                          cc.name as name
-                                    from 
-                                       credentials c
-                                       join customer cc on cc.credentials_id = c.id
-                                    where  c.login = '$login' ";
+                    $get_info = "select
+                                         name from customer 
+                                    where  id = '$customer_id' ";
 
-						$run_name = mysqli_query($con, $get_info);
+                    $run_name = mysqli_query($con, $get_info);
 
-						$row = mysqli_fetch_array($run_name);
+                    $row = mysqli_fetch_array($run_name);
 
-						$customer_name = $row['name'];
+                    $customer_name = $row['name'];
 
-						echo "<span>Добро пожаловать  в OPTIMUM BEAUTY   :    </span>". $customer_name ."<span></span>";
-
-						echo "<span>   :    </span>". $_SESSION['login'] ."<span></span>";
+                    echo "<span>Добро пожаловать  в OPTIMUM BEAUTY   :    </span>" . $customer_name . "<span></span>";
 
 
-					}else{
-						echo "<b>Добро пожаловать Гость</b>";
-					}
 
-					?>
+                } else {
+                    echo "<b>Добро пожаловать Гость</b>";
+                }
+
+                ?>
 					
 				</div>
 				<div class="pull-right">
 					<ul class="header-top-links">
 						<?php
 
-				if (!isset($_SESSION['login'])) {
-					echo "<button style='width:100px;' background:#800080; border-radius:5px;' class='btn next-btn'><a href='#' class='text-uppercase' style='color:#fff;'>Войти</a></buuton>";
-				}
-				else{
-					echo "<button style='width:100px;' background:#800080; border-radius:5px;' class='btn next-btn'><a href='logout.php' class='text-uppercase' style='color:#fff;'>Выити</a></buuton>";
+                    if (!isset($_SESSION['id'])) {
+                        echo "<button style='width:100px;' background:#800080; border-radius:5px;' class='btn next-btn'><a href='#' class='text-uppercase' style='color:#fff;'>Войти</a></buuton>";
+                    } else {
+                        echo "<button style='width:100px;' background:#800080; border-radius:5px;' class='btn next-btn'><a href='logout.php' class='text-uppercase' style='color:#fff;'>Выити</a></buuton>";
 
-				}
+                    }
 
-				?>
+                    ?>
+
 						
 					</ul>
 				</div>
@@ -655,14 +654,13 @@
 							
 							
 
+							
 							<div class="product-btns">
 								<div class="qty-input">
                                        
 
 									<span class="text-uppercase">QTY: </span>
-									<input class="input" type="number" name="qty" value="1">
-									<input type="hidden" name="hidden_name" value="<?php echo $pro_name;  ?>">
-									<input type="hidden" name="hidden_price" value="<?php echo $pro_price;  ?>">
+									<input class="input" type="number" name="qty">
 								</div>
 								<button class="primary-btn add-to-cart" name="add_cart"><i class="fa fa-shopping-cart"></i> 
 									<a style="color: #fff;" href="optimum_beauty.php?add_cart=<?php echo $pro_id?>">  Add to Cart</a></button>
@@ -703,3 +701,4 @@
 
 	
 	<?php include("inc/footer1.php");  ?>
+	

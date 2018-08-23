@@ -8,55 +8,39 @@ function cart(){
 	global $con;
 
 	if (isset($_GET['add_cart'])) {
-       
-		$pro_id = $_GET['add_cart'];
-
-        $status = 'in progress';
+    
+		
+		if (isset($_SESSION['id'])) {
 
 		
-		if (isset($_SESSION['login'])) {
 
-            $login = $_SESSION['login'];
+            $customer_id = $_SESSION['id'];
 
-            $get_credential_id= "select * from credentials where login = '$login'";
+            $pro_id = $_GET['add_cart'];
 
-            $run_credential = mysqli_query($con, $get_credential_id);
-
-            $row = mysqli_fetch_array($run_credential);
-
-            $credentials_id = $row['id'];
-
-            $get_customer = "select * from customer where credentials_id = '$credentials_id'";
-
-            $run_customer = mysqli_query($con, $get_customer);
-
-            $row_customer = mysqli_fetch_array($run_customer);
-
-            $customer_id = $row_customer['id'];
+           
 
 
-            $get_cart = "select * from cart where c.customer_id = '$customer_id'";
+            //getting cart_id
 
-             $run_cart = mysqli_query($con, $get_cart);
+            $sel_active_pro = "select * from cart where customer_id = '$customer_id' AND status = 'active'";
 
-             $check_cart = mysqli_num_rows($run_cart);
+             $run_cart = mysqli_query($con, $sel_active_pro);
+             $row = mysqli_fetch_array($run_cart);
+             $cart_id = $row['id'];
+
+             $sel_pro_item = "select * from product_item where cart_id='$cart_id' AND product_id = '$pro_id'";
+             $run_pro_item = mysqli_query($con, $sel_pro_item);
+             $check_cart = mysqli_num_rows($run_pro_item );
+
 
             if ($check_cart == 1) {
-            	echo "<script>alert('This Product has been selected and added in your cart');</script>";
-
+            	echo "<script>alert('This Product has already been selected and added in your cart');</script>";
+                echo "<script>window.open('all_products.php?all_products','_self');</script>";
 
             }else {
 
-			$insert_cart ="insert into cart (customer_id,status) values ('$customer_id','$status')";
-
-			
-			$run_cart = mysqli_query($con, $insert_cart);
-
-			$row = mysqli_fetch_array($run_cart);
-
-			   $cart_id = $row['id'];
-
-
+	
 			$insert_product_item = "insert into product_item (product_id,quantity,cart_id) values ('$pro_id','1','$cart_id') ";
 
 			$run_insert_product_item = mysqli_query($con, $insert_product_item);
@@ -64,11 +48,8 @@ function cart(){
 
 			if($run_insert_product_item){
 				echo "<script>alert('Product added to cart successfully')</script>";
-				echo "<script>window.open('optimum_beauty.php?all_products','_self');</script>";
-			}else{
-				echo "<script>alert('Problem in insertting the product you have already added it may be ')</script>";
-				echo "<script>window.open('optimum_beauty.php?all_products','_self');</script>";
-			    }
+				echo "<script>window.open('all_products.php?all_products','_self');</script>";
+			}
             }	
 	 }   } 
 }
@@ -77,11 +58,26 @@ function cart(){
 //total added items
 function total_items(){
 	if (isset($_GET['add_cart'])) {
+
 		global $con;
 
-		$user = $_SESSION['login'];
+		$customer_id = $_SESSION['id'];
 
-		$get_items = "select * from cart where customer_id='$user'";
+      
+
+        //getting cart_id
+
+        $sel_cart ="select * from cart where customer_id = '$customer_id' AND status = 'active'";
+
+		
+		$run_cart = mysqli_query($con, $sel_cart);
+
+		$row = mysqli_fetch_array($run_cart);
+
+		 $cart_id = $row['id'];
+
+
+		$get_items = "select * from product_item where cart_id='$cart_id' ";
 
 		$run_items = mysqli_query($con, $get_items);
 
@@ -89,8 +85,21 @@ function total_items(){
 		}else{
 			global $con;
 
-			$user = $_SESSION['login'];
-		    $get_items = "select * from cart where c.customer_id='$user'";
+		$customer_id = $_SESSION['id'];
+
+        
+        //getting cart_id
+
+        $sel_cart ="select * from cart where customer_id = '$customer_id' And status = 'active'";
+
+		
+		$run_cart = mysqli_query($con, $sel_cart);
+
+		$row = mysqli_fetch_array($run_cart);
+
+		 $cart_id = $row['id'];
+		    $get_items = "select * from product_item where cart_id='$cart_id' ";
+
 		   $run_items = mysqli_query($con, $get_items);
 
 		   $count_items =mysqli_num_rows($run_items);
@@ -113,25 +122,11 @@ function total_items(){
 		global $con;
         
         
-		if (isset($_SESSION['login'])) {
+		if (isset($_SESSION['id'])) {
 
-            $login = $_SESSION['login'];
+            $customer_id = $_SESSION['id'];
 
-            $get_credential_id= "select * from credentials where login = '$login'";
-
-            $run_credential = mysqli_query($con, $get_credential_id);
-
-            $row = mysqli_fetch_array($run_credential);
-
-            $credentials_id = $row['id'];
-
-            $get_customer = "select * from customer where credentials_id = '$credentials_id'";
-
-            $run_customer = mysqli_query($con, $get_customer);
-
-            $row_customer = mysqli_fetch_array($run_customer);
-
-            $customer_id = $row_customer['id'];
+            
 
         $sel_price = "select 
                          pt.product_id as product_id
@@ -139,7 +134,7 @@ function total_items(){
                         from 
                            cart c 
                            join product_item pt on c.id = pt.cart_id
-                        where c.customer_id = '$customer_id'";;
+                        where c.customer_id = '$customer_id' AND c.status = 'active'";
 
         $run_price = mysqli_query($con, $sel_price);
 

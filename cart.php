@@ -2,6 +2,13 @@
        session_start();
        include("inc/db.php");
        include("inc/functions.php");
+       //for not acceessing this page by another person who is not in admin
+
+   if (!isset($_SESSION['id'])) {
+  echo "<script>window.open('customer/customer_login.php?not_admin=You are not signed in!','_self')</script>";
+}
+
+else{
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -64,48 +71,44 @@
 				<div class="pull-left">
 					<?php
 
-					if (isset($_SESSION['login'])) {
-						include("inc/db.php");
-						$login = $_SESSION['login'];
+                if (isset($_SESSION['id'])) {
+                    include("inc/db.php");
+                    $customer_id = $_SESSION['id'];
 
-						$get_info = "select
-						cc.name as name
-						from 
-						credentials c
-						join customer cc on cc.credentials_id = c.id
-						where  c.login = '$login' ";
+                    $get_info = "select
+                                         name from customer 
+                                    where  id = '$customer_id' ";
 
-						$run_name = mysqli_query($con, $get_info);
+                    $run_name = mysqli_query($con, $get_info);
 
-						$row = mysqli_fetch_array($run_name);
+                    $row = mysqli_fetch_array($run_name);
 
-						$customer_name = $row['name'];
+                    $customer_name = $row['name'];
 
-						echo "<span>Добро пожаловать  в OPTIMUM BEAUTY   :    </span>". $customer_name ."<span></span>";
-
-						echo "<span>   :    </span>". $_SESSION['login'] ."<span></span>";
+                    echo "<span>Добро пожаловать  в OPTIMUM BEAUTY   :    </span>" . $customer_name . "<span></span>";
 
 
-					}else{
-						echo "<b>Добро пожаловать Гость</b>";
-					}
 
-					?>
+                } else {
+                    echo "<b>Добро пожаловать Гость</b>";
+                }
+
+                ?>
 					
 				</div>
 				<div class="pull-right">
 					<ul class="header-top-links">
 						<?php
 
-						if (!isset($_SESSION['login'])) {
-							echo "<button style='width:100px;' background:#800080; border-radius:5px;' class='btn next-btn'><a href='#' class='text-uppercase' style='color:#fff;'>Войти</a></buuton>";
-						}
-						else{
-							echo "<button style='width:100px;' background:#800080; border-radius:5px;' class='btn next-btn'><a href='logout.php' class='text-uppercase' style='color:#fff;'>Выити</a></buuton>";
+                    if (!isset($_SESSION['id'])) {
+                        echo "<button style='width:100px;' background:#800080; border-radius:5px;' class='btn next-btn'><a href='#' class='text-uppercase' style='color:#fff;'>Войти</a></buuton>";
+                    } else {
+                        echo "<button style='width:100px;' background:#800080; border-radius:5px;' class='btn next-btn'><a href='logout.php' class='text-uppercase' style='color:#fff;'>Выити</a></buuton>";
 
-						}
+                    }
 
-						?>
+                    ?>
+
 						
 					</ul>
 				</div>
@@ -141,7 +144,7 @@
 							
 							
 							<ul class="custom-menu">
-								<li><a href="customer/my_account.php"><i class="fa fa-user-o"></i> Личный кабинет </a></li>
+								<li><a href="customer/index.php"><i class="fa fa-user-o"></i> Личный кабинет </a></li>
 								
 								<li><a href="../chechout.php"><i class="fa fa-check"></i> Checkout</a></li>
 								<li><a href="customer/customer_login.php"><i class="fa fa-unlock-alt"></i>Выити</a></li>
@@ -579,7 +582,7 @@
 												<span class="menu-header">Menu <i class="fa fa-bars"></i></span>
 												<ul class="menu-list">
 
-													<li id="center1" ><a href="../all_products.php?all_products" title="живой пойск"></a></li>
+													<li id="center1" ><a href="all_products.php?all_products" title="живой пойск"></a></li>
 												</ul>
 											</div>
 <!-- menu nav -->
@@ -630,59 +633,78 @@
                           
 
 		                   global $con;
+		                   
 
-		                   $user = $_SESSION['login'];
+		                   $customer_id = $_SESSION['id'];
 
-                           $cart_items_sql = "
-								select 
-									p.name as product_name,
-								    p.price as price,
-								    p.id as product_id
-								from 
-									cart c
-								    join product_item pt on c.id = pt.cart_id
-								    join product p on p.id = pt.product_id
-								where 
-									c.customer_id = '$user'
-								order by 
-									p.name";
+		                  
 
+
+						    //getting cart_id
+
+						    $sel_cart ="select * from cart where customer_id = '$customer_id' AND status ='active'";
+
+							
+							$run_cart = mysqli_query($con, $sel_cart);
+
+							$row = mysqli_fetch_array($run_cart);
+
+							$cart_id = $row['id'];
+
+                           $cart_items_sql = "select 
+                                                  pt.product_id as product_id,
+                                                  p.name as product_name,
+                                                  p.price as product_price,
+                                                  pt.quantity as quantity
+
+                                              from product_item pt
+                                                   join product p on p.id = pt.product_id
+
+                                               where pt.cart_id = '$cart_id' ";
+								 			
                            $cart_items_query = mysqli_query($con, $cart_items_sql);
                             
 
 							while ($items = mysqli_fetch_array($cart_items_query)) {
 								$total_product_price = 0;
-								$product_title = $items['product_name'];
-								$product_price = $items['price'];
-								$product_id = $items['product_id'];
+								$product_name = $items['product_name'];
+								$product_price = $items['product_price'];
+								$qty = $items['quantity'];
+
+								$_SESSION['quantity'] = $qty;
+								 
+								$pro_id = $items['product_id'];
+
 
 						?>
 
 						<tr align="center"  >
-							<td><a href="cart.php?remove=<?php echo $product_id; ?>">Remove</a></td>
-							<td><?php echo $product_title; ?></td>
-							<td><input type="text" size="4" name="qty" ></td>
+							<td><a href="cart.php?remove=<?php echo $pro_id; ?>">Remove</a></td>
+							<td><a href="details.php?pro_id=<?php echo $pro_id ?>"><?php echo $product_name; ?></a></td>
+							<td><input type="text"  size="4" name="quantity" value="<?php echo $_SESSION['quantity']; ?>" ></td>
 							<?php
-                                
-                               if (isset($_POST['update_cart'])) {
+							
+							if (isset($_POST['update_cart'])) {
 
-                                 if (isset($_POST['qty'])) {
-                                 	
-                                 
-                               	$qty = $_POST['qty'];
+								if(isset( $_POST['quantity'])){
+									
+									
+									$qty = $_POST['quantity'];
 
-                               	$update_qty = "update cart set qty='$qty' where p_id = '$product_id'";
-                               	$run_qty = mysqli_query($con, $update_qty);
-                        
-                               if ($run_qty) {
-                                	 $total_product_price = $product_price * $qty;
-                                	 $total += $total_product_price;
+									$update_qty = "update product_item set quantity='$qty' where product_id = '$pro_id' AND cart_id = '$cart_id'";
+									$run_qty = mysqli_query($con, $update_qty);
+									
+									if ($run_qty) {
+										$total_product_price = $product_price * $qty;
+										$total += $total_product_price;
+										
 
-                                	
-                                }
-                               }	
-                               }
-							 ?>
+										
+										
+									}
+								}	
+							}
+							?>
 
 							<td><?php echo $product_price; ?></td>
 							<td><?php echo $total_product_price; ?></td>
@@ -712,9 +734,27 @@
                    if (isset($_GET['remove'])) {
   	
   	                     $remove_id = $_GET['remove'];
-  	                     $user = $_SESSION['login'];
 
-  	                     $delete_item = "delete from cart where p_id = '$remove_id' AND customer_id='$user' ";
+  	                     $customer_id = $_SESSION['id'];
+
+
+					    //getting cart_id
+
+					    $sel_cart ="select * from cart where customer_id = '$customer_id' AND status = 'active'";
+
+						
+						$run_cart = mysqli_query($con, $sel_cart);
+						    if (!$run_cart) {
+             printf("Error: %s\n", mysqli_error($con));
+            exit();
+           }/// helps to check error
+
+						$row = mysqli_fetch_array($run_cart);
+
+						$cart_id = $row['id'];
+
+
+  	                     $delete_item = "delete from product_item where product_id = '$remove_id' AND cart_id ='$cart_id' ";
 
   	                     $run_delete_item = mysqli_query($con, $delete_item);
 
@@ -739,3 +779,4 @@
 	<!-- /section -->
 
 	<?php  include("inc/footer1.php"); ?>
+	<?php  } ?>

@@ -4,6 +4,12 @@
        session_start();
        include("inc/db.php");
        include("inc/functions.php");
+       if (!isset($_SESSION['distributor_id'] )) {
+	echo "<script>window.open('login.php?not_dist=sign in!','_self')</script>";
+}
+
+else{
+	
 ?>
 <html lang="en">
 
@@ -33,13 +39,9 @@
 
 	<!-- Custom stlylesheet -->
 	<link type="text/css" rel="stylesheet" href="css/style.css" />
+	 <link type="text/css" rel="stylesheet" href="css/checkout_style.css"/>
 
-	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-	<!--[if lt IE 9]>
-		  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-		  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-		<![endif]-->
+	
 
 </head>
 
@@ -56,18 +58,52 @@
 		<div id="top-header">
 			<div class="container">
 				<div class="pull-left">
-					<?php
+					 <?php
 
-					if (isset($_SESSION['dist_email'])) {
-						echo "<span>Welcome to OPTIMUM BEAUTY   :    </span>". $_SESSION['dist_email'] ."<span></span>";
-					
-					}
+                if (isset($_SESSION['distributor_id'] )) {
+                    include("inc/db.php");
+                   $dist_id = $_SESSION['distributor_id'] ;
 
-					?>
+                    $get_info = "select
+                                       c.name as company_name
+                                  from distributor d
+                                       join company c on c.id = d.company_id
+
+                                  where  d.id = ' $dist_id' ";
+
+                    $run_name = mysqli_query($con, $get_info);
+
+
+
+                    $row = mysqli_fetch_array($run_name);
+
+                    $company_name = $row['company_name'];
+
+                    echo "<span>Добро пожаловать  в OPTIMUM BEAUTY   :    </span>" . $company_name . "<span></span>";
+
+
+
+                } else {
+                    echo "<b>Добро пожаловать Гость</b>";
+                }
+
+                ?>
 					
 				</div>
 				<div class="pull-right">
-					
+					<ul class="header-top-links">
+                    <?php
+
+                    if (!isset($_SESSION['distributor_id'])) {
+                        echo "<button style='width:100px;' background:#800080; border-radius:5px;' class='btn next-btn'><a href='#' class='text-uppercase' style='color:#fff;'>Войти</a></buuton>";
+                    } else {
+                        echo "<button style='width:100px;' background:#800080; border-radius:5px;' class='btn next-btn'><a href='logout.php' class='text-uppercase' style='color:#fff;'>Выити</a></buuton>";
+
+                    }
+
+                    ?>
+
+                </ul>
 				</div>
 			</div>
 		</div>
@@ -96,25 +132,14 @@
 								<div class="header-btns-icon">
 									<i class="fa fa-user-o"></i>
 								</div>
-								<strong class="text-uppercase">My Account <i class="fa fa-caret-down"></i></strong>
+								<strong class="text-uppercase"> Личный кабинет <i class="fa fa-caret-down"></i></strong>
 							</div>
-							<?php
-
-                                            if (!isset($_SESSION['dist_email'])) {
-                                            	echo "<a href='dist_login.php'>Login</a>";
-                                            }
-                                            else{
-                                            	echo "<a href='logout.php' class='text-uppercase'>Logout</a> ";
-
-                                            }
-                                         
-						     ?>
+							
 							
 							<ul class="custom-menu">
-								<li><a href="my_account.php"><i class="fa fa-user-o"></i> My Account</a></li>
+								<li><a href="my_account.php"><i class="fa fa-user-o"></i> Личный кабинет</a></li>
 								
-								<li><a href="../order.php"><i class="fa fa-check"></i> Checkout</a></li>
-								<li><a href="../dist_login.php"><i class="fa fa-unlock-alt"></i> Login</a></li>
+								<li><a href="logout.php"><i class="fa fa-unlock-alt"></i> Выити</a></li>
 								
 							</ul>
 						</li>
@@ -143,31 +168,37 @@
 			<div id="responsive-nav">
 				<!-- category nav -->
 				<div class="category-nav show-on-click">
-					<span class="category-header">My Account <i class="fa fa-list"></i></span>
+					<span class="category-header">Личный кабинет <i class="fa fa-list"></i></span>
 					<ul class="category-list">
 						<?php
-                           $dist = $_SESSION['dist_email'];
+                           $dist_id = $_SESSION['distributor_id'];
 
-                           $get_img = "select *from distributors where dist_email = '$dist' ";
 
-                           $run_img = mysqli_query($con, $get_img);
 
-                           $row_img = mysqli_fetch_array($run_img);
+						      	$get_company_name = "select * from company where id = '$dist_id'";
 
-                           $d_image = $row_img['dist_image'];
-                           $d_name = $row_img['dist_name'];
+						      	$run_company = mysqli_query($con, $get_company_name);
 
-                           echo "
-                                <img src='distributor_images/$d_image'  width='268px' height='150px' style='align:center;' />
-                           ";
+						      	while ($rows = mysqli_fetch_array($run_company) ){
+						      		$company_name = $rows['name'];
+
+                           }
+                       
 
 						?>
 
 
-						<li><a href="my_account.php?orders">Orders</a></li>
-						<li><a href="my_account.php?my_info">My Information</a></li>
-						<li><a href="my_account.php?view_client">View Clients</a></li>
-
+						<div class="category-nav show-on-click">
+							<span class="category-header">панель управления<i class="fa fa-list"></i></span>
+							<ul class="category-list">
+								
+								<li><a href="index.php?view_orders">Просмотреть все заказы</a></li>
+								
+								
+								<li><a href="index.php?view_products">Просмотреть все мои товары</a></li>
+								<li><a href="logout.php">Выход из системы</a></li>
+							</ul>
+						</div>
 						
 					</ul>
 				</div>
@@ -191,8 +222,8 @@
 	<div id="breadcrumb">
 		<div class="container">
 			<ul class="breadcrumb">
-				<li><a href="index.php">Home</a></li>
-				<li class="active">My Account</li>
+				<li><a href="index.php">Главная</a></li>
+				<li class="active">Личный кабинет</li>
 			</ul>
 		</div>
 	</div>
@@ -208,8 +239,8 @@
 	<div class="section">
 		
 		
-		<h2 style="text-align: center;">Welcome : <?php echo $d_name;  ?></h2>
-		<p style="text-align: center;">You can see  orders progress by clicking <a href="my_account.php?my_orders"><b>HERE</b></a></p>
+		<h2 style="text-align: center;">Добро пожаловать : <?php echo $company_name ;  ?></h2>
+		<p style="text-align: center;">Вы можете видеть ход выполнения заказов, нажав   <a href="index.php?view_orders"><b>ЗДЕСЬ</b></a></p>
 		
 		
 	</div>
@@ -224,69 +255,7 @@
 	<?php  include("inc/footer1.php"); ?>
 
 
-<?php
-	include("inc/db.php");
+	<?php } ?>
 
-if (isset($_GET['seen_order'])) {
-  
-  $get_id = $_GET['seen_order'];
-
-  $status = 'Смотрел';
-
-  $update_order = "update cart set cart_status = '$status' where cart_id = '$get_id'";
-
-  $run_update = mysqli_query($con,$update_order);
-
-  if($run_update){
-    echo "<script>alert('Order was Updated')</script>";
-    echo "<script>window.open('index.php?view_orders','_self')</script>";
-  }
-
-
-}
-?>
-
-<?php
-	include("inc/db.php");
-
-if (isset($_GET['confirm_order'])) {
-  
-  $get_id = $_GET['confirm_order'];
-
-  $status = 'Принял';
-
-  $update_order = "update cart set cart_status = '$status' where cart_id = '$get_id'";
-
-  $run_update = mysqli_query($con,$update_order);
-
-  if($run_update){
-    echo "<script>alert('Order was Updated')</script>";
-    echo "<script>window.open('index.php?view_orders','_self')</script>";
-  }
-
-
-}
-?>
-
-<?php
-	include("inc/db.php");
-
-if (isset($_GET['reject_order'])) {
-  
-  $get_id = $_GET['reject_order'];
-
-  $status = 'Отказ';
-
-  $update_order = "update cart set cart_status = '$status' where cart_id = '$get_id'";
-
-  $run_update = mysqli_query($con,$update_order);
-
-  if($run_update){
-    echo "<script>alert('Order was Updated')</script>";
-    echo "<script>window.open('index.php?view_orders','_self')</script>";
-  }
-
-
-}
-?>
 	
+

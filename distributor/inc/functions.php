@@ -8,43 +8,49 @@ function cart(){
 	global $con;
 
 	if (isset($_GET['add_cart'])) {
-       
-
-		$user = $_SESSION['customer_email'];
-		$pro_id = $_GET['add_cart'];
-
-        $cart_status = 'in progress';
+    
+		
+		if (isset($_SESSION['id'])) {
 
 		
-		if (isset($_SESSION['customer_email'])) {
-            $customer_email = $_SESSION['customer_email'];
 
-            $get_cart = "select * from cart where customer_email = '$customer_email' AND p_id = '$pro_id'";
+            $customer_id = $_SESSION['id'];
 
-            $run_cart = mysqli_query($con, $get_cart);
+            $pro_id = $_GET['add_cart'];
 
-            $check_cart = mysqli_num_rows($run_cart);
+           
+
+
+            //getting cart_id
+
+            $sel_active_pro = "select * from cart where customer_id = '$customer_id' AND status = 'active'";
+
+             $run_cart = mysqli_query($con, $sel_active_pro);
+             $row = mysqli_fetch_array($run_cart);
+             $cart_id = $row['id'];
+
+             $sel_pro_item = "select * from product_item where cart_id='$cart_id' AND product_id = '$pro_id'";
+             $run_pro_item = mysqli_query($con, $sel_pro_item);
+             $check_cart = mysqli_num_rows($run_pro_item );
+
 
             if ($check_cart == 1) {
-            	echo "<script>alert('This Product has been selected and added in your cart');</script>";
-
+            	echo "<script>alert('This Product has already been selected and added in your cart');</script>";
+                echo "<script>window.open('all_products.php?all_products','_self');</script>";
 
             }else {
 
-			$insert_pro ="insert into cart (p_id,customer_email,qty,cart_status) values ('$pro_id','$customer_email','1','$cart_status')";
-			
-			
-			$run_pro = mysqli_query($con, $insert_pro);
-			
+	
+			$insert_product_item = "insert into product_item (product_id,quantity,cart_id) values ('$pro_id','1','$cart_id') ";
 
-			if($run_pro){
+			$run_insert_product_item = mysqli_query($con, $insert_product_item);
+
+
+			if($run_insert_product_item){
 				echo "<script>alert('Product added to cart successfully')</script>";
-				echo "<script>window.open('optimum_beauty.php?all_products','_self');</script>";
-			}else{
-				echo "<script>alert('Problem in insertting the product you have already added it may be ')</script>";
-				echo "<script>window.open('optimum_beauty.php?all_products','_self');</script>";
-			    }
-            }
+				echo "<script>window.open('all_products.php?all_products','_self');</script>";
+			}
+            }	
 	 }   } 
 }
 
@@ -52,18 +58,48 @@ function cart(){
 //total added items
 function total_items(){
 	if (isset($_GET['add_cart'])) {
+
 		global $con;
 
-		$user = $_SESSION['customer_email'];
-		$get_items = "select * from cart where customer_email='$user'";
+		$customer_id = $_SESSION['id'];
+
+      
+
+        //getting cart_id
+
+        $sel_cart ="select * from cart where customer_id = '$customer_id' AND status = 'active'";
+
+		
+		$run_cart = mysqli_query($con, $sel_cart);
+
+		$row = mysqli_fetch_array($run_cart);
+
+		 $cart_id = $row['id'];
+
+
+		$get_items = "select * from product_item where cart_id='$cart_id' ";
+
 		$run_items = mysqli_query($con, $get_items);
 
 		$count_items =mysqli_num_rows($run_items);
 		}else{
 			global $con;
 
-			$user = $_SESSION['customer_email'];
-		    $get_items = "select * from cart where customer_email='$user'";
+		$customer_id = $_SESSION['id'];
+
+        
+        //getting cart_id
+
+        $sel_cart ="select * from cart where customer_id = '$customer_id' And status = 'active'";
+
+		
+		$run_cart = mysqli_query($con, $sel_cart);
+
+		$row = mysqli_fetch_array($run_cart);
+
+		 $cart_id = $row['id'];
+		    $get_items = "select * from product_item where cart_id='$cart_id' ";
+
 		   $run_items = mysqli_query($con, $get_items);
 
 		   $count_items =mysqli_num_rows($run_items);
@@ -85,23 +121,32 @@ function total_items(){
 
 		global $con;
         
-        if (isset($_SESSION['customer_email'])) {
-        	$user = $_SESSION['customer_email'];
         
+		if (isset($_SESSION['id'])) {
 
-        $sel_price = "select * from cart where customer_email = '$user'";
+            $customer_id = $_SESSION['id'];
+
+            
+
+        $sel_price = "select 
+                         pt.product_id as product_id
+
+                        from 
+                           cart c 
+                           join product_item pt on c.id = pt.cart_id
+                        where c.customer_id = '$customer_id' AND c.status = 'active'";
 
         $run_price = mysqli_query($con, $sel_price);
 
         while($p_price = mysqli_fetch_array($run_price)){
-        	$pro_id =$p_price['p_id'];
+        	$pro_id =$p_price['product_id'];
 
-        	$pro_price = "select * from products where product_id ='$pro_id'";
+        	$pro_price = "select * from product where id ='$pro_id'";
 
         	$run_pro_price =mysqli_query($con, $pro_price);
 
         	while ($pp_price = mysqli_fetch_array($run_pro_price)){
-        		$product_price = array($pp_price['product_price']); // getting all price
+        		$product_price = array($pp_price['price']); // getting all price
 
         		$values = array_sum($product_price);  // sum the price
 

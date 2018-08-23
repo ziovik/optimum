@@ -1,84 +1,86 @@
 
 
-<table width="800" align="center" >
+<table width="100%" align="center" >
 	<tr align="center">
-		<td colspan="7"><h2>View All Products</h2></td>
+		<h2 style="text-align: center;">Мои товары</h2>
 	</tr>
 	<tr style="text-align: center;">
 		<th >S/N</th>
-		<th>Product Name</th>
+		<th style="width:400px; text-align: center;">Наимнование</th>
 		
-		<th>Product Price</th>
-		<th>Minimum Buy</th>
-		<th>Region</th>
+		<th>Цена (руб)</th>
+		<th style="text-align: center;">Производитель</th>
+    <th style="text-align: center;">Годен до</th>
+    <th style="text-align: center;">Минимальная покупка</th>
+    <th style="text-align: center;">Максимальная покупка</th>
+    <th style="text-align: center;">Скидки</th>
+    <th style="text-align: center;">Примечание</th>
+
+		
 		
 	</tr>
      
      <?php
 
        include("inc/db.php");
-
-       if (isset($_SESSION['dist_email'])) {
-
-        $dist_email = $_SESSION['dist_email'];
-         
-       
-       // getting distributor info
-
-       $get_dist = "select * from distributors where dist_email = '$dist_email' ";
-       
-       $run_dist = mysqli_query($con,$get_dist);
-
-       $row_dist = mysqli_fetch_array($run_dist);
-       $dist_id = $row_dist['dist_id'];
-
-
-
-       $get_pro = "select * from products where dist_id ='$dist_id'";
-
-       $run_pro = mysqli_query($con, $get_pro);
-
        $i = 0;
 
-       while($row_pro = mysqli_fetch_array($run_pro)){
+       if (isset($_SESSION['distributor_id'])) {
 
-      
-          $pro_id = $row_pro['product_id'];
-       
-          $region = $row_pro['region_id'];
-        	$pro_name = $row_pro['product_title'];
-       	
-       	  $pro_price = $row_pro['product_price'];
+        $dist_id = $_SESSION['distributor_id'];
 
-          $min_buy = $row_pro['min_order'];
-       	
-       	  $i++;
-        
+        $get = "select 
+                  
+                   p.name as product_name,
+                   p.price as product_price,
+                   p.manufacturer as manufacturer,
+                   p.min_order as min_order,
+                   p.max_order as max_order,
+                   p.discount as discount,
+                   p.expires as expires,
+                   p.description as description
+                from 
+                    product p
+                    join distributor d on d.id = p.distributor_id
+                   
+                where d.id = '$dist_id'";
 
-       $get_region ="select * from regions where region_id='$region'";
+          $run = mysqli_query($con, $get);
+           if (!$run ) {
+             printf("Error: %s\n", mysqli_error($con));
+            exit();
+           }/// helps to check error
 
-       $run_region = mysqli_query($con, $get_region);
 
-       while ($row_region = mysqli_fetch_array($run_region)) {
-         $region_name = $row_region['region_name'];
-       
-
+          while($rows = mysqli_fetch_array($run)){
+            $product_name = $rows['product_name'];
+            $product_price = $rows['product_price'];
+            $manufacturer = $rows['manufacturer'];
+            $expires = $rows['expires'];
+            $min_order = $rows['min_order'];
+            $max_order = $rows['max_order'];
+            $discount = $rows['discount'];
+            $desc = $rows['description'];
+     
+                 $i++;
      ?>
 
      <tr align="center">
      	<td><?php echo $i;  ?></td>
-     	<td><?php echo $pro_name; ?></td>
-     	
-     	<td><?php echo $pro_price; ?></td>
-      
-      <td><?php echo $min_buy; ?></td>
+     	<td ><?php echo $product_name; ?></td>
+     	<td><?php echo $product_price; ?></td>
+      <td><?php echo $manufacturer; ?></td>
+      <td><?php echo $expires; ?></td>
+      <td><?php echo $min_order; ?></td>
+      <td><?php echo $max_order; ?></td>
+      <td><?php echo $discount ; ?></td>
+      <td><?php echo $desc ; ?></td>
 
-     	<td><?php echo $region_name; ?></td>
+     	
      	
      </tr>
 
-    <?php } }
- } ?>
+    <?php } } ?>
 
 </table>
 

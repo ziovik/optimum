@@ -10,49 +10,65 @@
 
 
 
-<div class="login">
-	<h2 style="color: white; text-align: center;"><?php  echo @$_GET['not_dist']; ?></h2>
-	<h2 style="color: white; text-align: center;"><?php  echo @$_GET['logged_out']; ?></h2>
-	<h1> Distributor Login</h1>
-    <form method="post">
-    	<input type="text" name="email" placeholder="Email" required="required" />
-        <input type="password" name="pass" placeholder="Password" required="required" />
-        <button type="submit" name="login" class="btn btn-primary btn-block btn-large">Log me in.</button>
-    </form>
-</div>
+	<div class="login">
+		<h2 style="color: white; text-align: center;"><?php  echo @$_GET['not_dist']; ?></h2>
+		<h2 style="color: white; text-align: center;"><?php  echo @$_GET['logged_out']; ?></h2>
+		<h1> Вход</h1>
+		<form method="post">
+			<input type="text" name="login" placeholder="логин..." required="required" />
+			<input type="password" name="pass" placeholder="пароль..." required="required" />
+			<button type="submit" name="submit" class="btn btn-primary btn-block btn-large">Вход</button>
+		</form>
+	</div>
 
 
 </body>
 </html>
-
 <?php
-
 include("inc/db.php");
 
-if (isset($_POST['login'])) {
-	  $email = mysql_real_escape_string($_POST['email']);
-	  $pass = mysql_real_escape_string($_POST['pass']);
+if (isset($_POST['submit'])) {
+	$dist_login = $_POST['login'];
 
-	  $sel_dist = "select * from distributors where dist_email='$email' AND dist_pass='$pass'";
+	$pass = $_POST['pass'];
 
-	  $run_dist = mysqli_query($con, $sel_dist);
+	$sel_distributor = "select 
+	                         c.id as credential_id, 
+	                         d.id as distributor_id,
+	                         com.name as name,
+	                         c.login as login
 
-	  $check_dist = mysqli_num_rows($run_dist);
+	                    from credentials c
+	                    join distributor d on d.credentials_id = c.id
+	                    join company com on com.id = d.company_id
 
-	  if ($check_dist == 1) {
-	  	
-	  	$_SESSION['dist_email'] = $email;
-        echo "<script >alert('$email')</script>";
-	  	echo "<script>window.open('index.php?logged_in=You have successfully Logged into Distributor','_self')</script>";
-	  }
+	                    where c.login='$dist_login' AND c.password='$pass'";
 
-	  else{
-	  	echo "<script>alert('Password or Email is wrong')</script>";
-	  	
-	  }
+	$run_distributor = mysqli_query($con, $sel_distributor);
+
+	$check_distributor  = mysqli_num_rows($run_distributor);
+
+	if ($check_distributor == 0 ) {
+		echo "<script>alert('невервеный пароль или логин')</script>";
+		exit();
+	}
+
+    while ($rows_distributor = mysqli_fetch_array($run_distributor)){
+    	 $credential_id = $rows_distributor['credential_id'];
+      	
+      	$dist_id = $rows_distributor['distributor_id'];
 
 
 
-}
+
+  		$_SESSION['distributor_id'] = $dist_id;
+
+
+      		echo "<script>alert('Вы успешно вошлли в систему')</script>";
+      		echo "<script>window.open('index.php','_self')</script>";
+      	}
+      }
+    
+    
 
 ?>

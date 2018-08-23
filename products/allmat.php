@@ -118,15 +118,8 @@ include("inc/functions.php");
 								<?php
 
 								include("inc/db.php");
-								if(isset($_SESSION['login'])){
-								$login = $_SESSION['login'];
-
-								$get_c =
-                                    "select c.id as customer_id from credentials crd join customer c on crd.id = c.credentials_id where crd.login = '$login'";
-
-								$run_c = mysqli_query($con, $get_c);
-								$array = mysqli_fetch_array($run_c);
-								$c_id = $array['customer_id'];
+								if(isset($_SESSION['id'])){
+                                $customer_id = $_SESSION['id'];
 
 
 								if (isset($_GET['allmat'])) {
@@ -149,8 +142,10 @@ include("inc/functions.php");
                                         join product p on p.distributor_id = d.id
                                         join customer c on c.region_id = s.region_id
                                         join company cm on cm.id = d.company_id
+                                        join sub_category sb on sb.id = p.sub_category_id
+                                        join category ct on ct.id = sb.category_id
                                         
-                                        where c.id ='$c_id' and p.category_id= '$allmat_id'";
+                                        where c.id ='$customer_id' and ct.id= '$allmat_id'";
 
                                     $run_allmat_pro = mysqli_query($con, $get_allmat_pro);
 

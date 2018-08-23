@@ -5,48 +5,43 @@
 				<div class="pull-left">
 					<?php
 
-					if (isset($_SESSION['login'])) {
-						include("inc/db.php");
-						$login = $_SESSION['login'];
+                if (isset($_SESSION['id'])) {
+                    include("inc/db.php");
+                    $customer_id = $_SESSION['id'];
 
-						$get_info = "select
-						cc.name as name
-						from 
-						credentials c
-						join customer cc on cc.credentials_id = c.id
-						where  c.login = '$login' ";
+                    $get_info = "select
+                                         name from customer 
+                                    where  id = '$customer_id' ";
 
-						$run_name = mysqli_query($con, $get_info);
+                    $run_name = mysqli_query($con, $get_info);
 
-						$row = mysqli_fetch_array($run_name);
+                    $row = mysqli_fetch_array($run_name);
 
-						$customer_name = $row['name'];
+                    $customer_name = $row['name'];
 
-						echo "<span>Добро пожаловать  в OPTIMUM BEAUTY   :    </span>". $customer_name ."<span></span>";
-
-						echo "<span>   :    </span>". $_SESSION['login'] ."<span></span>";
+                    echo "<span>Добро пожаловать  в OPTIMUM BEAUTY   :    </span>" . $customer_name . "<span></span>";
 
 
-					}else{
-						echo "<b>Добро пожаловать Гость</b>";
-					}
 
-					?>
+                } else {
+                    echo "<b>Добро пожаловать Гость</b>";
+                }
+
+                ?>
 					
 				</div>
 				<div class="pull-right">
 					<ul class="header-top-links">
 						<?php
 
-						if (!isset($_SESSION['login'])) {
-							echo "<button style='width:100px;' background:#800080; border-radius:5px;' class='btn next-btn'><a href='#' class='text-uppercase' style='color:#fff;'>Войти</a></buuton>";
-						}
-						else{
-							echo "<button style='width:100px;' background:#800080; border-radius:5px;' class='btn next-btn'><a href='logout.php' class='text-uppercase' style='color:#fff;'>Выити</a></buuton>";
+                    if (!isset($_SESSION['id'])) {
+                        echo "<button style='width:100px;' background:#800080; border-radius:5px;' class='btn next-btn'><a href='#' class='text-uppercase' style='color:#fff;'>Войти</a></buuton>";
+                    } else {
+                        echo "<button style='width:100px;' background:#800080; border-radius:5px;' class='btn next-btn'><a href='logout.php' class='text-uppercase' style='color:#fff;'>Выити</a></buuton>";
 
-						}
+                    }
 
-						?>
+                    ?>
 					</ul>
 				</div>
 			</div>
@@ -76,14 +71,14 @@
 								<div class="header-btns-icon">
 									<i class="fa fa-user-o"></i>
 								</div>
-								<strong class="text-uppercase">My Account <i class="fa fa-caret-down"></i></strong>
+								<strong >Личный кабинет <i class="fa fa-caret-down"></i></strong>
 							</div>
 							
 							<ul class="custom-menu">
-								<li><a href="my_account.php"><i class="fa fa-user-o"></i> My Account</a></li>
+								<li><a href="index.php"><i class="fa fa-user-o"></i> Личный кабинет</a></li>
 								
 								<li><a href="../checkout.php"><i class="fa fa-check"></i> Checkout</a></li>
-								<li><a href="logout.php"><i class="fa fa-unlock-alt"></i> Logout</a></li>
+								<li><a href="logout.php"><i class="fa fa-unlock-alt"></i> Выити</a></li>
 								
 							</ul>
 						</li>
