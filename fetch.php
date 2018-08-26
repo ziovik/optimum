@@ -33,16 +33,14 @@ session_start();
      $product_id = $row['product_id'];
 
        ?>
-<div class="banner banner-1">
-    <div class="table-responsive" data-pattern='priority-columns'>
-      <form method="post" action="all_products.php?action=add&id=<?php echo $row['product_id']; ?>">
+                         
          <table cellspacing='0' id='group-test' class='table table-small-font table-bordered table-striped'>
         <thead>
           <tr >
 
               <th colspan='1' data-priority= "1" style="text-align: center;" >Дистрибьютор</th>
 
-              <th colspan='1' data-priority= "2" style="text-align: center;" >Найменование</th>
+              <th colspan='1' data-priority= "2" style="text-align: center; max-width: 500px;"  >Найменование</th>
               <th colspan='1' data-priority= "3" style="text-align: center;">Производитель/<br>Страна производства</th>
              
               
@@ -51,9 +49,8 @@ session_start();
               <th colspan='1' data-priority= "5" style="text-align: center;">Годен до</th>
               <th colspan='1' data-priority= "6" style="text-align: center;">Остаток</th>
               <th colspan='1' data-priority= "7" style="text-align: center;">Примечание</th>
-
-              <th colspan='1' data-priority= "8" style="text-align: center;">Количество</th>
-              <th colspan='1' data-priority= "9" style="text-align: center;">Добавить в корзине</th>
+              <th colspan='1' data-priority= "7" style="text-align: center;">Добавить</th>
+              
           </tr>
 
                
@@ -145,8 +142,11 @@ $count_result = mysqli_num_rows($result);
 
        ?>
                 <tr >
+
+                <form method="post"action="cart.php?action=add&id=<?php echo $pro_id; ?>" style = "width: 100%;">
+                 
                     <td data-priority='1' style='background: white; color: #400040;'><?php echo $pro_dist ?></td>
-                    <td data-priority='2' style='background: white; color: #400040; width: 400px;'><a href='details.php?pro_id=<?php echo $pro_id ?>'><?php echo $pro_name ?></a></td>
+                    <td data-priority='2' style='background: white; color: #400040; width: 400px;'><a href='details.php?pro_id=<?php echo $pro_id ?>' style = "max-width: 500px;"><?php echo $pro_name ?></a></td>
                     <td data-priority='3'style='background: white; color: #400040;'><?php echo $pro_manu ?></td>
 
                     
@@ -156,14 +156,19 @@ $count_result = mysqli_num_rows($result);
                     <td data-priority='6' style='background: white; color: #400040;'><?php echo $pro_min_order ?></td>
                     <td data-priority='7' style='background: white; color: #400040;'><?php echo $pro_desc ?></td>
 
-                    <td><input type="text" name="quantity" class="form-control" value="1" /> </td> 
-                     <!-- hidden-->
-                      <input type="hidden" name="hidden_name" value="<?php echo $pro_name; ?>" />
-                      <input type="hidden" name="hidden_price" value="<?php echo $pro_price; ?>" /> 
+                    <td><input type="text" name="quantity" class="form-control" value="1"/>
+                    <!-- hidden-->
+                 
+                        <input type="hidden" name="hidden_name" value="<?php echo $pro_name; ?>"/>
+                        <input type="hidden" name="hidden_price" value="<?php echo $pro_price; ?>"/>
+                     
+                   
+                        <input type="submit" name="add_to_cart"
+                               style="margin-top:5px; width: 70px; height: 30px; background: #800080; font-size: 14px;"
+                               class="btn btn-success" value="Add" style="width: "/>
+                    </td>
 
-                    <td><input type="submit" name="add_to_cart" style="margin-top:5px; width: 70px; height: 30px; background: #800080; font-size: 14px;" class="btn btn-success" value="Add "  style="width: " /> </td> 
-
-             
+                  </form>
                 </tr>
 
              

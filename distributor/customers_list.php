@@ -50,7 +50,7 @@
                       <li class="header-cart dropdown default-dropdown"  >
                         
                         	<div class="header-btns-icon"  >
-                               <a href="index1.php?chat=<?php echo $customer_id;  ?>"><i class='fa fa-envelope faa-shake animated fa-4x' style="font-size:50px;color:red; float: right;  "></i></a>
+                               <a href="index1.php?customer_id=<?php echo $customer_id;  ?>"><i class='fa fa-envelope faa-shake animated fa-4x' style="font-size:50px;color:red; float: right;  "></i></a>
                                 <span class="qty" style="width: 20px; height: 20px;" >1</span>
                             </div>
                           

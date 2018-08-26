@@ -37,6 +37,7 @@
                      com.name as company_name,
                      so.registration_date as order_date,
                      c.name as customer_name,
+                     c.id as customer_id,
                      ct.email as customer_email,
                      ct.telephone as customer_telephone,
                      r.name as customer_region,
@@ -84,7 +85,7 @@
                    $status = $rows['status'];
                   $order_date = $rows['order_date'];
                   $customer_name = $rows['customer_name'];
-                  
+                  $customer_id = $rows['customer_id'];
                   $product_name = $rows['product_name'];
                   $pro_item_id = $rows['product_id'];
                   
@@ -93,8 +94,7 @@
 
 
                                 $i++;
-                      
-               
+
            
                               
      ?>
