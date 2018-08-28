@@ -25,6 +25,7 @@
          
      // this is for customer details
           $customer_id = $_SESSION['id'];
+         
 
          
           $i= 0;
@@ -42,7 +43,7 @@
                               cart c
                               join product_item pt on pt.cart_id = c.id
                               join simple_order so on so.cart_id = pt.cart_id
-                         where c.customer_id = '$customer_id' ";
+                         where c.customer_id = '$customer_id' AND (pt.onscreen_status = 'Принял'  OR pt.onscreen_status = 'Отказ') ";
 
             $run_cart = mysqli_query($con, $get_cart);
 

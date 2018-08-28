@@ -118,7 +118,7 @@
 
 </table>
 
-<button style="background:#800080; border-radius:5px; width: 80px; height: 50px;" class="btn next-btn"><a href='index1.php?view_orders' class='text-uppercase' style='color:#fff; line-height: 2.5;'>Назад</a></buuton>
+<button style="background:#800080; border-radius:5px; width: 80px; height: 50px;" class="btn next-btn"><a href='index1.php?view_orders' class='text-uppercase' style='color:#fff; line-height: 2.5;'>Назад</a></button>
   <br>
   <br>
 

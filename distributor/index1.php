@@ -267,7 +267,7 @@ else{
 							  	include("customers_list.php");
 							  }
 
-							   if (isset($_GET['chat'])) {
+							   if (isset($_GET['customer_id'])) {
 							  	include("chat.php");
 							  }
 							  if (isset($_GET['accept_all'])) {

@@ -35,7 +35,7 @@ if (isset($_POST['submit'])) {
 	$sel_distributor = "select 
 	                         c.id as credential_id, 
 	                         d.id as distributor_id,
-	                         com.name as name,
+	                         com.name as distributor_name,
 	                         c.login as login
 
 	                    from credentials c
@@ -57,9 +57,9 @@ if (isset($_POST['submit'])) {
     	 $credential_id = $rows_distributor['credential_id'];
       	
       	$dist_id = $rows_distributor['distributor_id'];
+        $distributor_name = $rows_distributor['distributor_name'];
 
-
-
+        $_SESSION['distributor_name'] = $distributor_name;
 
   		$_SESSION['distributor_id'] = $dist_id;
 

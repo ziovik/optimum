@@ -120,12 +120,12 @@
 								<div class="header-btns-icon">
 									<i class="fa fa-user-o"></i>
 								</div>
-								<strong class="text-uppercase">My Account <i class="fa fa-caret-down"></i></strong>
+								<strong >личный кабинет <i class="fa fa-caret-down"></i></strong>
 							</div>
 							
 							
 							<ul class="custom-menu">
-								<li><a href="customer/my_account.php"><i class="fa fa-user-o"></i> My Account</a></li>
+								<li><a href="customer/index.php"><i class="fa fa-user-o"></i> личный кабинет</a></li>
 								
 								<li><a href="checkout.php"><i class="fa fa-check"></i> Checkout</a></li>
 								<li><a href="customer/customer_login.php"><i class="fa fa-unlock-alt"></i> Login</a></li>
@@ -141,7 +141,7 @@
 									<i class="fa fa-shopping-cart"></i>
 									<span class="qty"><?php total_items();  ?></span>
 								</div>
-								<strong class="text-uppercase">My Cart:</strong>
+								<strong class="text-uppercase">Мои заказы:</strong>
 								<br>
 								<span><?php total_price() ?></span>
 							</a>
@@ -151,7 +151,7 @@
 										
 									</div>
 									<div class="shopping-cart-btns">
-										<a href="cart.php"><button class="main-btn">View Cart</button></a>
+										<a href="cart.php"><button class="main-btn">заказы</button></a>
 										<button class="primary-btn">Checkout <i class="fa fa-arrow-circle-right"></i></button>
 
 
@@ -583,9 +583,9 @@
 	<div id="breadcrumb">
 		<div class="container">
 			<ul class="breadcrumb">
-				<li><a href="index.php">Home</a></li>
+				<li><a href="index.php">Главная</a></li>
 				
-				<li class="active">Product Details</li>
+				<li class="active">Подробность продуктов</li>
 			</ul>
 		</div>
 	</div>
@@ -632,12 +632,12 @@
 						
 					
 					<div class="col-md-6">
-						<div class="product-body">
+						<div class="product-body" >
 							<div class="product-label">
-								<span>New</span>
+								<span>новый</span>
 								<span class="sale">-20%</span>
 							</div>
-							<h2 class="product-name" style="width: 600px; font-size: 20px;"><?php echo $pro_name;   ?></h2>
+							<h2 class="product-name" style="width: 800px; font-size: 20px;"><?php echo $pro_name;   ?></h2>
 							<h3 class="product-price"><?php echo $pro_price; ?>руб</h3>
 							<div>
 								<div class="product-rating">
@@ -649,35 +649,34 @@
 								</div>
 								<a href="#"><?php echo $min_order; ?> order(s) / min</a>
 							</div>
-							<p><strong>Availability:</strong> In Stock</p>
-							<p ><strong>Distributor:</strong> <?php echo $dist_name;  ?></p>
+							<p><strong>На склад:</strong> In Stock</p>
+							<p ><strong>Дистрибьютор:</strong> <?php echo $dist_name;  ?></p>
+                            
+                            <!-- adding form -->
 							
-							
+							<form method="get" action="">
+								<div class="product-btns">
+									<div class="qty-input">
+										<span class="text-uppercase">Количество: </span>
+										<input class="input" type="number" name="qty[]" value="">
+									</div>
+									<button class="primary-btn add-to-cart" name="add_cart"><i class="fa fa-shopping-cart"></i> 
+										<a style="color: #fff;" href="optimum_beauty.php?add_cart=<?php echo $pro_id?>"> Добавить в казине</a>
+									</button>
 
+								</div>
+							</form>
 							
-							<div class="product-btns">
-								<div class="qty-input">
-                                       
+							<!-- end -->
 
-									<span class="text-uppercase">QTY: </span>
-									<input class="input" type="number" name="qty">
-								</div>
-								<button class="primary-btn add-to-cart" name="add_cart"><i class="fa fa-shopping-cart"></i> 
-									<a style="color: #fff;" href="optimum_beauty.php?add_cart=<?php echo $pro_id?>">  Add to Cart</a></button>
-								<div class="pull-right">
-									<button class="main-btn icon-btn"><i class="fa fa-heart"></i></button>
-									<button class="main-btn icon-btn"><i class="fa fa-exchange"></i></button>
-									<button class="main-btn icon-btn"><i class="fa fa-share-alt"></i></button>
-								</div>
-							</div>
 						</div>
 					</div>
 					<div class="col-md-12">
 						<div class="product-tab">
 							<ul class="tab-nav">
-								<li class="active"><a data-toggle="tab" href="#tab1">Description</a></li>
+								<li class="active"><a data-toggle="tab" href="#tab1">Примечание</a></li>
 								
-								<li><a data-toggle="tab" href="#tab2">Manufaturer Details</a></li>
+								<li><a data-toggle="tab" href="#tab2">Производитель/Страна пройзводителя</a></li>
 							</ul>
 							<div class="tab-content">
 								<div id="tab1" class="tab-pane fade in active">

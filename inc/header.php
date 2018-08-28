@@ -104,7 +104,7 @@
 									<i class="fa fa-shopping-cart"></i>
 									<span class="qty"><?php total_items();  ?></span>
 								</div>
-								<strong class="text-uppercase">Мой заказы:</strong>
+								<strong class="text-uppercase">Мои Заказы:</strong>
 								<br>
 								<span><?php total_price() ?></span>
 							</a>

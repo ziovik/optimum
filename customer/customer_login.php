@@ -53,17 +53,19 @@ if (isset($_POST['submit'])) {
 	while($rows_customer = mysqli_fetch_array($run_customer)){
 		$credential_id = $rows_customer['id'];
 
-		$get_name = "select * from customer where credentials_id = '$credential_id'";
+		$get_name = "select name as customer_name, id  from customer where credentials_id = '$credential_id'";
 
 		$run_name = mysqli_query($con, $get_name);
 
 		while($row_name = mysqli_fetch_array($run_name)){
 
-			$customer_name = $row_name['name'];
+			$customer_name = $row_name['customer_name'];
 
 			$customer_id =$row_name['id'];
 
 			$_SESSION['id'] = $customer_id;
+
+			$_SESSION['customer_name'] = $customer_name;
 
 
 			 //checking cart too

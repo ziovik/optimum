@@ -37,6 +37,8 @@
 	<link type="text/css" rel="stylesheet" href="css/table.css" />
 	<link type="text/css" rel="stylesheet" href="css/checkout_style.css" />
 	<link type="text/css" rel="stylesheet" href="css/book.css" />
+	<link type="text/css" rel="stylesheet" href="css/text_animation.css" />
+	<link type="text/css" rel="stylesheet" href="css/logo.css" />
 
 	
 
@@ -59,7 +61,7 @@
 			<div id="responsive-nav">
 				<!-- category nav -->
 				<div class="category-nav show-on-click">
-					<span class="category-header">My Account <i class="fa fa-list"></i></span>
+					<span class="category-header">Панель Управления<i class="fa fa-list"></i></span>
 					<ul class="category-list">
 						<?php
                            $customer_id = $_SESSION['id'];
@@ -142,46 +144,41 @@
 			<!-- row -->
 			<div class="row">
 				<!-- section -->
-	<div class="section">
-		
-		
-		<h2 style="text-align: center;">Добро пожаловать : <?php echo $customer_name;  ?></h2>
 
-		<div style=" margin-left: auto;margin-right: auto; width: 28%;">
+		<h2 class="line-1 anim-typewriter">Добро пожаловать : <?php echo $customer_name;  ?></h2>
 
-   
-			<div id="wrapper" >
-			<div id="swipe-container">
-				<div id="articles" class="parent-transform transform-hook" style="max-height: 300px;">
-					<section class="page nav-state">
-						<h2 style="padding-bottom: 0px;color: #800080;">Контактное лицо</h2><hr>
-						<p style="text-align: center;"><?php echo $customer_name;  ?></p>
-						<p style="text-align: center;">(<?php echo $telephone; ?>)</p>
-					</section>
-				</div>
-				<div id="projects" class="parent-transform">
-					<section class="page nav-state">
-						<h2 style="text-align: center;color: #800080;">Мой Адрес</h2>
-						<p ><b style="text-align: center; ">Регион :</b>  <?php echo $region_name;  ?></p><br>
-						<p >  <?php echo $region_name;  ?>, <?php echo $street_name;  ?>, <?php echo $building;  ?>, <?php echo $index_code;  ?>  </p><br>
+		<section class="ac-container" style="width: 700px;">
+				<div>
+					<input id="ac-1" name="accordion-1" type="radio" checked="">
+					<label for="ac-1" style="color: white; background: #800080; font-size: 15px !important;">Контактное лицо</label>
+					<article class="ac-small">
 						
-
-
-
-					</section>
+						<p style="text-align: center; font-size: 20px; padding-bottom: 0px;"><?php echo $customer_name;  ?></p>
+						<p style="text-align: center; padding-top: 0px; font-size: 20px;">(<?php echo $telephone; ?>)</p>
+					</article>
 				</div>
-				<div id="downloads" class="parent-transform">
-					<section class="page nav-state">
-						<h2 style="text-align: center;color: #800080;">Чем занимаемся</h2>
-					</section>
+				<div>
+					<input id="ac-2" name="accordion-1" type="radio">
+					<label for="ac-2" style="color: white; background: #800080; font-size: 15px !important;">Мой Адрес</label>
+					<article class="ac-medium">
+						
+						<p style="padding-bottom: 0px;"><b style="text-align: center; font-size: 20px;">Регион :</b>  <?php echo $region_name;  ?></p><br>
+						<p style=" padding-top: 0px;font-size: 15px;" >  <?php echo $region_name;  ?>, <?php echo $street_name;  ?>, <?php echo $building;  ?>, <?php echo $index_code;  ?>  </p><br>
+					</article>
+				</div>
+				<div>
+					<input id="ac-3" name="accordion-1" type="radio">
+					<label for="ac-3" style="color: white; background: #800080; font-size: 15px !important;">Чем занимаемся</label>
+					<article class="ac-large">
+						
+						<p style="font-size: 15px;">You think water moves fast? You should see ice. It moves like it has a mind. Like it knows it killed the world once and got a taste for murder. After the avalanche, it took us a week to climb out. Now, I don't know exactly when we turned on each other, but I know that seven of us survived the slide... and only five made it out. Now we took an oath, that I'm breaking now. We said we'd say it was the snow that killed the other two, but it wasn't. Nature is lethal but it doesn't hold a candle to man. </p>
+					</article>
 				</div>
 				
-			</div>
-		</div>
-		
-		</div>
-		
+			</section>
 
+	<div class="section">
+	
 		<?php
 
 							
@@ -199,6 +196,7 @@
 		
 	</div>
 	<!-- /section -->
+
 			</div>
 			<!-- /row -->
 		</div>

@@ -1,11 +1,11 @@
 <?php  
-       session_start();
-       include("inc/db.php");
-       include("inc/functions.php");
-       //for not acceessing this page by another person who is not in admin
+session_start();
+include("inc/db.php");
+include("inc/functions.php");
+//for not acceessing this page by another person who is not in admin
 
-   if (!isset($_SESSION['id'])) {
-  echo "<script>window.open('customer/customer_login.php?not_admin=You are not signed in!','_self')</script>";
+if (!isset($_SESSION['id'])) {
+	echo "<script>window.open('customer/customer_login.php?not_admin=You are not signed in!','_self')</script>";
 }
 
 else{
@@ -14,610 +14,658 @@ else{
 <html lang="en">
 
 <head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
-	<title>OPTIMUM BEAUTY | PRODUCT</title>
+<title>OPTIMUM BEAUTY | PRODUCT</title>
 
-	<!-- Google font -->
-	<link href="https://fonts.googleapis.com/css?family=Hind:400,700" rel="stylesheet">
+<!-- Google font -->
+<link href="https://fonts.googleapis.com/css?family=Hind:400,700" rel="stylesheet">
 
-	<!-- Bootstrap -->
-	<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" />
+<!-- Bootstrap -->
+<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" />
 
-	<!-- Slick -->
-	<link type="text/css" rel="stylesheet" href="css/slick.css" />
-	<link type="text/css" rel="stylesheet" href="css/slick-theme.css" />
+<!-- Slick -->
+<link type="text/css" rel="stylesheet" href="css/slick.css" />
+<link type="text/css" rel="stylesheet" href="css/slick-theme.css" />
 
-	<!-- nouislider -->
-	<link type="text/css" rel="stylesheet" href="css/nouislider.min.css" />
+<!-- nouislider -->
+<link type="text/css" rel="stylesheet" href="css/nouislider.min.css" />
 
-	<!-- Font Awesome Icon -->
-	<link rel="stylesheet" href="css/font-awesome.min.css">
+<!-- Font Awesome Icon -->
+<link rel="stylesheet" href="css/font-awesome.min.css">
 
-	<!-- Custom stlylesheet -->
-	<link type="text/css" rel="stylesheet" href="css/style.css" />
+<!-- Custom stlylesheet -->
+<link type="text/css" rel="stylesheet" href="css/style.css" />
 <link type="text/css" rel="stylesheet" href="css/table.css" />
 <link type="text/css" rel="stylesheet" href="css/checkout_style.css" />
 
-	
-	<!--table resp-->
-    <link rel="stylesheet" href="css/rwd-table.min.css?v=5.3.1">
-        <link rel="stylesheet" href="css/docs.min.css?v=5.3.1">
 
-        <script type="text/javascript">
-        var _gaq = _gaq || [];
-        _gaq.push(['_setAccount', 'UA-19870163-1']);
-        _gaq.push(['_trackPageview']);
+<!--table resp-->
+<link rel="stylesheet" href="css/rwd-table.min.css?v=5.3.1">
+<link rel="stylesheet" href="css/docs.min.css?v=5.3.1">
 
-        (function() {
-            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-        })();
-        </script>
-	
+<script type="text/javascript">
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-19870163-1']);
+	_gaq.push(['_trackPageview']);
+
+	(function() {
+		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	})();
+</script>
+
 </head>
 
 <body>
-	
+
 <!-- HEADER -->
-	<header>
-		<!-- top Header -->
-		<div id="top-header">
-			<div class="container">
-				<div class="pull-left">
-					<?php
+<header>
+<!-- top Header -->
+<div id="top-header">
+   <div class="container">
+      <div class="pull-left">
+      	<?php
 
-                if (isset($_SESSION['id'])) {
-                    include("inc/db.php");
-                    $customer_id = $_SESSION['id'];
+      	if (isset($_SESSION['id'])) {
+      		include("inc/db.php");
+      		$customer_id = $_SESSION['id'];
 
-                    $get_info = "select
-                                         name from customer 
-                                    where  id = '$customer_id' ";
+      		$get_info = "select
+      		name from customer 
+      		where  id = '$customer_id' ";
 
-                    $run_name = mysqli_query($con, $get_info);
+      		$run_name = mysqli_query($con, $get_info);
 
-                    $row = mysqli_fetch_array($run_name);
+      		$row = mysqli_fetch_array($run_name);
 
-                    $customer_name = $row['name'];
+      		$customer_name = $row['name'];
 
-                    echo "<span>Добро пожаловать  в OPTIMUM BEAUTY   :    </span>" . $customer_name . "<span></span>";
+      		echo "<span>Добро пожаловать  в OPTIMUM BEAUTY   :    </span>" . $customer_name . "<span></span>";
 
 
 
-                } else {
-                    echo "<b>Добро пожаловать Гость</b>";
-                }
+      	} else {
+      		echo "<b>Добро пожаловать Гость</b>";
+      	}
 
-                ?>
-					
-				</div>
-				<div class="pull-right">
-					<ul class="header-top-links">
-						<?php
+      	?>
 
-                    if (!isset($_SESSION['id'])) {
-                        echo "<button style='width:100px;' background:#800080; border-radius:5px;' class='btn next-btn'><a href='#' class='text-uppercase' style='color:#fff;'>Войти</a></buuton>";
-                    } else {
-                        echo "<button style='width:100px;' background:#800080; border-radius:5px;' class='btn next-btn'><a href='logout.php' class='text-uppercase' style='color:#fff;'>Выити</a></buuton>";
+        </div>
+        <div class="pull-right">
+        	<ul class="header-top-links">
+        		<?php
 
-                    }
+        		if (!isset($_SESSION['id'])) {
+        			echo "<button style='width:100px;' background:#800080; border-radius:5px;' class='btn next-btn'><a href='#' class='text-uppercase' style='color:#fff;'>Войти</a></buuton>";
+        		} else {
+        			echo "<button style='width:100px;' background:#800080; border-radius:5px;' class='btn next-btn'><a href='logout.php' class='text-uppercase' style='color:#fff;'>Выити</a></buuton>";
 
-                    ?>
+        		}
 
-						
-					</ul>
-				</div>
+        		?>
+
+
+        	</ul>
+        </div>
+    </div>
+</div>
+<!-- /top Header -->
+
+<!-- header -->
+<div id="header">
+	<div class="container">
+		<div class="pull-left">
+			<!-- Logo -->
+			<div class="header-logo">
+				<a class="logo" href="optimum_beauty.php">
+					<img src="./img/logo.png" alt="">
+				</a>
 			</div>
+			<!-- /Logo -->
+
+
+
 		</div>
-		<!-- /top Header -->
-
-		<!-- header -->
-		<div id="header">
-			<div class="container">
-				<div class="pull-left">
-					<!-- Logo -->
-					<div class="header-logo">
-						<a class="logo" href="optimum_beauty.php">
-							<img src="./img/logo.png" alt="">
-						</a>
-					</div>
-					<!-- /Logo -->
-
-					
-					
-				</div>
-				<div class="pull-right">
-					<ul class="header-btns">
-						<!-- Account -->
-						<li class="header-account dropdown default-dropdown">
-							<div class="dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="true">
-								<div class="header-btns-icon">
-									<i class="fa fa-user-o"></i>
-								</div>
-								<strong >Личный кабинет  <i class="fa fa-caret-down"></i></strong>
-							</div>
-							
-							
-							<ul class="custom-menu">
-								<li><a href="customer/index.php"><i class="fa fa-user-o"></i> Личный кабинет </a></li>
-								
-								<li><a href="../chechout.php"><i class="fa fa-check"></i> Checkout</a></li>
-								<li><a href="customer/customer_login.php"><i class="fa fa-unlock-alt"></i>Выити</a></li>
-								
-							</ul>
-						</li>
-						<!-- /Account -->
-
-						<!-- Cart -->
-						<li class="header-cart dropdown default-dropdown">
-							<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-								<div class="header-btns-icon">
-									<i class="fa fa-shopping-cart"></i>
-									<span class="qty"><?php total_items();  ?></span>
-								</div>
-								<strong class="text-uppercase">My Cart:</strong>
-								<br>
-								<span><?php total_price() ?></span>
-							</a>
-							<div class="custom-menu">
-								<div id="shopping-cart">
-									<div class="shopping-cart-list">
-										
-									</div>
-									<div class="shopping-cart-btns">
-										<a href="cart.php"><button class="main-btn">View Cart</button></a>
-										<button class="primary-btn">Checkout <i class="fa fa-arrow-circle-right"></i></button>
-
-
-									</div>
-								</div>
-							</div>
-						</li>
-						<!-- /Cart -->
-
-						<!-- Mobile nav toggle-->
-						<li class="nav-toggle">
-							<button class="nav-toggle-btn main-btn icon-btn"><i class="fa fa-bars"></i></button>
-						</li>
-						<!-- / Mobile nav toggle -->
-					</ul>
-				</div>
-			</div>
-			<!-- header -->
-			
-		</div>
-		<!-- container -->
-	</header>
-	<!-- /HEADER -->
-    
-
-	<!-- NAVIGATION -->
-	<div id="navigation">
-		<!-- container -->
-		<div class="container">
-			<div id="responsive-nav">
-				<!-- category nav -->
-				<div class="category-nav show-on-click">
-					<span class="category-header">Категории <i class="fa fa-list"></i></span>
-<ul class="category-list">
-	<li class="dropdown side-dropdown">
-		<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true" name="cosm">Косметология <i class="fa fa-angle-right"></i></a>
-		<div class="custom-menu">
-			<div class="row">
-				<div class="col-md-4">
-					<ul class="list-links">
-						<li><h3 class="list-links-title"><a href="products/allcosm.php?allcosm=1" name="allcosm">Косметология</a>  </h3></li>
-
-						<?php
-						if (!isset($_GET['cosm'])) {
+        <div class="pull-right">
+        	<ul class="header-btns">
+        		<!-- Account -->
+        		<li class="header-account dropdown default-dropdown">
+        			<div class="dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="true">
+        				<div class="header-btns-icon">
+        					<i class="fa fa-user-o"></i>
+        				</div>
+        				<strong >Личный кабинет  <i class="fa fa-caret-down"></i></strong>
+        			</div>
+
+
+        			<ul class="custom-menu">
+        				<li><a href="customer/index.php"><i class="fa fa-user-o"></i> Личный кабинет </a></li>
+
+        				<li><a href="../chechout.php"><i class="fa fa-check"></i> Checkout</a></li>
+        				<li><a href="customer/customer_login.php"><i class="fa fa-unlock-alt"></i>Выити</a></li>
+
+        			</ul>
+        		</li>
+        		<!-- /Account -->
+
+        		<!-- Cart -->
+        		<li class="header-cart dropdown default-dropdown">
+        			<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+        				<div class="header-btns-icon">
+        					<i class="fa fa-shopping-cart"></i>
+        					<span class="qty"><?php total_items();  ?></span>
+        				</div>
+        				<strong class="text-uppercase">My Cart:</strong>
+        				<br>
+        				<span><?php total_price() ?></span>
+        			</a>
+        			<div class="custom-menu">
+        				<div id="shopping-cart">
+        					<div class="shopping-cart-list">
 
+        					</div>
+        					<div class="shopping-cart-btns">
+        						<a href="cart.php"><button class="main-btn">View Cart</button></a>
+        						<button class="primary-btn">Checkout <i class="fa fa-arrow-circle-right"></i></button>
 
-							$get_cosm = "select * from sub_category where category_id='1'";
 
-							$run_cosm = mysqli_query($con, $get_cosm);
+        					</div>
+        				</div>
+        			</div>
+        		</li>
+        		<!-- /Cart -->
 
+        		<!-- Mobile nav toggle-->
+        		<li class="nav-toggle">
+        			<button class="nav-toggle-btn main-btn icon-btn"><i class="fa fa-bars"></i></button>
+        		</li>
+        		<!-- / Mobile nav toggle -->
+        	</ul>
+        </div>
+    </div>
+<!-- header -->
 
-							while ($row_cosm  = mysqli_fetch_array($run_cosm)){
+</div>
+<!-- container -->
+</header>
+<!-- /HEADER -->
 
-								$cosm_id= $row_cosm['id'];
-								$cosm_name = $row_cosm['name'];
 
-								echo " <li style='width:300px;'><a href='products/cosm.php?cosm=$cosm_id'>$cosm_name</a></li>";
+<!-- NAVIGATION -->
+<div id="navigation">
+   <!-- container -->
+   <div class="container">
+      <div id="responsive-nav">
+      <!-- category nav -->
+         <div class="category-nav show-on-click">
+            <span class="category-header">Категории <i class="fa fa-list"></i></span>
+            <ul class="category-list">
+                <li class="dropdown side-dropdown">
+                   <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true" name="cosm">Косметология <i class="fa fa-angle-right"></i></a>
+                   <div class="custom-menu">
+                      <div class="row">
+                          <div class="col-md-4">
+                          	<ul class="list-links">
+                          		<li><h3 class="list-links-title"><a href="products/allcosm.php?allcosm=1" name="allcosm">Косметология</a>  </h3></li>
 
-							}
+                          		<?php
+                          		if (!isset($_GET['cosm'])) {
 
 
+                          			$get_cosm = "select * from sub_category where category_id='1'";
 
-						}
-						?>
-					</ul>
-					<hr class="hidden-md hidden-lg">
-				</div>
+                          			$run_cosm = mysqli_query($con, $get_cosm);
 
 
-			</div>
-		</li>
+                          			while ($row_cosm  = mysqli_fetch_array($run_cosm)){
 
-		<li class="dropdown side-dropdown">
-			<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true" name="depil">Депиляция <i class="fa fa-angle-right"></i></a>
-			<div class="custom-menu">
-				<div class="row">
-					<div class="col-md-4">
-						<ul class="list-links">
+                          				$cosm_id= $row_cosm['id'];
+                          				$cosm_name = $row_cosm['name'];
 
-							<?php
-							if (!isset($_GET['depil'])) {
+                          				echo " <li style='width:300px;'><a href='products/cosm.php?cosm=$cosm_id'>$cosm_name</a></li>";
 
+                          			}
 
 
-								$get_depils = "select * from sub_category where category_id='2' ";
-								$run_depils = mysqli_query($con, $get_depils );
 
-								while ($row_depils  = mysqli_fetch_array($run_depils)){
-									$depil_id = $row_depils['id'];
-									$depil_name = $row_depils['name'];
+                          		}
+                          		?>
+                          	</ul>
+                            <hr class="hidden-md hidden-lg">
+                        </div>
 
-									echo " <li style='width:300px;'><a href='products/depil.php?depil=$depil_id'>$depil_name</a></li>";
-								}
-							}
-							?>
 
+                    </div>
+                </li>
 
-						</ul>
-						<hr class="hidden-md hidden-lg">
-					</div>
+                <li class="dropdown side-dropdown">
+                	<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true" name="depil">Депиляция <i class="fa fa-angle-right"></i></a>
+                	<div class="custom-menu">
+                		<div class="row">
+                			<div class="col-md-4">
+                				<ul class="list-links">
 
+                					<?php
+                					if (!isset($_GET['depil'])) {
 
-				</div>
-			</li>
 
-			<li class="dropdown side-dropdown">
-				<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true" name="solar">Солярий <i class="fa fa-angle-right"></i></a>
-				<div class="custom-menu">
-					<div class="row">
-						<div class="col-md-4">
-							<ul class="list-links">
 
-								<?php
-								if (!isset($_GET['solar'])) {
+                						$get_depils = "select * from sub_category where category_id='2' ";
+                						$run_depils = mysqli_query($con, $get_depils );
 
+                						while ($row_depils  = mysqli_fetch_array($run_depils)){
+                							$depil_id = $row_depils['id'];
+                							$depil_name = $row_depils['name'];
 
+                							echo " <li style='width:300px;'><a href='products/depil.php?depil=$depil_id'>$depil_name</a></li>";
+                						}
+                					}
+                					?>
 
-									$get_solars = "select * from sub_category where category_id='3' ";
-									$run_solars = mysqli_query($con, $get_solars );
 
-									while ($row_solars  = mysqli_fetch_array($run_solars)){
-										$solar_id = $row_solars['id'];
-										$solar_name = $row_solars['name'];
+                				</ul>
+                				<hr class="hidden-md hidden-lg">
+                			</div>
 
-										echo " <li style='width:300px;'><a href='products/solar.php?solar=$solar_id'>$solar_name</a></li>";
-									}
-								}
-								?>
 
+                		</div>
+                </li>
 
-							</ul>
-							<hr class="hidden-md hidden-lg">
-						</div>
+                <li class="dropdown side-dropdown">
+                	<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true" name="solar">Солярий <i class="fa fa-angle-right"></i></a>
+                	<div class="custom-menu">
+                		<div class="row">
+                			<div class="col-md-4">
+                				<ul class="list-links">
 
+                					<?php
+                					if (!isset($_GET['solar'])) {
 
-					</div>
-				</li>
 
-				<li class="dropdown side-dropdown">
-					<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true" name="massag">Массаж <i class="fa fa-angle-right"></i></a>
-					<div class="custom-menu">
-						<div class="row">
-							<div class="col-md-4">
-								<ul class="list-links">
 
-									<?php
-									if (!isset($_GET['massag'])) {
+                						$get_solars = "select * from sub_category where category_id='3' ";
+                						$run_solars = mysqli_query($con, $get_solars );
 
+                						while ($row_solars  = mysqli_fetch_array($run_solars)){
+                							$solar_id = $row_solars['id'];
+                							$solar_name = $row_solars['name'];
 
+                							echo " <li style='width:300px;'><a href='products/solar.php?solar=$solar_id'>$solar_name</a></li>";
+                						}
+                					}
+                					?>
 
-										$get_massags = "select * from sub_category where category_id='4' ";
-										$run_massags = mysqli_query($con, $get_massags );
 
-										while ($row_massags  = mysqli_fetch_array($run_massags)){
-											$massag_id = $row_massags['id'];
-											$massag_name = $row_massags['name'];
+                				</ul>
+                				<hr class="hidden-md hidden-lg">
+                			</div>
 
-											echo " <li style='width:300px;'><a href='products/massag.php?massag=$massag_id'>$massag_name</a></li>";
-										}
-									}
-									?>
 
+                		</div>
+                </li>
 
-								</ul>
-								<hr class="hidden-md hidden-lg">
-							</div>
+                <li class="dropdown side-dropdown">
+                	<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true" name="massag">Массаж <i class="fa fa-angle-right"></i></a>
+                	<div class="custom-menu">
+                		<div class="row">
+                			<div class="col-md-4">
+                				<ul class="list-links">
 
+                					<?php
+                					if (!isset($_GET['massag'])) {
 
-						</div>
-					</li>
 
 
-					<li class="dropdown side-dropdown"><a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true" name="par">Парикмахерская Продукция <i class="fa fa-angle-right"></i></a>
-						<div class="custom-menu">
-							<div class="row">
-								<div class="col-md-4">
-									<ul class="list-links">
-										<li>
-											<h3 class="list-links-title" style="width: 300px;"><a href="products/allparak.php?allpar=5" name="allnail">Парикмахерская Продукция</a>  </h3></li>
-											<?php
-											if (!isset($_GET['par'])) {
+                						$get_massags = "select * from sub_category where category_id='4' ";
+                						$run_massags = mysqli_query($con, $get_massags );
 
-												$get_pars = "select * from sub_category where category_id='5' ";
-												$run_pars = mysqli_query($con, $get_pars );
+                						while ($row_massags  = mysqli_fetch_array($run_massags)){
+                							$massag_id = $row_massags['id'];
+                							$massag_name = $row_massags['name'];
 
-												while ($row_pars  = mysqli_fetch_array($run_pars)){
-													$par_id = $row_pars['id'];
-													$par_name = $row_pars['name'];
+                							echo " <li style='width:300px;'><a href='products/massag.php?massag=$massag_id'>$massag_name</a></li>";
+                						}
+                					}
+                					?>
 
 
+                				</ul>
+                				<hr class="hidden-md hidden-lg">
+                			</div>
 
-													echo " <li style='width:300px;'><a href='products/parak.php?par=$par_id'>$par_name</a></li>";
-												}
-											}
-											?>
 
-										</ul>
-										<hr>
+                		</div>
+                	</li>
 
-										<hr class="hidden-md hidden-lg">
-									</div>
 
+                	<li class="dropdown side-dropdown"><a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true" name="par">Парикмахерская Продукция <i class="fa fa-angle-right"></i></a>
+                		<div class="custom-menu">
+                			<div class="row">
+                				<div class="col-md-4">
+                					<ul class="list-links">
+                						<li>
+                							<h3 class="list-links-title" style="width: 300px;"><a href="products/allparak.php?allpar=5" name="allnail">Парикмахерская Продукция</a>  </h3></li>
+                							<?php
+                							if (!isset($_GET['par'])) {
 
-								</div>
-							</li>
+                								$get_pars = "select * from sub_category where category_id='5' ";
+                								$run_pars = mysqli_query($con, $get_pars );
 
-							<li class="dropdown side-dropdown">
-								<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true" name="nail">Ногтевой сервис <i class="fa fa-angle-right"></i></a>
-								<div class="custom-menu">
-									<div class="row">
-										<div class="col-md-4">
-											<ul class="list-links">
-												<li>
-													<h3 class="list-links-title"><a href="products/allnail.php?allnail=6" name="allnail">Ногтевой сервис</a>  </h3></li>
+                								while ($row_pars  = mysqli_fetch_array($run_pars)){
+                									$par_id = $row_pars['id'];
+                									$par_name = $row_pars['name'];
 
-													<?php
-													if (!isset($_GET['nail'])) {
 
 
-														$get_nails = "select * from sub_category where category_id='6' ";
-														$run_nails = mysqli_query($con, $get_nails );
+                									echo " <li style='width:300px;'><a href='products/parak.php?par=$par_id'>$par_name</a></li>";
+                								}
+                							}
+                							?>
 
-														while ($row_nails  = mysqli_fetch_array($run_nails)){
-															$nail_id = $row_nails['id'];
-															$nail_name = $row_nails['name'];
+                						</ul>
+                						<hr>
 
-															echo " <li style='width:300px;'><a href='products/nail.php?nail=$nail_id'>$nail_name</a></li>";
-														}
-													}
-													?>
+                						<hr class="hidden-md hidden-lg">
+                					</div>
 
-												</ul>
-												<hr>
 
-												<hr class="hidden-md hidden-lg">
-											</div>
+                				</div>
+                 </li>
 
+                 <li class="dropdown side-dropdown">
+                 	<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true" name="nail">Ногтевой сервис <i class="fa fa-angle-right"></i></a>
+                 	<div class="custom-menu">
+                 		<div class="row">
+                 			<div class="col-md-4">
+                 				<ul class="list-links">
+                 					<li>
+                 						<h3 class="list-links-title"><a href="products/allnail.php?allnail=6" name="allnail">Ногтевой сервис</a>  </h3></li>
 
-										</div>
-									</div>
-								</li>
+                 						<?php
+                 						if (!isset($_GET['nail'])) {
 
-								<li class="dropdown side-dropdown">
-									<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true" name="eye">Ресницы и брови<i class="fa fa-angle-right"></i></a>
-									<div class="custom-menu">
-										<div class="row">
-											<div class="col-md-4">
-												<ul class="list-links">
-													<li>
-														<h3 class="list-links-title"><a href="products/alleye.php?alleye=7" name="allnail">Ресницы и брови</a>  </h3></li>
 
-														<?php
-														if (!isset($_GET['eye'])) {
+                 							$get_nails = "select * from sub_category where category_id='6' ";
+                 							$run_nails = mysqli_query($con, $get_nails );
 
+                 							while ($row_nails  = mysqli_fetch_array($run_nails)){
+                 								$nail_id = $row_nails['id'];
+                 								$nail_name = $row_nails['name'];
 
-															$get_eye = "select * from sub_category where category_id='7' ";
-															$run_eye = mysqli_query($con, $get_eye );
+                 								echo " <li style='width:300px;'><a href='products/nail.php?nail=$nail_id'>$nail_name</a></li>";
+                 							}
+                 						}
+                 						?>
 
-															while ($row_eye  = mysqli_fetch_array($run_eye)){
-																$eye_id = $row_eye['id'];
-																$eye_name = $row_eye['name'];
+                 					</ul>
+                 					<hr>
 
-																echo " <li style='width:300px;'><a href='products/eye.php?eye=$eye_id'>$eye_name</a></li>";
-															}
-														}
-														?>
+                 					<hr class="hidden-md hidden-lg">
+                 				</div>
 
-													</ul>
-													<hr class="hidden-md hidden-lg">
-												</div>
 
-											</div>
+                 			</div>
+                 		</div>
+                 	</li>
 
-										</div>
-									</li>
-									<li class="dropdown side-dropdown">
-										<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true" name="viz">Визаж<i class="fa fa-angle-right"></i></a>
-										<div class="custom-menu">
-											<div class="row">
-												<div class="col-md-4">
-													<ul class="list-links">
-														<li>
-															<h3 class="list-links-title"><a href="products/allviz.php?allviz=8" name="allviz">Визаж</a>  </h3></li>
-															<?php
-															if (!isset($_GET['viz'])) {
+                 	<li class="dropdown side-dropdown">
+                 		<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true" name="eye">Ресницы и брови<i class="fa fa-angle-right"></i></a>
+                 		<div class="custom-menu">
+                 			<div class="row">
+                 				<div class="col-md-4">
+                 					<ul class="list-links">
+                 						<li>
+                 							<h3 class="list-links-title"><a href="products/alleye.php?alleye=7" name="allnail">Ресницы и брови</a>  </h3></li>
 
+                 							<?php
+                 							if (!isset($_GET['eye'])) {
 
-																$get_viz = "select * from sub_category where category_id='8' ";
-																$run_viz = mysqli_query($con, $get_viz );
 
-																while ($row_viz  = mysqli_fetch_array($run_viz)){
-																	$viz_id = $row_viz['id'];
-																	$viz_name = $row_viz['name'];
+                 								$get_eye = "select * from sub_category where category_id='7' ";
+                 								$run_eye = mysqli_query($con, $get_eye );
 
-																	echo " <li style='width:500px;'><a href='products/viz.php?viz=$viz_id'>$viz_name</a></li>";
-																}
-															}
-															?>
-														</ul>
-														<hr class="hidden-md hidden-lg">
-													</div>
+                 								while ($row_eye  = mysqli_fetch_array($run_eye)){
+                 									$eye_id = $row_eye['id'];
+                 									$eye_name = $row_eye['name'];
 
-												</div>
+                 									echo " <li style='width:300px;'><a href='products/eye.php?eye=$eye_id'>$eye_name</a></li>";
+                 								}
+                 							}
+                 							?>
 
-											</div>
-										</li>
-										<li class="dropdown side-dropdown">
-											<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true" name="tatu">Татуаж и пирсинг<i class="fa fa-angle-right"></i></a>
-											<div class="custom-menu">
-												<div class="row">
-													<div class="col-md-4">
-														<ul class="list-links">
+                 						</ul>
+                 						<hr class="hidden-md hidden-lg">
+                 					</div>
 
-															<li>
-																<h3 class="list-links-title"><a href="products/alltatu.php?alltatu=9" name="alltatu">Татуаж и пирсинг</a>  </h3></li>
-																<?php
-																if (!isset($_GET['tatu'])) {
+                 				</div>
 
+                 			</div>
+                 		</li>
+                 		<li class="dropdown side-dropdown">
+                 			<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true" name="viz">Визаж<i class="fa fa-angle-right"></i></a>
+                 			<div class="custom-menu">
+                 				<div class="row">
+                 					<div class="col-md-4">
+                 						<ul class="list-links">
+                 							<li>
+                 								<h3 class="list-links-title"><a href="products/allviz.php?allviz=8" name="allviz">Визаж</a>  </h3></li>
+                 								<?php
+                 								if (!isset($_GET['viz'])) {
 
-																	$get_tatu = "select * from sub_category where category_id='9' ";
-																	$run_tatu = mysqli_query($con, $get_tatu );
 
-																	while ($row_tatu  = mysqli_fetch_array($run_tatu)){
-																		$tatu_id = $row_tatu['id'];
-																		$tatu_name = $row_tatu['name'];
+                 									$get_viz = "select * from sub_category where category_id='8' ";
+                 									$run_viz = mysqli_query($con, $get_viz );
 
-																		echo " <li style='width:500px;'><a href='products/tatu.php?tatu=$tatu_id'>$tatu_name</a></li>";
-																	}
-																}
-																?>
-															</ul>
-															<hr class="hidden-md hidden-lg">
-														</div>
+                 									while ($row_viz  = mysqli_fetch_array($run_viz)){
+                 										$viz_id = $row_viz['id'];
+                 										$viz_name = $row_viz['name'];
 
-													</div>
+                 										echo " <li style='width:500px;'><a href='products/viz.php?viz=$viz_id'>$viz_name</a></li>";
+                 									}
+                 								}
+                 								?>
+                 							</ul>
+                 							<hr class="hidden-md hidden-lg">
+                 						</div>
 
-												</div>
-											</li>
-											<li class="dropdown side-dropdown">
-												<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true" name="mat">Расходники<i class="fa fa-angle-right"></i></a>
-												<div class="custom-menu">
-													<div class="row">
-														<div class="col-md-4">
-															<ul class="list-links">
+                 					</div>
 
-																<li>
-																	<h3 class="list-links-title"><a href="products/allmat.php?allmat=10" name="allmat">Расходники</a>  </h3></li>
-																	<?php
-																	if (!isset($_GET['mat'])) {
+                 				</div>
+                 			</li>
+                 			<li class="dropdown side-dropdown">
+                 				<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true" name="tatu">Татуаж и пирсинг<i class="fa fa-angle-right"></i></a>
+                 				<div class="custom-menu">
+                 					<div class="row">
+                 						<div class="col-md-4">
+                 							<ul class="list-links">
 
+                 								<li>
+                 									<h3 class="list-links-title"><a href="products/alltatu.php?alltatu=9" name="alltatu">Татуаж и пирсинг</a>  </h3></li>
+                 									<?php
+                 									if (!isset($_GET['tatu'])) {
 
-																		$get_mat = "select * from sub_category where category_id='10' ";
-																		$run_mat = mysqli_query($con, $get_mat );
 
-																		while ($row_mat  = mysqli_fetch_array($run_mat)){
-																			$mat_id = $row_mat['id'];
-																			$mat_name = $row_mat['name'];
+                 										$get_tatu = "select * from sub_category where category_id='9' ";
+                 										$run_tatu = mysqli_query($con, $get_tatu );
 
-																			echo " <li style='width:500px;'><a href='products/mat.php?mat=$mat_id'>$mat_name</a></li>";
-																		}
-																	}
-																	?>
-																</ul>
-																<hr class="hidden-md hidden-lg">
-															</div>
+                 										while ($row_tatu  = mysqli_fetch_array($run_tatu)){
+                 											$tatu_id = $row_tatu['id'];
+                 											$tatu_name = $row_tatu['name'];
 
-														</div>
+                 											echo " <li style='width:500px;'><a href='products/tatu.php?tatu=$tatu_id'>$tatu_name</a></li>";
+                 										}
+                 									}
+                 									?>
+                 								</ul>
+                 								<hr class="hidden-md hidden-lg">
+                 							</div>
 
-													</div>
-												</li>
-												<li class="dropdown side-dropdown">
-													<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true" name="ster">Стерилизация и дезинфекция<i class="fa fa-angle-right"></i></a>
-													<div class="custom-menu">
-														<div class="row">
-															<div class="col-md-4">
-																<ul class="list-links">
+                 						</div>
 
-																	<li style="width: 300px;">
-																		<h3 class="list-links-title"><a href="products/allster.php?allster=11" name="allster">Стерилизация и дезинфекция</a>  </h3></li>
-																		<?php
-																		if (!isset($_GET['ster'])) {
+                 					</div>
+                 				</li>
+                 				<li class="dropdown side-dropdown">
+                 					<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true" name="mat">Расходники<i class="fa fa-angle-right"></i></a>
+                 					<div class="custom-menu">
+                 						<div class="row">
+                 							<div class="col-md-4">
+                 								<ul class="list-links">
 
+                 									<li>
+                 										<h3 class="list-links-title"><a href="products/allmat.php?allmat=10" name="allmat">Расходники</a>  </h3></li>
+                 										<?php
+                 										if (!isset($_GET['mat'])) {
 
-																			$get_ster = "select * from sub_category where category_id='11' ";
-																			$run_ster = mysqli_query($con, $get_ster );
 
-																			while ($row_ster  = mysqli_fetch_array($run_ster)){
-																				$ster_id = $row_ster['id'];
-																				$ster_name = $row_ster['name'];
+                 											$get_mat = "select * from sub_category where category_id='10' ";
+                 											$run_mat = mysqli_query($con, $get_mat );
 
-																				echo " <li style='width:500px;'><a href='products/ster.php?ster=$ster_id'>$ster_name</a></li>";
-																			}
-																		}
-																		?>
-																	</ul>
-																	<hr class="hidden-md hidden-lg">
-																</div>
+                 											while ($row_mat  = mysqli_fetch_array($run_mat)){
+                 												$mat_id = $row_mat['id'];
+                 												$mat_name = $row_mat['name'];
 
-															</div>
+                 												echo " <li style='width:500px;'><a href='products/mat.php?mat=$mat_id'>$mat_name</a></li>";
+                 											}
+                 										}
+                 										?>
+                 									</ul>
+                 									<hr class="hidden-md hidden-lg">
+                 								</div>
 
-														</div>
-													</li>
+                 							</div>
 
-													<li><a href="all_products.php?all_products">Все продукты</a></li>
-												</ul>
-											</div>
-											<!-- menu nav -->
-											<div class="menu-nav">
-												<span class="menu-header">Menu <i class="fa fa-bars"></i></span>
-												<ul class="menu-list">
+                 						</div>
+                 					</li>
+                 					<li class="dropdown side-dropdown">
+                 						<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true" name="ster">Стерилизация и дезинфекция<i class="fa fa-angle-right"></i></a>
+                 						<div class="custom-menu">
+                 							<div class="row">
+                 								<div class="col-md-4">
+                 									<ul class="list-links">
 
-													<li id="center1" ><a href="all_products.php?all_products" title="живой пойск"></a></li>
-												</ul>
-											</div>
+                 										<li style="width: 300px;">
+                 											<h3 class="list-links-title"><a href="products/allster.php?allster=11" name="allster">Стерилизация и дезинфекция</a>  </h3></li>
+                 											<?php
+                 											if (!isset($_GET['ster'])) {
+
+
+                 												$get_ster = "select * from sub_category where category_id='11' ";
+                 												$run_ster = mysqli_query($con, $get_ster );
+
+                 												while ($row_ster  = mysqli_fetch_array($run_ster)){
+                 													$ster_id = $row_ster['id'];
+                 													$ster_name = $row_ster['name'];
+
+                 													echo " <li style='width:500px;'><a href='products/ster.php?ster=$ster_id'>$ster_name</a></li>";
+                 												}
+                 											}
+                 											?>
+                 										</ul>
+                 										<hr class="hidden-md hidden-lg">
+                 									</div>
+
+                 								</div>
+
+                 							</div>
+                 						</li>
+
+		                                 <li><a href="all_products.php?all_products">Все продукты</a></li>
+	                              </ul>
+                             </div>
 <!-- menu nav -->
-			</div>
-		</div>
-		<!-- /container -->
-	</div>
-	<!-- /NAVIGATION -->
+                             <div class="menu-nav">
+	<span class="menu-header">Menu <i class="fa fa-bars"></i></span>
+	<ul class="menu-list">
 
-	<!-- BREADCRUMB -->
-	<div id="breadcrumb">
-		<div class="container">
-			<ul class="breadcrumb">
-				<li><a href="index.php">Home</a></li>
-				<li class="active">Cart</li>
-			</ul>
-		</div>
-	</div>
-	<!-- /BREADCRUMB -->
+		<li id="center1" ><a href="all_products.php?all_products" title="живой пойск"></a></li>
+	</ul>
+</div>
+<!-- menu nav -->
+</div>
+</div>
+<!-- /container -->
+</div>
+<!-- /NAVIGATION -->
 
-	<!-- section -->
-	<div class="section">
-		<!-- container -->
-		<div class="container">
-			<!-- row -->
-			<div class="row">
-				<!-- section -->
-	<div class="section">
-		
-		
-				
-				
+<!-- BREADCRUMB -->
+<div id="breadcrumb">
+	<div class="container">
+		<ul class="breadcrumb">
+			<li><a href="index.php">Home</a></li>
+			<li class="active">Cart</li>
+		</ul>
+	</div>
+</div>
+<!-- /BREADCRUMB -->
+
+<!-- section -->
+<div class="section">
+	<!-- container -->
+	<div class="container">
+		<div style="clear:both"></div>  
+<br />  
+<h3>Order Details</h3>  
+<div class="table-responsive">  
+<table class="table table-bordered">  
+	<tr>  
+		<th width="40%">Item Name</th>  
+		<th width="10%">Quantity</th>  
+		<th width="20%">Price</th>  
+		<th width="15%">Total</th>  
+		<th width="5%">Action</th>  
+	</tr>  
+	<?php
+    include("inc/db.php");   
+	if(!empty($_SESSION["shopping_cart"]))  
+	{  
+		$total = 0;  
+		foreach($_SESSION["shopping_cart"] as $keys => $values)  
+		{  
+			?>  
+			<tr>  
+				<td><?php echo $values["item_name"]; ?></td>  
+				<td><?php echo $values["item_quantity"]; ?></td>  
+				<td>$ <?php echo $values["item_price"]; ?></td>  
+				<td>$ <?php echo number_format($values["item_quantity"] * $values["item_price"], 2); ?></td>
+
+
+				<td><a href="cart.php?action=delete&id=<?php echo $values["item_id"]; ?>"><span class="text-danger">Remove</span></a></td>  
+			</tr>  
+			<?php  
+			$total = $total + ($values["item_quantity"] * $values["item_price"]);  
+
+
+           
+		}  
+		?>  
+		<tr>  
+			<td colspan="3" align="right">Total</td>  
+			<td align="right">$ <?php echo number_format($total, 2); ?></td>  
+			<td></td>  
+		</tr>  
+		<?php  
+	}  
+	?>  
+</table>  
+</div>  
+<br><br><hr>
+		<!-- row -->
+		<div class="row">
+
+			<!-- section -->
+			<div class="section">
+
+
+              <?php add_to_cart(); ?>
+
 				<form action="" method="post" enctype="multipart/form-data" >
 					<table width="100%" align="center">
-						
+
 						<tr style="text-align:center;" >
 							<th style="text-align:center;" >Remove</th>
 							<th style="text-align:center;" >Product</th>
@@ -626,157 +674,157 @@ else{
 							<th style="text-align:center;" > Total of a Product</th>
 						</tr>
 
-                        
+
 
 						<?php
-                           $total = 0;
-                          
-
-		                   global $con;
-		                   
-
-		                   $customer_id = $_SESSION['id'];
-
-		                  
+						$total = 0;
 
 
-						    //getting cart_id
-
-						    $sel_cart ="select * from cart where customer_id = '$customer_id' AND status ='active'";
-
-							
-							$run_cart = mysqli_query($con, $sel_cart);
-
-							$row = mysqli_fetch_array($run_cart);
-
-							$cart_id = $row['id'];
-
-                           $cart_items_sql = "select 
-                                                  pt.product_id as product_id,
-                                                  p.name as product_name,
-                                                  p.price as product_price,
-                                                  pt.quantity as quantity
-
-                                              from product_item pt
-                                                   join product p on p.id = pt.product_id
-
-                                               where pt.cart_id = '$cart_id' ";
-								 			
-                           $cart_items_query = mysqli_query($con, $cart_items_sql);
-                            
-
-							while ($items = mysqli_fetch_array($cart_items_query)) {
-								$total_product_price = 0;
-								$product_name = $items['product_name'];
-								$product_price = $items['product_price'];
-								$qty = $items['quantity'];
-
-								$_SESSION['quantity'] = $qty;
-								 
-								$pro_id = $items['product_id'];
+						global $con;
 
 
-						?>
+						$customer_id = $_SESSION['id'];
 
-						<tr align="center"  >
-							<td><a href="cart.php?remove=<?php echo $pro_id; ?>">Remove</a></td>
-							<td><a href="details.php?pro_id=<?php echo $pro_id ?>"><?php echo $product_name; ?></a></td>
-							<td><input type="text"  size="4" name="quantity" value="<?php echo $_SESSION['quantity']; ?>" ></td>
-							<?php
-							
-							if (isset($_POST['update_cart'])) {
 
-								if(isset( $_POST['quantity'])){
-									
-									
-									$qty = $_POST['quantity'];
 
-									$update_qty = "update product_item set quantity='$qty' where product_id = '$pro_id' AND cart_id = '$cart_id'";
-									$run_qty = mysqli_query($con, $update_qty);
-									
-									if ($run_qty) {
-										$total_product_price = $product_price * $qty;
-										$total += $total_product_price;
-										
+//getting cart_id
 
-										
-										
-									}
-								}	
-							}
+						$sel_cart ="select * from cart where customer_id = '$customer_id' AND status ='active'";
+
+
+						$run_cart = mysqli_query($con, $sel_cart);
+
+						$row = mysqli_fetch_array($run_cart);
+
+						$cart_id = $row['id'];
+
+						$cart_items_sql = "select 
+						pt.product_id as product_id,
+						p.name as product_name,
+						p.price as product_price,
+						pt.quantity as quantity
+
+						from product_item pt
+						join product p on p.id = pt.product_id
+
+						where pt.cart_id = '$cart_id' ";
+
+						$cart_items_query = mysqli_query($con, $cart_items_sql);
+
+
+						while ($items = mysqli_fetch_array($cart_items_query)) {
+							$total_product_price = 0;
+							$product_name = $items['product_name'];
+							$product_price = $items['product_price'];
+							$qty = $items['quantity'];
+
+							$_SESSION['quantity'] = $qty;
+
+							$pro_id = $items['product_id'];
+
+
 							?>
 
-							<td><?php echo $product_price; ?></td>
-							<td><?php echo $total_product_price; ?></td>
+							<tr align="center"  >
+								<td><a href="cart.php?remove=<?php echo $pro_id; ?>">Remove</a></td>
+								<td><a href="details.php?pro_id=<?php echo $pro_id ?>"><?php echo $product_name; ?></a></td>
+								<td><input type="text"  size="4" name="quantity" value="<?php echo $_SESSION['quantity']; ?>" ></td>
+								<?php
+
+								if (isset($_POST['update_cart'])) {
+
+									if(isset( $_POST['quantity'])){
 
 
-						
-						<?php }?>
-        	             
-        	             	<td colspan="4">Net Total</td>
+										$qty = $_POST['quantity'];
+
+										$update_qty = "update product_item set quantity='$qty' where product_id = '$pro_id' AND cart_id = '$cart_id'";
+										$run_qty = mysqli_query($con, $update_qty);
+
+										if ($run_qty) {
+											$total_product_price = $product_price * $qty;
+											$total += $total_product_price;
+
+
+
+
+										}
+									}	
+								}
+								?>
+
+								<td><?php echo $product_price; ?></td>
+								<td><?php echo $total_product_price; ?></td>
+
+
+
+							<?php }?>
+
+							<td colspan="4">Net Total</td>
 							<td><?php echo $total; ?></td>
 						</tr>  
 
 
 						<tr align="center">
 							<td colspan="2"><input type="submit" name="update_cart" value="Update Cart"></td>
-							 <td><button><a href='optimum_beauty.php' >Continue Shopping</a> </button></td>
+							<td><button><a href='optimum_beauty.php' >Continue Shopping</a> </button></td>
 							<td><button ><a href="payment.php">CheckOut</a></button></td>
 						</tr>
-                          
+
 					</table>
 
 				</form>	
-				
+
 				<?php
-				   
-				  
-                   if (isset($_GET['remove'])) {
-  	
-  	                     $remove_id = $_GET['remove'];
-
-  	                     $customer_id = $_SESSION['id'];
 
 
-					    //getting cart_id
+				if (isset($_GET['remove'])) {
 
-					    $sel_cart ="select * from cart where customer_id = '$customer_id' AND status = 'active'";
+					$remove_id = $_GET['remove'];
 
-						
-						$run_cart = mysqli_query($con, $sel_cart);
-						    if (!$run_cart) {
-             printf("Error: %s\n", mysqli_error($con));
-            exit();
-           }/// helps to check error
-
-						$row = mysqli_fetch_array($run_cart);
-
-						$cart_id = $row['id'];
+					$customer_id = $_SESSION['id'];
 
 
-  	                     $delete_item = "delete from product_item where product_id = '$remove_id' AND cart_id ='$cart_id' ";
+//getting cart_id
 
-  	                     $run_delete_item = mysqli_query($con, $delete_item);
+					$sel_cart ="select * from cart where customer_id = '$customer_id' AND status = 'active'";
 
-  	                  
-  		                   echo "<script>alert('Product deleted')</script>";
-  		                   echo "<script>window.open('cart.php','_self')</script>";
-  	                   
-                     }
 
-                
-				?>
-		
-		<br>
-		
-	</div>
-	<!-- /section -->
-			</div>
-			<!-- /row -->
-		</div>
-		<!-- /container -->
-	</div>
-	<!-- /section -->
+					$run_cart = mysqli_query($con, $sel_cart);
+					if (!$run_cart) {
+						printf("Error: %s\n", mysqli_error($con));
+						exit();
+					}/// helps to check error
 
-	<?php  include("inc/footer1.php"); ?>
-	<?php  } ?>
+					$row = mysqli_fetch_array($run_cart);
+
+					$cart_id = $row['id'];
+
+
+					$delete_item = "delete from product_item where product_id = '$remove_id' AND cart_id ='$cart_id' ";
+
+					$run_delete_item = mysqli_query($con, $delete_item);
+
+
+					echo "<script>alert('Product deleted')</script>";
+					echo "<script>window.open('cart.php','_self')</script>";
+
+					}
+
+
+					?>
+
+<br>
+
+</div>
+<!-- /section -->
+</div>
+<!-- /row -->
+
+</div>
+<!-- /container -->
+</div>
+<!-- /section -->
+
+<?php  include("inc/footer1.php"); ?>
+<?php  } ?>

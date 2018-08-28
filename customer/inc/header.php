@@ -75,10 +75,10 @@
 							</div>
 							
 							<ul class="custom-menu">
-								<li><a href="index.php"><i class="fa fa-user-o"></i> Личный кабинет</a></li>
+								<li><a href="index.php" style="text-transform: lowercase;"><i class="fa fa-user-o"></i> Личный кабинет</a></li>
 								
-								<li><a href="../checkout.php"><i class="fa fa-check"></i> Checkout</a></li>
-								<li><a href="logout.php"><i class="fa fa-unlock-alt"></i> Выити</a></li>
+								<li><a href="#" style="text-transform: lowercase;"><i class="fa fa-check"></i> Checkout</a></li>
+								<li><a href="logout.php" style="text-transform: lowercase;"><i class="fa fa-unlock-alt"></i> Выити</a></li>
 								
 							</ul>
 						</li>
@@ -91,7 +91,7 @@
 									<i class="fa fa-shopping-cart"></i>
 									<span class="qty"><?php total_items();  ?></span>
 								</div>
-								<strong class="text-uppercase">My Cart:</strong>
+								<strong class="text-uppercase">Мои Заказы:</strong>
 								<br>
 								<span><?php total_price() ?></span>
 							</a>
@@ -101,8 +101,8 @@
 										
 									</div>
 									<div class="shopping-cart-btns">
-										<a href="../cart.php"><button class="main-btn">View Cart</button></a>
-										<button class="primary-btn">Checkout <i class="fa fa-arrow-circle-right"></i></button>
+										<a href="../cart.php" style="text-transform: lowercase;"><button class="main-btn">заказы</button></a>
+										<button class="primary-btn" style="text-transform: lowercase;">Checkout <i class="fa fa-arrow-circle-right"></i></button>
 
 
 									</div>

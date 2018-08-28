@@ -37,6 +37,7 @@
                      com.name as company_name,
                      so.registration_date as order_date,
                      c.name as customer_name,
+                     c.id as customer_id,
                      ct.email as customer_email,
                      ct.telephone as customer_telephone,
                      r.name as customer_region,
@@ -52,6 +53,7 @@
                      pt.id as product_item,
                      ct.telephone as telephone,
                      crt.id as cart_id,
+                     so.id as order_id,
                      pt.id as product_id,
                      pt.onscreen_status as status
 
@@ -84,17 +86,16 @@
                    $status = $rows['status'];
                   $order_date = $rows['order_date'];
                   $customer_name = $rows['customer_name'];
-                  
+                  $customer_id = $rows['customer_id'];
                   $product_name = $rows['product_name'];
                   $pro_item_id = $rows['product_id'];
-                  
+                  $order_id = $rows['order_id'];
                   $product_price = $rows['price'];
                   $quantity = $rows['quantity'];
 
 
                                 $i++;
-                      
-               
+
            
                               
      ?>
@@ -130,7 +131,7 @@
 </table>
 <br>
 <br>
-<form  method="post" action="excel.php">
+<form  method="post" action="excel.php?order_id=<?php echo $order_id ?> & customer_id=<?php echo $customer_id ?>">
   <input type="submit" name="export_excel" class="btn btn-success" value="Печать ">
   
 </form>

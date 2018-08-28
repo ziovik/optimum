@@ -1,131 +1,129 @@
 <?php
-  session_start();
+session_start();
 include("../inc/db.php");
 
 if (isset($_REQUEST['action'])) {
-  
+
 
     $dist_id = $_SESSION['distributor_id'];
 
-   
-	
-	switch ($_REQUEST['action']) {
+
+    switch ($_REQUEST['action']) {
 
 
-		case "SendMessage":
-			 $message = $_REQUEST['message'];  // action is calling message inputed
-		
-			$sql = "select 
-	                    c.name as company_name,
-	                    cc.name as customer_name,
-	                    cc.id as customer_id
+        case "SendMessage":
+            $message = $_REQUEST['Message'];  // action is calling message inputed
 
-	               from distributor d
-				         join company c on c.id = d.company_id
-				         join product p on p.distributor_id = d.id
-				         join product_item pt on pt.product_id = p.id
-				         join cart crt on crt.id = pt.cart_id
-				         join customer cc on cc.id = crt.customer_id
+            $sql = "select 
+                        c.name as company_name,
+                        cc.name as customer_name,
+                        cc.id as customer_id
 
-	                where d.id = '$dist_id'";
+                   from distributor d
+                         join company c on c.id = d.company_id
+                         join product p on p.distributor_id = d.id
+                         join product_item pt on pt.product_id = p.id
+                         join cart crt on crt.id = pt.cart_id
+                         join customer cc on cc.id = crt.customer_id
 
-			$run = mysqli_query($con, $sql);
+                    where d.id = '$dist_id'";
 
-			$row = mysqli_fetch_array($run);
+            $run = mysqli_query($con, $sql);
 
-			$distributor_name = $row['company_name'];
-			$customer_id = $row['customer_id'];   
-					                
-		               
+            $row = mysqli_fetch_array($run);
 
-		    $sql = "insert into distributor_chat set user = '$distributor_name', message ='$message', distributor_id = '$dist_id', customer_id = '$customer_id' ";
-		    $run = mysqli_query($con, $sql);
-
-		    echo "Success";
+            $distributor_name = $row['company_name'];
+            $customer_id = $row['customer_id'];
 
 
-			break;
+            $sql = "insert into distributor_chat set user = '$distributor_name', message ='$message', distributor_id = '$dist_id', customer_id = '$customer_id' ";
+            $run = mysqli_query($con, $sql);
+
+            echo "Success";
 
 
-			case "getChat":
-
-                 $sql = "select 
-	                    c.name as company_name,
-	                    cc.name as customer_name,
-	                    cc.id as customer_id
-
-	               from distributor d
-				         join company c on c.id = d.company_id
-				         join product p on p.distributor_id = d.id
-				         join product_item pt on pt.product_id = p.id
-				         join cart crt on crt.id = pt.cart_id
-				         join customer cc on cc.id = crt.customer_id
-
-	                where d.id = '$dist_id' ";
-
-			$run = mysqli_query($con, $sql);
-
-			$row = mysqli_fetch_array($run);
-
-			$distributor_name = $row['company_name'];
-			$customer_id = $row['customer_id'];   
+            break;
 
 
-				 $sql_dist_message = "select * from distributor_chat where distributor_id ='$dist_id' AND customer_id = '$customer_id'";
+        case "getChat":
 
-				                  
-				              
-		         $run_dist = mysqli_query($con, $sql_dist_message);
-		         
+            $sql = "select 
+                        c.name as company_name,
+                        cc.name as customer_name,
+                        cc.id as customer_id
 
-		         while($rows = mysqli_fetch_array($run_dist)){
+                   from distributor d
+                         join company c on c.id = d.company_id
+                         join product p on p.distributor_id = d.id
+                         join product_item pt on pt.product_id = p.id
+                         join cart crt on crt.id = pt.cart_id
+                         join customer cc on cc.id = crt.customer_id
 
-		         	$chat = $rows['message'];
-		         	$user = $rows['user'];
-		         
-		        
+                    where d.id = '$dist_id' ";
+
+            $run = mysqli_query($con, $sql);
+
+            $row = mysqli_fetch_array($run);
+
+            $distributor_name = $row['company_name'];
+            $customer_id = $row['customer_id'];
 
 
-                    echo "
+            $sql_dist_message = "select * from distributor_chat where distributor_id ='$dist_id' AND customer_id = '$customer_id'";
+
+
+            $run_dist = mysqli_query($con, $sql_dist_message);
+
+
+            while ($rows = mysqli_fetch_array($run_dist)) {
+
+                $chat = $rows['Message'];
+                $user = $rows['user'];
+
+
+                echo "
 
 
                   
                     
                    <div class='form-group'>
-                        <span class='fa fa-lg fa-user pb-chat-fa-user'></span><br>".$rows['user']."<span class='label label-default pb-chat-labels pb-chat-labels-left'>".$rows['message']."</span>
+                        <span class='fa fa-lg fa-user pb-chat-fa-user'></span><br>" . $rows['user'] . "<span class='label label-default pb-chat-labels pb-chat-labels-left'>" . $rows['Message'] . "</span>
                     </div>
                     <hr>
 
 
-                    ";  
-}
+                    ";
+            }
 
-                    $get_customer_message = "select 
+            $get_customer_message = "select 
                                                 * 
                                              from customer_chat
                                              
                                              where distributor_id = '$dist_id' AND customer_id = '$customer_id' ";
-                    $run_customer = mysqli_query($con, $get_customer_message);
-                   while($row_customer = mysqli_fetch_array($run_customer)){
+            $run_customer = mysqli_query($con, $get_customer_message);
+            while ($row_customer = mysqli_fetch_array($run_customer)) {
 
-                    	$chat = $row_customer['message'];
-                    	$user = $row_customer['user'];
+                $chat = $row_customer['Message'];
 
-                    	 echo "
-
-
-				                  <div class='form-group pull-right pb-chat-labels-right'>
-				                        <span class='label label-primary pb-chat-labels pb-chat-labels-primary'>".$row_customer['message']." :D</span>".$row_customer['user']."<span class='fa fa-lg fa-user pb-chat-fa-user'></span>
-				                    </div><br><br>
+                echo "
 
 
-                    ";  
-                    	
-                    }
+                                  <div class='form-group pull-right pb-chat-labels-right'>
+                                        <span class='label label-primary pb-chat-labels pb-chat-labels-primary'>
+                                        " . $row_customer['Message'] . " :D
+                                        </span>
+                                        " . (isset($_SESSION['customer_name']) ? $_SESSION['customer_name'] : null) . "
+                                        <span class='fa fa-lg fa-user pb-chat-fa-user'></span>
+                                    </div><br><br>
 
-               
-				break;
-		
-	}
+
+                    ";
+
+            }
+
+
+            break;
+
+    }
 }
 ?>

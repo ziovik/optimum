@@ -12,14 +12,15 @@ function cart(){
 		
 		if (isset($_SESSION['id'])) {
 
+
+
 		
 
             $customer_id = $_SESSION['id'];
 
             $pro_id = $_GET['add_cart'];
 
-           
-
+         
 
             //getting cart_id
 
@@ -159,117 +160,128 @@ function total_items(){
 	}
 
 
-//getting categories
+// virtual table to add cart
 
-function getCats(){
-	global $con;
+	function add_to_cart(){
 
-	$get_cats = "select * from categories";
-	$run_cats = mysqli_query($con, $get_cats);
+		if(isset($_POST["add_to_cart"]))  
+		{  
+			if(isset($_SESSION["shopping_cart"]))  
+			{  
+				$item_array_id = array_column($_SESSION["shopping_cart"], "item_id");  
+				if(!in_array($_GET["id"], $item_array_id))  
+				{  
+					$count = count($_SESSION["shopping_cart"]);  
+					$item_array = array(  
+						'item_id'               =>     $_GET["id"],  
+						'item_name'               =>     $_POST["hidden_name"],  
+						'item_price'          =>     $_POST["hidden_price"],  
+						'item_quantity'          =>     $_POST["quantity"]  
+					);  
+					$_SESSION["shopping_cart"][$count] = $item_array;  
+					echo '<script>alert(" Added")</script>';  
+					echo '<script>window.open("cart.php","_self")</script>';
+					
+				}  
+				else  
+				{  
+					echo '<script>alert("Item Already Added")</script>';  
+					
+					
+				}  
+			}  
+			else  
+			{  
+				$item_array = array(  
+					'item_id'               =>     $_GET["id"],  
+					'item_name'               =>     $_POST["hidden_name"],  
+					'item_price'          =>     $_POST["hidden_price"],  
+					'item_quantity'          =>     $_POST["quantity"]  
+				);  
+				$_SESSION["shopping_cart"][0] = $item_array;  
+			}  
+		}  
+		if(isset($_GET["action"]))  
+		{  
+			if($_GET["action"] == "delete")  
+			{  
+				foreach($_SESSION["shopping_cart"] as $keys => $values)  
+				{  
+					if($values["item_id"] == $_GET["id"])  
+					{  
+						unset($_SESSION["shopping_cart"][$keys]);  
+						echo '<script>alert("Item Removed")</script>';  
+						echo '<script>window.open("cart.php","_self")</script>';
+						
+					}  
+				}  
+			}  
+		}  
 
-	while ($row_cats = mysqli_fetch_array($run_cats)){
-		$cat_id = $row_cats['cat_id'];
-		$cat_title = $row_cats['cat_title'];
-
-		echo "<li><a href ='index.php?cat=$cat_id'>$cat_title</a></li>";
 	}
-}
-
-function getBrands(){
-	global $con;
-
-	$get_brands = "select * from brands";
-	$run_brands = mysqli_query($con, $get_brands);
-
-	while ($row_brands = mysqli_fetch_array($run_brands)){
-		$brand_id = $row_brands['brand_id'];
-		$brand_name = $row_brands['brand_name'];
-
-		echo "<li><a href ='index.php?brand=$brand_id'>$brand_name</a></li>";
-	}
-}
 
 
-function getRegion(){
-	global $con;
+// send mail
+	function sendEmail (){
+		global $con;
 
-	$get_regs = "select * from regions";
-	$run_regs = mysqli_query($con, $get_regs);
+		if (isset($_SESSION['id'])) {
+			
 
-	while ($row_regs = mysqli_fetch_array($run_regs)){
-		$region_id = $row_regs['region_id'];
-		$region_name = $row_regs['region_name'];
+			if ($_POST['send_distributor']) {
 
-		echo "<li ><a href ='optimum_beauty.php?region=$region_id'>$region_name</a></li>";
-	}
-}
+             $customer_id = $_SESSION['id'];
 
-function getSubCat(){
-	global $con;
+             $sql = "select 
+                          con.email as distributor_email
+                     from cart crt
+                          join product_item pt on pt.cart_id = crt.id
+                          join simple_order so on so.cart_id = crt.id
+                          join product p on p.id = pt.product_id
+                          join distributor d on d.id = p.distributor_id
+                          join contact con on con.id = d.contact_id
+                          join customer c on c.id = crt.customer_id
+                     where c.id = '$customer_id' AND crt.status = 'active'";
+              $run_info = mysqli_query($con, $sql);
 
-	$get_sub_cat = "select * from sub_cat";
-	$run_sub_cat = mysqli_query($con, $get_sub_cat);
-
-	while ($row_sub_cat = mysqli_fetch_array($run_sub_cat)){
-		$sub_cat_id = $row_sub_cat['sub_cat_id'];
-		$sub_cat_name = $row_sub_cat['sub_cat_name'];
-
-		echo "<li><a href ='index.php?sub_cat=$sub_cat_id'>$sub_cat_name</a></li>";
-	}
-}
-
-
-//getting the products to our website page
-
-function getPro(){
-     
-     if (!isset($_GET['region'])) {
-     	
-        
-        	
-        	if (!isset($_GET['sub_cat'])) {
-        		
-        	
-        
-
-	global $con;
-
-	$get_pro = "select * from products order by RAND() LIMIT 0,6";
-	$run_pro = mysqli_query($con, $get_pro);
-
-	while($row_pro=mysqli_fetch_array($run_pro)){
-		$pro_id = $row_pro['product_id'];
-		$pro_cat = $row_pro['product_cat'];
-		$pro_sub_cat = $row_pro['product_sub_cat'];
-		$pro_brand = $row_pro['product_brand'];
-		$pro_title = $row_pro['product_title'];
-		$pro_price = $row_pro['product_price'];
-		$pro_image = $row_pro['product_image'];
-		$pro_manu = $row_pro['product_manu'];
+              while ($rows = mysqli_fetch_array($run_info)) {
+              	$distributor_email = $rows['distributor_email'];
+              }
 
 
-		echo "
+			//reciever
+				$to = 'mondaydaniel2002@yahoo.com';
 
-                <div id='single_product'>
-                    <h4>$pro_title</h4>
-                    <img src='admin_area/product_images/$pro_image' width='200px' height='200px' >
-                    <p ><b>$pro_price</b></p>
-                    <a href='details.php?pro_id=$pro_id' style='float:left'><button>Details</button></a>
+			//subject
+				$subject = 'у вас заказ';
 
-                    <a href='index.php?add_cart=$pro_id'><button style='float:right'>Add to cart</button></a>
-                   
-                  
-                </div>
-		";
+			//messages/mail
+				$message = '<h1>у вас заказ от велокса</h1>';
 
+
+			//
+
+				$headers = "From:  The sender name <veloxkursk@yandex.ru>\r\n";
+				$headers .= "Reply-To: veloxkursk@yandex.ru\r\n";
+				$headers .= 'Content-type: text/html; charset=utf-8' . "\r\n";
+
+				mail($to, $subject, $message, $headers);
+			}
 		}
 
-	
-
-		}
-
 	}
-}
 
+	function mail_utf8($to, $from_user, $from_email, $subject = '(No subject)', $message = '')
+                                             
+		   { 
+		      $from_user = "=?UTF-8?B?".base64_encode($from_user)."?=";
+		      $subject = "=?UTF-8?B?".base64_encode($subject)."?=";
+
+		      $headers = "From: $from_user <$from_email>\r\n". 
+		               "MIME-Version: 1.0" . "\r\n" . 
+		               "Content-type: text/html; charset=UTF-8" . "\r\n"; 
+
+		     return mail($to, $subject, $message, $headers); 
+		   }
 
 ?>

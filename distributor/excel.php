@@ -1,87 +1,79 @@
-    <?php
-    session_start();
-    include("inc/db.php");
-    
-    $output = '<meta http-equiv=Content-Type content="text/html; charset=utf-8">';
-    $i = 0;
+<?php
+session_start();
+include("inc/db.php");
 
-    if (isset($_SESSION['distributor_id'])) {
+$output = '<meta http-equiv=Content-Type content="text/html; charset=utf-8">';
+$i = 0;
 
-      $dist_id= $_SESSION['distributor_id'];
+if (isset($_SESSION['distributor_id'])) {
+
+  if (isset($_GET['customer_id'])) {
+    if (isset($_GET['order_id'])) {
+
+    $order_id = $_GET['order_id'];
+    $customer_id = $_GET['customer_id'];
+    $dist_id = $_SESSION['distributor_id'];
 
     if (isset($_POST['export_excel'])) {
-      
+
+
+        $total = 0;
+        $get = "select 
+                     so.id as order_id,
+                     com.name as company_name,
+                     c.name as customer_name,
+                     con.email as customer_email,
+                     con.telephone as customer_telephone,
+                     r.name as customer_region,
+                     st.name as street_name,
+                     a.building as customer_building,
+                     a.house as customer_house,
+                     a.index_code as index_code
+                    
+                     
+
+                from simple_order so 
+                     join product_item pt on pt.cart_id = so.cart_id
+                     join cart crt on crt.id = pt.cart_id
+                     join product p on p.id = pt.product_id
+                     join distributor d on d.id = p.distributor_id
+                     join customer c on c.id = crt.customer_id
+                     join company com on com.id = d.company_id
+                     join contact con on con.id = c.contact_id
+                     join region r on r.id = c.region_id
+                     join address a on a.id = c.address_id
+                     join street st on st.id = a.street_id
+                     
+               where d.id = '$dist_id'  AND  c.id = '$customer_id' AND so.id='$order_id' AND (pt.onscreen_status = 'Отправил' OR pt.onscreen_status = 'Смотрел' )
+                      ";
+
+
+
+
+        $run = mysqli_query($con, $get);
+
+        $rows = mysqli_fetch_array($run);
 
        
 
-       $total = 0;
-         $get = "select 
-                      com.name as company_name,
-                      so.id as order_id,
-                      cc.name as customer_name,
-                      con.email as customer_email,
-                      con.telephone as customer_telephone,
-                      r.name as customer_region,
-                      st.name as street_name,
-                      a.building as customer_building,
-                      a.house as customer_house,
-                      a.index_code as index_code,
-
-                      p.name as product_name,
-                      p.manufacturer as manufacturer,
-                      p.expires as expires,
-                      p.price as price,
-                      pt.quantity as quantity
-
-
-                   from 
-                       cart c 
-                        join product_item pt on pt.cart_id = c.id
-                        join product p on p.id = pt.product_id
-                        join distributor d on d.id = p.distributor_id
-                        join company com on com.id = d.company_id
-                        join customer cc on cc.id = c.customer_id
-                        join simple_order so on so.cart_id = pt.cart_id
-                        join address a on a.id = cc.address_id
-                        join region r on r.id = cc.region_id
-                        join contact con on con.id = cc.contact_id
-                        join street st on st.id = a.street_id
-
-                    where d.id = '$dist_id'  AND (pt.onscreen_status = 'Отправил' OR pt.onscreen_status = 'Смотрел' )";     
-
-
-
-
-
-                  $run = mysqli_query($con, $get);
-                
-
-                  $rows = mysqli_fetch_array($run);
-                 
-                  $order_id = $rows['order_id'];
-
-
-
-
-
-       $output .='
+        $output .= '
         <div style="text-align:center;">
 
-       <h2 style="text-align:center;">'.$rows['company_name'].' </h2 ><h4 >заказ № '.$rows['order_id'].'</h4>
+       <h2 style="text-align:center;">' . $rows['company_name'] . ' </h2 ><h4 >заказ № ' . $order_id . '</h4>
        </div>
        <div>
-       <p>От "'.$rows['customer_name'].'" </p>
+       <p>От "' . $rows['customer_name'] . '" </p>
        <table>
            <tr>
              <td>Контактное лицо:</td>
-             <td style="padding-left:100px;"><h4 > '.$rows['customer_name'].'<br> '.$rows['customer_email'].', '.$rows['customer_telephone'].'</h4></td>
+             <td style="padding-left:100px;"><h4 > ' . $rows['customer_name'] . '<br> ' . $rows['customer_email'] . ', ' . $rows['customer_telephone'] . '</h4></td>
            </tr>
        </table>
        <br>
       <table>
            <tr>
               <td>Адрес Доставки:</td>
-              <td style="padding-left:100px;"><h4>'.$rows['customer_region'].'<br> ул.: '.$rows['street_name'].', дом: '.$rows['customer_building'].', кв. : '.$rows['customer_house'].', почтовой адресс: '.$rows['index_code'].'</h4></td>
+              <td style="padding-left:100px;"><h4>' . $rows['customer_region'] . '<br> ул.: ' . $rows['street_name'] . ', дом: ' . $rows['customer_building'] . ', кв. : ' . $rows['customer_house'] . ', почтовой адресс: ' . $rows['index_code'] . '</h4></td>
 
        </tr>
        </table>
@@ -103,38 +95,56 @@
 
        ';
 
+        $total = 0;
+        $get_product = "select 
+                              p.name as product_name,
+                              p.manufacturer as manufacturer,
+                              p.expires as expires,
+                              p.price as price,
+                              pt.quantity as quantity
+                         
+                         
+                         from product_item pt 
+                              join simple_order so on so.cart_id = pt.cart_id
+                              join cart crt on crt.id = pt.cart_id
+                              join product p on p.id = pt.product_id
+                              join distributor d on d.id = p.distributor_id
+                         
+                              
+                     
+                         where d.id = '$dist_id' AND crt.customer_id = '$customer_id' AND so.id='$order_id' AND (pt.onscreen_status = 'Отправил' OR pt.onscreen_status = 'Смотрел' )
+                         ";
+
+        $run_product = mysqli_query($con, $get_product);
 
 
-  while ( $row = mysqli_fetch_array($run)) {
-    
-  
+        while ($row = mysqli_fetch_array($run_product)) {
+
 
             $output .= '
             
             <tr >
 
-            <td style="width : 500px; text-align:left;  border: 1px solid #ddd;padding: 8px;">'.$row['product_name'].'</td>
+            <td style="width : 500px; text-align:left;  border: 1px solid #ddd;padding: 8px;">' . $row['product_name'] . '</td>
 
-            <td  style="width : 50px; text-align:center; border: 1px solid #ddd; padding: 8px;"">'.$row['manufacturer'].'</td>
-            <td  style="width : 50px; text-align:center; border: 1px solid #ddd; padding: 8px;"">'.$row['expires'].'</td>
-            <td  style="width : 50px; text-align:center; border: 1px solid #ddd; padding: 8px;"">'.$row['price'].'</td>
-            <td  style="width : 50px; text-align:center; border: 1px solid #ddd; padding: 8px;"">'.$row['quantity'].'</td>
-            <td  style="width : 50px; text-align:center; border: 1px solid #ddd; padding: 8px;"">'.($row['quantity']) * ($rows['price'] ).'</td>
+            <td  style="width : 50px; text-align:center; border: 1px solid #ddd; padding: 8px;"">' . $row['manufacturer'] . '</td>
+            <td  style="width : 50px; text-align:center; border: 1px solid #ddd; padding: 8px;"">' . $row['expires'] . '</td>
+            <td  style="width : 50px; text-align:center; border: 1px solid #ddd; padding: 8px;"">' . $row['price'] . '</td>
+            <td  style="width : 50px; text-align:center; border: 1px solid #ddd; padding: 8px;"">' . $row['quantity'] . '</td>
+            <td  style="width : 50px; text-align:center; border: 1px solid #ddd; padding: 8px;"">' . ($row['quantity']) * ($row['price']) . '</td>
 
             </tr>
             ';
-    
-        
 
-        
-      }
-     }
 
-     $output .= '</table>';
-     
+        }
+    }
+
+    $output .= '</table>';
+
     header("Content-Type: text/cvs; charset=utf-8");
     header("Content-Disposition: attachment; filename=download.cvs");
     echo $output;
 
-   }
+}}}
 ?>

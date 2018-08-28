@@ -69,7 +69,7 @@
 			<div id="responsive-nav">
 				<!-- category nav -->
 				<div class="category-nav show-on-click">
-					<span class="category-header">My Account <i class="fa fa-list"></i></span>
+					<span class="category-header">Панель Управления<i class="fa fa-list"></i></span>
 					<ul class="category-list">
 							<?php
                            $customer_id = $_SESSION['id'];

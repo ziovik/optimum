@@ -12,7 +12,7 @@
 		<th style="text-align: center;">Производитель</th>
     <th style="text-align: center;">Годен до</th>
     <th style="text-align: center;">Минимальная покупка</th>
-    <th style="text-align: center;">Максимальная покупка</th>
+    
     <th style="text-align: center;">Скидки</th>
     <th style="text-align: center;">Примечание</th>
 
@@ -35,7 +35,7 @@
                    p.price as product_price,
                    p.manufacturer as manufacturer,
                    p.min_order as min_order,
-                   p.max_order as max_order,
+                  
                    p.discount as discount,
                    p.expires as expires,
                    p.description as description
@@ -58,7 +58,7 @@
             $manufacturer = $rows['manufacturer'];
             $expires = $rows['expires'];
             $min_order = $rows['min_order'];
-            $max_order = $rows['max_order'];
+            
             $discount = $rows['discount'];
             $desc = $rows['description'];
      
@@ -72,7 +72,7 @@
       <td><?php echo $manufacturer; ?></td>
       <td><?php echo $expires; ?></td>
       <td><?php echo $min_order; ?></td>
-      <td><?php echo $max_order; ?></td>
+     
       <td><?php echo $discount ; ?></td>
       <td><?php echo $desc ; ?></td>
 

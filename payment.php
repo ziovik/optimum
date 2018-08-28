@@ -632,12 +632,12 @@ else{
         
      </tr>
    
-        
+       
     
      <tr >
         <td ><button class="btn back-btn"><a href="cart.php"> Назад</a></button></td>
         
-        <td><button class="btn next-btn" name="distributor">Делать Заказ</button></td>
+        <td><button class="btn next-btn" name="send_distributor">Делать Заказ</button></td>
      </tr>
 
   </form>
@@ -654,7 +654,7 @@ else{
     include("inc/db.php");
        
  
-           if (isset($_POST['distributor'])) { 
+           if (isset($_POST['send_distributor'])) { 
               if (isset($_SESSION['id'])) {
                  $customer_id = $_SESSION['id'];
    
@@ -709,6 +709,8 @@ else{
         $insert_customer_cart = "insert into cart (customer_id,status) values ('$customer_id','active')";
          $run_customer_cart = mysqli_query($con, $insert_customer_cart);
 
+           
+
 
  //removing product_item to empty
        // $cart_status = 'inactive';
@@ -756,3 +758,58 @@ else{
   <?php  include("inc/footer1.php"); ?>
 
 <?php  } ?>
+
+<?php
+  global $con;
+
+		if (isset($_SESSION['id'])) {
+			
+
+			if ($_POST['send_distributor']) {
+
+             $customer_id = $_SESSION['id'];
+
+             $sql = "select 
+                          con.email as distributor_email
+                     from cart crt
+                          join product_item pt on pt.cart_id = crt.id
+                          join simple_order so on so.cart_id = crt.id
+                          join product p on p.id = pt.product_id
+                          join distributor d on d.id = p.distributor_id
+                          join contact con on con.id = d.contact_id
+                          join customer c on c.id = crt.customer_id
+                     where c.id = '$customer_id' AND crt.status = 'active'";
+              $run_info = mysqli_query($con, $sql);
+
+              while ($rows = mysqli_fetch_array($run_info)) {
+              	$distributor_email = $rows['distributor_email'];
+              }
+
+
+			//reciever
+				$to = 'mondaydaniel2002@yahoo.com';
+
+			//subject
+				$subject = 'у вас заказ';
+
+			//messages/mail
+				$message = '<h1>у вас заказ от велокса</h1>';
+
+
+			//
+
+				$headers = "From:  The sender name <veloxkursk@yandex.ru>\r\n";
+				$headers .= "Reply-To: veloxkursk@yandex.ru\r\n";
+				$headers .= 'Content-type: text/html; charset=utf-8' . "\r\n";
+
+				mail($to, $subject, $message, $headers);
+
+				$success = mail($to, $subject, $message, $headers);
+
+				if (!$success) {
+					    $errorMessage = error_get_last()['message'];
+					}
+			}
+		}
+
+?>
