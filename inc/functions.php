@@ -157,37 +157,43 @@ function total_price()
 
 // virtual table to add cart
 
+function get_index_by_item_id($item_id)
+{
+	$array_length = count($_SESSION["shopping_cart"]);
+
+	if ($array_length == 0) return -1;
+
+	for ($i = 0; $i < $array_length; $i++) {
+		if ($_SESSION["shopping_cart"]["item_id"] == $item_id) {
+			return $i;
+		}
+	}
+
+	return -1;
+}
+
 function add_to_cart()
 {
-
 	if (isset($_POST["add_to_cart"])) {
-		if (isset($_SESSION["shopping_cart"])) {
-			$item_array_id = array_column($_SESSION["shopping_cart"], "item_id");
-			if (!in_array($_GET["id"], $item_array_id)) {
-				$count = count($_SESSION["shopping_cart"]);
-				$item_array = array(
-					'item_id' => $_GET["id"],
-					'item_name' => $_POST["hidden_name"],
-					'item_price' => $_POST["hidden_price"],
-					'item_quantity' => $_POST["quantity"]
-				);
-				$_SESSION["shopping_cart"][$count] = $item_array;
-				echo '<script>alert(" Added")</script>';
-				echo '<script>window.open("cart.php","_self")</script>';
+		$product = array(
+			"item_id" => $_GET["id"],
+			"item_name" => $_POST["hidden_name"],
+			"item_price" => $_POST["hidden_price"],
+			"item_quantity" => $_POST["quantity"]
+		);
 
-			} else {
-				echo '<script>alert("Item Already Added")</script>';
+		if (!isset($_SESSION["shopping_cart"])) {
+			$_SESSION["shopping_cart"] = array();
+		}
 
-
-			}
+		if (empty($_SESSION["shopping_cart"])) {
+			array_push($_SESSION["shopping_cart"], $product);
 		} else {
-			$item_array = array(
-				'item_id' => $_GET["id"],
-				'item_name' => $_POST["hidden_name"],
-				'item_price' => $_POST["hidden_price"],
-				'item_quantity' => $_POST["quantity"]
-			);
-			$_SESSION["shopping_cart"][0] = $item_array;
+			$index = get_index_by_item_id($_GET["item_id"]);
+			if ($index < 0) return;
+
+			$quantity = $_SESSION["shopping_cart"][$index]["item_quantity"];
+			$_SESSION["shopping_cart"][$index]["item_quantity"] = $quantity + 1;
 		}
 	}
 	if (isset($_GET["action"])) {
