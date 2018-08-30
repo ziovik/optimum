@@ -1,111 +1,229 @@
-  <table width="800" align="center" >
-  	<tr align="center">
-  		<td colspan="7"><h2>Your Orders Details</h2></td>
-  	</tr>
-  	<tr style="text-align: center;">
-  		<th >S/N</th>
-      
-  		<th>Product Name</th>
-      
-  		<th>Quantity</th>
-  		<th>Distributor</th>
-  		<th>Status</th>
-      <th>Delete</th>
-  		
-  	</tr>
-       
-       <?php
+<script>
+	let currDistId = null, currDistName = null;
+</script>
 
-         
+<table width="800" align="center">
+	<tr align="center">
+		<td colspan="7"><h2>Подробность заказа</h2></td>
+	</tr>
+	<tr style="text-align: center;">
+		<th>S/N</th>
 
-        
-        if (isset($_SESSION['customer_email'])) {
-         
-     // this is for customer details
-          $user = $_SESSION['customer_email'];
+		<th>Наимнование</th>
 
-         
-          $i= 0;
+		<th>количество</th>
+		<th>Дистрибьютор</th>
+		<th>Цена</th>
+		<th>Положение</th>
+	</tr>
 
-          $get_c = "select *from customers where customer_email = '$user' ";
+	<?php
 
-          $run_c = mysqli_query($con, $get_c);
+	include("../inc/db.php");
 
-          while($row_c = mysqli_fetch_array($run_c)){
-            $c_id = $row_c['customer_id'];
-            $customer_email = $row_c['customer_email'];
-            
-            $get_cart = "select * from cart where customer_email = '$customer_email' ";
+	if (isset($_GET['my_orders'])) {
 
-            $run_cart = mysqli_query($con, $get_cart);
+		if (isset($_SESSION['customer_id'])) {
 
-            while ($row_cart = mysqli_fetch_array($run_cart)) {
-               $cart_status = $row_cart['cart_status'];
-               $product_id = $row_cart['p_id'];
-               $cart_id =$row_cart['cart_id'];
+			$my_orders = $_GET['my_orders'];
 
-               $qty = $row_cart['qty'];
+// this is for customer details
+			$customer_id = $_SESSION['customer_id'];
 
-            $get_pro ="select * from products where product_id = '$product_id'";
+			$onscreen_status = 'Отправил';
 
-            $run_pro = mysqli_query($con, $get_pro);
-
-            while ($rows = mysqli_fetch_array($run_pro)) {
-              $product_name = $rows['product_title'];
-              
-              $dist_id = $rows['dist_id'];
+			$i = 0;
 
 
-              $get_dist_name = "select * from distributors where dist_id = '$dist_id'";
+			$get = "select 
+pt.onscreen_status as status,                          
+pt.product_id as product_id,
+c.id as cart_id,
+com.name as company_name,
+pt.quantity as qty,
+p.price as price,
+so.id as order_id,
+p.name as product_name,
+cc.name as customer_name,
+d.id as distributor_id
 
-              $run_dist = mysqli_query($con, $get_dist_name);
+from 
+cart c
+join product_item pt on pt.cart_id = c.id
+join simple_order so on so.cart_id = pt.cart_id
+join product p on p.id = pt.product_id
+join distributor d on d.id = p.distributor_id
+join company com on com.id = d.company_id
+join customer cc on cc.id = c.customer_id
 
-              while ($row_dist = mysqli_fetch_array($run_dist)) {
-                $dist_name = $row_dist['dist_name'];
-  
-                $i++;
+where c.customer_id = '$customer_id' AND  so.id = '$my_orders'  AND pt.onscreen_status = '$onscreen_status' ";
 
-            
-            ?>
+			$run = mysqli_query($con, $get);
+			$current_distributor_id = null;
+			$current_company_name = null;
 
-            <tr align="center">
-            <td><?php echo $i;  ?></td>
-            <td><?php echo $product_name; ?></td>
+			while ($rows = mysqli_fetch_array($run)) {
 
-            <td><?php echo $qty; ?></td>
-            <td><?php echo $dist_name; ?></td>
+				$product_name = $rows['product_name'];
+				$qty = $rows['qty'];
+				$company_name = $rows['company_name'];
+				$product_price = $rows['price'];
+				$onscreen_status = $rows['status'];
+				$customer_name = $rows['customer_name'];
+				$order_id = $rows['order_id'];
+				$distributor_id = $rows['distributor_id'];
 
-            <td><?php echo $cart_status; ?></td>
-            <td><a href="my_orders.php?remove=<?php echo $cart_id; ?>">Remove</a></td>
-            </tr>
-          <?php }} } }}?>
+				$i++;
 
-          <form  method="post" action="excel.php">
-            <input type="submit" name="export_excel" class="btn btn-success" value="Печать Заказы">
-            
-          </form>
+				?>
 
-  </table>
+				<tr align="center">
+					<td><?php echo $i; ?></td>
+					<td><?php echo $product_name; ?></td>
+					<td><?php echo $qty; ?></td>
+					<td><?php echo $company_name; ?>
 
-    <?php
-    if (isset($_GET['remove'])) {
-
-     $remove_id = $_GET['remove'];
-     $user = $_SESSION['customer_email'];
-
-     $delete_item = "delete from cart where p_id = '$remove_id' AND customer_email='$user' ";
-
-     $run_delete_item = mysqli_query($con, $delete_item);
-
-
-     echo "<script>alert('Product deleted')</script>";
-     echo "<script>window.open('my_account.php','_self')</script>";
-
-   }
+						<!--chat -->
 
 
-   ?>
+						<div class="btn-group">
+							<button class="btn btn-primary dropdown-toggle btn-lg" data-toggle="dropdown"
+									aria-haspopup="true" aria-expanded="false" style="width: 100px;"
+									onclick="setCurrentValues(<?php echo $distributor_id; ?>, '<?php echo
+									$company_name; ?>')">
+								<span class="fa fa-comments pull-left">Chat</span>
+							</button>
+							<ul class="dropdown-menu pb-chat-dropdown">
+								<li>
+									<div class="panel panel-info pb-chat-panel">
+										<div class="panel panel-heading pb-chat-panel-heading">
+											<div class="row">
+												<div class="col-xs-12">
+													<a href="#">
+														<label id="support_label"><?php echo $customer_name; ?></label>
+													</a>
+													<a href="#"><span
+																class="fa fa-cog pull-right pb-chat-top-icons"></span></a>
+													<a href="#"><span
+																class="fa fa-share pull-right pb-chat-top-icons"></span></a>
+												</div>
+											</div>
+										</div>
+										<div class="scroll-container" id="chatRoom_<?php echo $distributor_id; ?>">
+											<form action="" method="post">
+												<hr>
+												<div class="clearfix"></div>
+											</form>
+										</div>
 
-  
+										<div class="panel-footer">
+											<div class="row">
+												<div class="col-xs-10">
+<textarea id="message_<?php echo $distributor_id; ?>"
+		  class="form-control pb-chat-textarea"
+		  onkeyup="textAreaOnEnterClick(event, <?php echo
+		  $distributor_id; ?>, '<?php echo $company_name; ?>')"
+		  placeholder="чат...И нажмите Кнопку Enter"
+		  style="width: 300px;"></textarea>
+												</div>
+											</div>
+										</div>
+									</div>
+								</li>
+							</ul>
+						</div>
 
+						<!--chat end-->
+
+					</td>
+					<td><?php echo $product_price; ?></td>
+					<td><?php echo $onscreen_status; ?></td>
+				</tr>
+			<?php }
+		}
+	} ?>
+
+
+</table>
+<div style="float: right;">
+	<form method="post" action="excel.php?action=<?php echo $order_id; ?>">
+		<input type="submit" name="export_excel" class="btn btn-success" value="Печать Заказы">
+
+	</form>
+
+</div>
+<div>
+	<button style="background:#800080; border-radius:5px; width: 80px; height: 50px;" class="btn next-btn"><a
+				href='index.php?view_orders' class='text-uppercase'
+				style='color:#fff; line-height: 2.5;'>Назад</a></button>
+	<br>
+	<br>
+</div>
+
+<script>
+	function setCurrentValues(distributorId, distributorName) {
+		currDistId = distributorId;
+		currDistName = distributorName;
+		loadChat();
+	}
+
+	function textAreaOnEnterClick(event) {
+		if (event.which === 13) {
+			let textArea = document.getElementById('message_' + currDistId);
+
+			if (textArea == null) {
+				console.log('TextArea is not found');
+				return;
+			}
+
+			let message = {
+				'distributor_id': currDistId,
+				'message': textArea.value
+			};
+
+			let data = JSON.stringify(message);
+
+			$.ajax({
+				method: 'POST',
+				url: 'handlers/myajax.php',
+				data: data,
+				success: function () {
+					loadChat();
+				},
+				error: function (error) {
+					console.log(error);
+				}
+			});
+
+			textArea.value = '';
+		}
+	}
+
+	$(document).ready(function () {
+		loadChat();
+	});
+
+	//showing all chat in box
+
+	function loadChat() {
+		if (currDistId == null) return;
+
+		$.ajax({
+			method: 'GET',
+			url: 'handlers/myajax.php?action=get_chat&distributor_id='
+			+ currDistId + '&distributor_name=' + currDistName,
+			success: function (data) {
+				let chatRoom = document.getElementById('chatRoom_' + currDistId);
+				if (chatRoom != null) chatRoom.innerHTML = data;
+			},
+			error: function () {
+				console.log('error');
+			}
+		});
+	}
+
+	setInterval(function () {
+		loadChat();
+	}, 2000);
+</script>
 

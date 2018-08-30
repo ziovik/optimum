@@ -10,7 +10,7 @@
 						<!-- footer logo -->
 						<div class="footer-logo">
 							<a class="logo" href="#">
-		            <img src="./img/logo.png" alt="">
+		            <img src="../img/logo.png" alt="">
 		          </a>
 						</div>
 						<!-- /footer logo -->
@@ -97,14 +97,16 @@
 	<!-- /FOOTER -->
 
 	<!-- jQuery Plugins -->
-	<script src="js/jquery.min.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<script src="js/slick.min.js"></script>
-	<script src="js/nouislider.min.js"></script>
-	<script src="js/jquery.zoom.min.js"></script>
-	<script src="js/main.js"></script>
-	<script src="js/checkout.js"></script>
-	<script src="js/rwd-table.js?v=5.3.1"></script>
+	<script src="../js/jquery.min.js"></script>
+	<script src="../js/bootstrap.min.js"></script>
+	<script src="../js/slick.min.js"></script>
+	<script src="../js/nouislider.min.js"></script>
+	<script src="../js/jquery.zoom.min.js"></script>
+	<script src="../js/main.js"></script>
+	<script src="../js/checkout.js"></script>
+	<script src="../js/rwd-table.js?v=5.3.1"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<!--<script src="js/global.js"></script>-->
         <script>
             $(function() {
                 $('#bs-deps').on('hide.bs.collapse show.bs.collapse', function () {

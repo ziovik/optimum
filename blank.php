@@ -98,7 +98,7 @@
 					<!-- Logo -->
 					<div class="header-logo">
 						<a class="logo" href="index.php">
-							<img src="./img/logo.png" alt="">
+							<img src="../img/logo.png" alt="">
 						</a>
 					</div>
 					<!-- /Logo -->

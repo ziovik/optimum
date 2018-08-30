@@ -10,14 +10,14 @@
   <link rel="stylesheet" type="text/css" href="css/style_index.css">
   <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
    
-  <link href="css1/animate.css" rel="stylesheet"/>
-  <link href="css1/waypoints.css" rel="stylesheet"/>
+  <link href="css/animate.css" rel="stylesheet"/>
+  <link href="css/waypoints.css" rel="stylesheet"/>
 
   <script src="main.js"></script>
   <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
   <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-  <script src="js1/jquery.waypoints.min.js" type="text/javascript"></script>
-  <script src="js1/waypoints.js" type="text/javascript"></script>
+  <script src="js/jquery.waypoints.min.js" type="text/javascript"></script>
+  <script src="js/waypoints.js" type="text/javascript"></script>
    
 </head>
 <body>

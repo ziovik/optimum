@@ -1,119 +1,187 @@
-<div class="banner banner-1">
-    <div class="table-responsive" data-pattern='priority-columns'>
-     <table cellspacing='0' id='group-test' class='table table-small-font table-bordered table-striped'>
+               
+<?php
+session_start();
+
+ include("inc/db.php"); 
+      
+        //getting customer details
+       $customer_id = $_SESSION['customer_id'];
+
+       $query = "
+          select 
+            p.name,
+            p.id as product_id,
+            p.manufacturer ,
+            p.price , 
+            p.min_order ,
+            p.expires ,
+            p.description ,
+            p.discount ,
+            cm.name as company_name 
+          from 
+
+              store s
+              join distributor d on d.id = s.distributor_id
+              join product p on p.distributor_id = d.id
+              join customer c on c.region_id = s.region_id
+              join company cm on cm.id = d.company_id
+      
+     where c.id = '$customer_id'";
+     $run = mysqli_query($con, $query);
+     $row = mysqli_fetch_array($run);
+
+     $product_id = $row['product_id'];
+
+       ?>
+         <div style="overflow-x:auto;">                
+         <table cellspacing='0' id='group-test' class='table table-small-font table-bordered table-striped'>
         <thead>
           <tr >
 
-              <th colspan='1' style="text-align: center;" >Дистрибьютор</th>
+              <th colspan='1' data-priority= "1" style="text-align: center;" >Дистрибьютор</th>
 
-              <th colspan='1' style="text-align: center;" >Найменование</th>
-              <th colspan='1' style="text-align: center;">Производитель/<br>Страна производства</th>
-              <th colspan='1' style="text-align: center;">Цена</th>
-              <th colspan='1' style="text-align: center;">Годен до</th>
-              <th colspan='1' style="text-align: center;">Остаток</th>
-              <th colspan='1' style="text-align: center;">Примечание</th>
+              <th colspan='1' data-priority= "2" style="text-align: center; max-width: 500px;"  >Найменование</th>
+              <th colspan='1' data-priority= "3" style="text-align: center;">Производитель/<br>Страна производства</th>
+             
+              
+
+              <th colspan='1' data-priority= "4" style="text-align: center;">Цена<br>(руб.)</th>
+              <th colspan='1' data-priority= "5" style="text-align: center;">Годен до</th>
+              <th colspan='1' data-priority= "6" style="text-align: center;">Остаток</th>
+              <th colspan='1' data-priority= "7" style="text-align: center;">Примечание</th>
+              <th colspan='1' data-priority= "7" style="text-align: center;">Добавить</th>
+              
           </tr>
 
                
 <?php
-session_start();
+
 include("inc/functions.php");
  global $con;
        $output = '';
         //getting customer details
-       $user = $_SESSION['customer_email'];
+       $customer_id = $_SESSION['customer_id'];
 
-        $get_c = "select *from customers where customer_email = '$user' ";
+        
 
-        $run_c = mysqli_query($con, $get_c);
 
-        $row_c = mysqli_fetch_array($run_c);
-
-        $c_id = $row_c['customer_id'];
 if(isset($_POST["query"]))
 {
  $search = mysqli_real_escape_string($con, $_POST["query"]);
  $query = "
- select * from products p 
-     
-     join distributors d on p.dist_id = d.dist_id 
-     join customers c on d.region_id = c.region_id 
+          select 
+            p.name,
+            p.id as product_id,
+            p.manufacturer ,
+            p.price , 
+            p.min_order ,
+            p.expires ,
+            p.description ,
+            p.discount ,
+            cm.name as company_name 
+          from 
+
+              store s
+              join distributor d on d.id = s.distributor_id
+              join product p on p.distributor_id = d.id
+              join customer c on c.region_id = s.region_id
+              join company cm on cm.id = d.company_id
       
-     where c.customer_id = '$c_id'
-  AND p.product_title LIKE '%".$search."%'
+     where c.id = '$customer_id'
+  AND p.name LIKE '%".$search."%'
   
  ";
 }
 else
 {
  $query = 
- "select * from products p 
-     
-     join distributors d on p.dist_id = d.dist_id 
-     join customers c on d.region_id = c.region_id 
+     "select 
+            p.id as product_id,
+            p.name , 
+            p.manufacturer ,
+            p.price , 
+            p.min_order ,
+            p.expires ,
+            p.description ,
+            p.discount ,
+            cm.name as company_name
+      from 
+
+              store s
+              join distributor d on d.id = s.distributor_id
+              join product p on p.distributor_id = d.id
+              join customer c on c.region_id = s.region_id
+              join company cm on cm.id = d.company_id
       
-     where c.customer_id = '$c_id'  ORDER BY product_id
+      where c.id = '$customer_id'
+         ORDER BY p.id
  ";
 }
 $result = mysqli_query($con, $query);
+  if (!$result ) {
+             printf("Error: %s\n", mysqli_error($con));
+            exit();
+           }/// helps to check error
+
 $count_result = mysqli_num_rows($result);
  if ($count_result == 0) {
-	   	    echo "<h2>'No Product in ths Category'</h2>";
-	      }else{
+          echo "<h2>'нет продукта'</h2>";
+        }else{
 
-	    while($row_allcosm_pro=mysqli_fetch_array($result)){
-		  $pro_id = $row_allcosm_pro['product_id'];
-		  $pro_cat = $row_allcosm_pro['product_cat'];
-		  $pro_sub_cat = $row_allcosm_pro['product_sub_cat'];
-		  $pro_brand = $row_allcosm_pro['product_brand'];
-		  $pro_name = $row_allcosm_pro['product_title'];
-		  $pro_price = $row_allcosm_pro['product_price'];
-		  $pro_desc = $row_allcosm_pro['product_desc'];
-		  $pro_manu = $row_allcosm_pro['product_manu'];
-      $pro_min_order = $row_allcosm_pro['min_order'];
-      $pro_dist = $row_allcosm_pro['dist_id'];
-
-      $get_dist = "select * from distributors where dist_id = '$pro_dist'";
-
-      $run_dist = mysqli_query($con, $get_dist);
-
-      $row_dist = mysqli_fetch_array($run_dist);
-
-      $dist_name = $row_dist['dist_name'];
-
-         
+      while($row_pro=mysqli_fetch_array($result)){
+      $pro_id = $row_pro['product_id'];
+      $pro_expires = $row_pro['expires'];
+      $pro_name = $row_pro['name'];
+      $pro_price = $row_pro['price'];
+      $pro_desc = $row_pro['description'];
+      $pro_manu = $row_pro['manufacturer'];
+      $pro_min_order = $row_pro['min_order'];
+      $pro_dist = $row_pro['company_name'];
+      $pro_discount = $row_pro['discount'];
 
 
-
-       echo "
-                
-
-          
-       
+       ?>
                 <tr >
-                   <td colspan='1' data-priority='7'>$dist_name</td>
-                   
-                   <td colspan='1' data-priority='1'><a href='product_details.php?pro_id= $pro_id '>$pro_name  </td>
-                   <td colspan='1' data-priority='3'>$pro_manu </td>
-                   <td colspan='1' data-priority='2'>$pro_price</td>
-                   <td colspan='1' data-priority='2'>0</td>
-                   <td colspan='1' data-priority='2'>$pro_min_order</td>
-                   <td colspan='1' data-priority='2'>$pro_desc</td>
-                   
 
+                <form method="post"action="cart.php?action=add&id=<?php echo $pro_id; ?>" style = "width: 100%;">
+                 
+                    <td data-priority='1' style='background: white; color: #400040;'><?php echo $pro_dist ?></td>
+                    <td data-priority='2' style='background: white; color: #400040; width: 400px;'><a href='details.php?pro_id=<?php echo $pro_id ?>' style = "max-width: 500px;"><?php echo $pro_name ?></a></td>
+                    <td data-priority='3'style='background: white; color: #400040;'><?php echo $pro_manu ?></td>
+
+                    
+                    <td data-priority='4' style='background: white; color: #400040;'><?php echo $pro_price ?></td>
+
+                    <td data-priority='5' style='background: white; color: #400040;'><?php echo $pro_expires ?></td>
+                    <td data-priority='6' style='background: white; color: #400040;'><?php echo $pro_min_order ?></td>
+                    <td data-priority='7' style='background: white; color: #400040;'><?php echo $pro_desc ?></td>
+
+                    <td><input type="text" name="quantity" class="form-control" value="1"/>
+                    <!-- hidden-->
+                 
+                        <input type="hidden" name="hidden_name" value="<?php echo $pro_name; ?>"/>
+                        <input type="hidden" name="hidden_price" value="<?php echo $pro_price; ?>"/>
+                     
                    
+                        <input type="submit" name="add_to_cart"
+                               style="margin-top:5px; width: 70px; height: 30px; background: #800080; font-size: 14px;"
+                               class="btn btn-success" value="Add" style="width: "/>
+                    </td>
 
-
+                  </form>
                 </tr>
 
-          
-       ";
+             
 
-		}
+     
+<?php
+    }
 
-	}
+  }
 
 ?>
    </thead>
           </table>
+      </form>
+    
        </div>

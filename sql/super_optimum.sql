@@ -1,5 +1,5 @@
 drop database if exists super_optimum;
-create database super_optimum;
+CREATE DATABASE super_optimum CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 use super_optimum;
 
@@ -173,9 +173,10 @@ create table customer (
     on update cascade
 );
 
-insert into customer (id, name, company_id, contact_id, region_id, address_id, credentials_id) values
-  (1, 'Alex', null, 1, 3, 4, 2), -- 3 is Voronej
-  (2, 'Daniel', 4, 2, 1, 1, 3); -- 1 is Kursk
+insert into customer (id, name,  contact_id, region_id, address_id, credentials_id) values
+  (1, 'Alex', 1, 3, 4, 2), -- 3 is Voronej
+  (2, 'Daniel',  2, 1, 1, 3); -- 1 is Kursk
+
 
 create table distributor (
   id             bigint not null auto_increment,
@@ -246,9 +247,19 @@ create table category (
 );
 
 insert into category values
-  (1, 'Косметика'),
-  (2, 'Электроника'),
-  (3, 'Одежда');
+  (1, 'Космотология'),
+  (2, 'Депиляция'),
+  (3, 'Солярий'),
+  (4, 'Массаж'),
+  (5, 'Парикмахерская продукции'),
+  (6, 'Ногтевой сервис'),
+  (7, 'Ресницы и брови'),
+  (8, 'Визаж'),
+  (9, 'Татуаж и пирсинг'),
+  (10, 'Расходные материалы и одноразовые принадлежности'),
+  (11, 'терилизация и дезинфекция');
+
+
 
 create table sub_category (
   id          bigint       not null auto_increment,
@@ -263,14 +274,54 @@ create table sub_category (
 );
 
 insert into sub_category values
-  (1, 'Крем', 1),
-  (2, 'Помада', 1),
+  (1, 'Инъекционная', 1),
+  (2, 'Аппаратная', 1),
+  (3, 'Уход за волосами', 1),
 
-  (3, 'Смартфоны', 2),
-  (4, 'Ноутбуки', 2),
+  (4, 'Депиряций', 2),
 
-  (5, 'Футболки', 3),
-  (6, 'Кроссовки', 3);
+  (5, 'Солярий', 3),
+
+  (6, 'Массаж', 4),
+
+  (7, 'Стайлинг', 5),
+  (8, 'Нарашивание волос', 5),
+  (9, 'Инструменты, аксесуары и расходные материалы', 5),
+
+  (10, 'Моделирование', 6),
+  (11, 'Уход за ногтями и кожей рук', 6),
+  (12, 'Декор ногтей', 6),
+  (13, 'Инструменты и техника', 6),
+  (14, 'Расходные материалы', 6),
+
+  (15, 'Оформление бровей', 7),
+  (16, 'Наращивание ресниц', 7),
+  (17, 'Ламинирование ресниц', 7),
+  (18, 'Микропигментирование', 7),
+  (19, 'Инструменты и расходные материалы', 7),
+
+  (20, 'Макияж лица', 8),
+  (21, 'Макияж глаз', 8),
+  (22, 'Макияж губ', 8),
+  (23, 'Кисти для Макияжа', 8),
+  (24, 'Кейсы и палитра', 8),
+  (25, 'Инструменты', 8),
+
+  (26, 'Татуаж', 9),
+  (27, 'Пирсинг', 9),
+
+  (28, 'Одноразовые простыни,полотенца, салфетки', 10),
+  (29, 'Одноразовая одежда и перчатки', 10),
+  (30, 'Кисти, шпатели, баночки', 10),
+  (31, 'Ватные диски, спонжи', 10),
+  (32, 'Другое', 10),
+
+  (33, 'Средства для обработки кожи', 11),
+  (34, 'Средства для обработки инструментов и поверхностей', 11),
+  (35, 'Стерилизаторы, принадлежности и расходники', 11);
+
+
+
 
 create table product (
   id              bigint              not null auto_increment,
@@ -283,7 +334,7 @@ create table product (
   min_order       double,
   max_order       double,
   discount        double,
-  expired         date,
+  expires         date,
   code            varchar(50),
 
   distributor_id  bigint              not null,
@@ -324,9 +375,8 @@ create table cart (
 );
 
 insert into cart (id, customer_id, status) values
-  (1, 1, 'inacitve'), -- my cart in past
-  (2, 1, 'active'), -- it's only my cart
-  (3, 2, 'active'); -- it's only your cart
+  (1, 1, 'inactive'); -- my cart in past
+
 
 -- product_item table --
 create table product_item (
@@ -334,6 +384,7 @@ create table product_item (
   product_id bigint not null,
   quantity   double not null,
   cart_id    bigint not null,
+  onscreen_status  varchar(20) ,
 
   primary key (id),
 
@@ -348,13 +399,28 @@ create table product_item (
 
 insert into product_item (id, product_id, quantity, cart_id) values
   (1, 2, 1, 1), -- i bought cream for hands in past
-  (2, 6, 3, 1), -- i bought 3 pans in past
+  (2, 6, 3, 1); -- i bought 3 pans in past
 
-  (3, 1, 2, 1), -- shaving cream 2 items (my cart)
-  (4, 3, 1, 1), -- iphone10 1 item (my cart)
 
-  (5, 5, 1, 2), -- one red t-shirt (your cart)
-  (6, 4, 3, 2); -- three imacs (your cart)
+-- history table --
+create table history (
+  id         bigint not null auto_increment,
+  product_id bigint not null,
+  quantity   double not null,
+  cart_id    bigint not null,
+  status     varchar(20) not null, -- active/inactive (inactive is in history)
+  order_date datetime not null,
+
+  primary key (id),
+
+  foreign key (product_id) references product (id)
+    on delete cascade
+    on update cascade,
+
+  foreign key (cart_id) references cart (id)
+    on delete cascade
+    on update cascade
+);
 
 create table simple_order (
   id                bigint   not null auto_increment,
@@ -369,6 +435,6 @@ create table simple_order (
 );
 
 insert into simple_order values
-  (1, now() - interval 10 day, 1), -- my order in past
-  (2, now(), 3), -- my order
-  (3, now() + interval 3 day, 2); -- your order
+  (1, now() - interval 10 day, 1); -- my order in past
+
+
