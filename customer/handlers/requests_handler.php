@@ -39,8 +39,6 @@ function show_customer_message($message)
 
 function show_messages($messages)
 {
-	if (empty($message)) return;
-
 	foreach ($messages as $message) {
 		if ($message instanceof DistributorMessage) {
 			show_distributor_message($message);
@@ -56,6 +54,15 @@ if (isset($_GET["action"])) {
 	$action = $_GET["action"];
 
 	switch ($action) {
+		case "get_chat":
+			get_chat_message();
+			break;
+		case "send_message_to_distributor":
+			send_message_to_distributor_request($data);
+			break;
+		case "delete_product_from_cart":
+			delete_product_from_active_cart_request($data);
+			break;
 		case "add_to_cart":
 			add_to_cart_request($data);
 			break;
@@ -69,7 +76,20 @@ if (isset($_GET["action"])) {
 	return;
 }
 
-function check_product_in_cart_request($data) {
+function delete_product_from_active_cart_request($data)
+{
+	if (empty($data)) {
+		print_r("data is empty");
+		return;
+	}
+
+	if (isset($data["id"])) {
+		db_delete_product_from_active_cart($data["id"]);
+	}
+}
+
+function check_product_in_cart_request($data)
+{
 	if (empty($data)) {
 		print_r("data is empty");
 		return;
@@ -78,9 +98,9 @@ function check_product_in_cart_request($data) {
 	if (isset($data["product_id"]) && isset($data["customer_id"])) {
 		$product_id = $data["product_id"];
 		$customer_id = $data["customer_id"];
-		$cart_id = get_customer_active_cart_id($customer_id);
-		$product_item = get_product_in_active_cart($product_id, $cart_id);
-		if (isset($product_item)){
+		$cart_id = db_get_customer_active_cart_id($customer_id);
+		$product_item = db_get_product_in_active_cart($product_id, $cart_id);
+		if (isset($product_item)) {
 			$result = array("id" => $product_item->id, "quantity" => $product_item->quantity);
 			print_r(json_encode($result));
 		} else {
@@ -100,9 +120,9 @@ function add_to_cart_request($data)
 		$product_id = $data["product_id"];
 		$product_quantity = $data["product_quantity"];
 		$customer_id = $data["customer_id"];
-		$cart_id = get_customer_active_cart_id($customer_id);
+		$cart_id = db_get_customer_active_cart_id($customer_id);
 
-		add_product_to_active_cart($product_id, $product_quantity, $cart_id);
+		db_add_product_to_active_cart($product_id, $product_quantity, $cart_id);
 		print_r("product was added into db");
 	}
 }
@@ -118,43 +138,57 @@ function update_product_in_cart_request($data)
 		$id = $data["id"];
 		$product_quantity = $data["product_quantity"];
 
-		update_product_in_active_cart($id, $product_quantity);
+		db_update_product_in_active_cart($id, $product_quantity);
 		print_r("product was updated in db");
 	}
 }
 
-if (!empty($data) && isset($data["distributor_id"]) && isset($data["message"])) {
-	$message = $data["message"];
-	$distributor_id = $data["distributor_id"];
-	$now = date("Y-m-d H:i:s");
-	insert_customer_message($customer_id, $distributor_id, $message, $now);
+function send_message_to_distributor_request($data) {
+	if (empty($data)) {
+		print_r("data is empty");
+		return;
+	}
+
+	if (isset($data["distributor_id"]) && isset($data["message"]) && isset($data["customer_id"])) {
+		$message = $data["message"];
+		$distributor_id = $data["distributor_id"];
+		$customer_id = $data["customer_id"];
+		$now = date("Y-m-d H:i:s");
+		db_insert_customer_message($customer_id, $distributor_id, $message, $now);
+	}
 }
 
-if (!empty($_GET["action"]) && !empty($_GET["distributor_id"]) && !empty($_GET["distributor_name"])) {
-	$distributor_id = $_GET["distributor_id"];
-	$distributor_name = $_GET["distributor_name"];
-	$customer_messages = get_customer_messages($customer_id, $customer_name, $distributor_id);
-	$distributor_messages = get_distributor_messages($distributor_id, $distributor_name, $customer_id);
+function get_chat_message() {
+	if (!empty($_GET["customer_id"]) && !empty($_GET["customer_name"]
+			&& !empty($_GET["distributor_id"]) && !empty($_GET["distributor_name"]))) {
+		$customer_id = $_GET["customer_id"];
+		$customer_name = $_GET["customer_name"];
+		$distributor_id = $_GET["distributor_id"];
+		$distributor_name = $_GET["distributor_name"];
 
-	if ($distributor_messages != null && !empty($distributor_messages)) {
-		usort($distributor_messages, "date_comparator");
+		$customer_messages = db_get_customer_messages($customer_id, $customer_name, $distributor_id);
+		$distributor_messages = db_get_distributor_messages($distributor_id, $distributor_name, $customer_id);
+
+		if ($distributor_messages != null && !empty($distributor_messages)) {
+			usort($distributor_messages, "date_comparator");
+		}
+
+		if ($customer_messages != null && !empty($customer_messages)) {
+			usort($customer_messages, "date_comparator");
+		}
+
+		if ($distributor_messages != null && $customer_messages == null) {
+			show_messages($distributor_messages);
+			return;
+		}
+
+		if ($customer_messages != null && $distributor_messages == null) {
+			show_messages($customer_messages);
+			return;
+		}
+
+		$messages = array_merge($customer_messages, $distributor_messages);
+		usort($messages, "date_comparator");
+		show_messages($messages);
 	}
-
-	if ($customer_messages != null && !empty($customer_messages)) {
-		usort($customer_messages, "date_comparator");
-	}
-
-	if ($distributor_messages != null && $customer_messages == null) {
-		show_messages($distributor_messages);
-		return;
-	}
-
-	if ($customer_messages != null && $distributor_messages == null) {
-		show_messages($customer_messages);
-		return;
-	}
-
-	$messages = array_merge($customer_messages, $distributor_messages);
-	usort($messages, "date_comparator");
-	show_messages($messages);
 }

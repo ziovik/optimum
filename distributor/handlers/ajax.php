@@ -1,7 +1,7 @@
 <?php
 session_start();
-include("../../inc/functions.php");
-include("../../inc/db_functions.php");
+include_once "../../inc/functions.php";
+include_once "../../inc/db_functions.php";
 
 $distributor_id = isset($_SESSION['distributor_id']) ? $_SESSION['distributor_id'] : null;
 $distributor_name = isset($_SESSION['distributor_name']) ? $_SESSION['distributor_name'] : null;
@@ -47,14 +47,14 @@ if (!empty($data) && $data['customer_id'] != null && $data['message'] != null) {
 	$message = $data['message'];
 	$customer_id = $data['customer_id'];
 	$now = date("Y-m-d H:i:s");
-	insert_distributor_message($distributor_id, $customer_id, $message, $now);
+	db_insert_distributor_message($distributor_id, $customer_id, $message, $now);
 }
 
 if (isset($_GET['action']) && isset($_GET['customer_id']) && isset($_GET['customer_name'])) {
 	$customer_id = $_GET['customer_id'];
 	$customer_name = $_GET['customer_name'];
-	$customer_messages = get_customer_messages($customer_id, $customer_name, $distributor_id);
-	$distributor_messages = get_distributor_messages($distributor_id, $distributor_name, $customer_id);
+	$customer_messages = db_get_customer_messages($customer_id, $customer_name, $distributor_id);
+	$distributor_messages = db_get_distributor_messages($distributor_id, $distributor_name, $customer_id);
 
 	if ($distributor_messages != null && !empty($distributor_messages)) {
 		usort($distributor_messages, "date_comparator");

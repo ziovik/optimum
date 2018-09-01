@@ -178,14 +178,15 @@ where c.customer_id = '$customer_id' AND  so.id = '$my_orders'  AND pt.onscreen_
 
 			let message = {
 				'distributor_id': currDistId,
-				'message': textArea.value
+				'message': textArea.value,
+				'customer_id' : <?php echo $_SESSION["customer_id"]; ?>
 			};
 
 			let data = JSON.stringify(message);
 
 			$.ajax({
 				method: 'POST',
-				url: 'handlers/myajax.php',
+				url: 'handlers/requests_handler.php?action=send_message_to_distributor',
 				data: data,
 				success: function () {
 					loadChat();
@@ -207,11 +208,17 @@ where c.customer_id = '$customer_id' AND  so.id = '$my_orders'  AND pt.onscreen_
 
 	function loadChat() {
 		if (currDistId == null) return;
+		let customerId = '<?php echo $_SESSION["customer_id"]; ?>' ;
+		let customerName = '<?php echo $_SESSION["customer_name"]; ?>';
+
+		if (customerId == undefined && customerName == undefined) return;
 
 		$.ajax({
 			method: 'GET',
-			url: 'handlers/myajax.php?action=get_chat&distributor_id='
-			+ currDistId + '&distributor_name=' + currDistName,
+			url: 'handlers/requests_handler.php?action=get_chat&customer_id=' + customerId
+			+ '&customer_name=' + customerName
+			+ '&distributor_id=' + currDistId
+			+ '&distributor_name=' + currDistName,
 			success: function (data) {
 				let chatRoom = document.getElementById('chatRoom_' + currDistId);
 				if (chatRoom != null) chatRoom.innerHTML = data;

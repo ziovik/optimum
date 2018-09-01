@@ -13,14 +13,14 @@ include $_SERVER['DOCUMENT_ROOT'] . "/db_objects/CustomerMessage.php";
 include $_SERVER['DOCUMENT_ROOT'] . "/db_objects/ProductItem.php";
 
 
-function create_cart_for_customer($customer_id)
+function db_create_cart_for_customer($customer_id)
 {
 	global $con;
 	$sql = "insert into cart (customer_id,status) values ('$customer_id','active')";
 	mysqli_query($con, $sql);
 }
 
-function get_cart_id_by_customer($customer_id)
+function db_get_cart_id_by_customer($customer_id)
 {
 	global $con;
 	$sql = "select * from cart where status = 'active' and customer_id = '$customer_id'";
@@ -34,7 +34,7 @@ function get_cart_id_by_customer($customer_id)
 	}
 }
 
-function insert_customer_message($customer_id, $distributor_id, $message, $message_date)
+function db_insert_customer_message($customer_id, $distributor_id, $message, $message_date)
 {
 	global $con;
 	$sql = "
@@ -43,7 +43,7 @@ values ('$customer_id', '$distributor_id', '$message', '$message_date')";
 	mysqli_query($con, $sql);
 }
 
-function insert_distributor_message($distributor_id, $customer_id, $message, $message_date)
+function db_insert_distributor_message($distributor_id, $customer_id, $message, $message_date)
 {
 	global $con;
 	$sql = "
@@ -52,7 +52,7 @@ values ('$customer_id', '$distributor_id', '$message', '$message_date')";
 	mysqli_query($con, $sql);
 }
 
-function get_customer_messages($customer_id, $customer_name, $distributor_id)
+function db_get_customer_messages($customer_id, $customer_name, $distributor_id)
 {
 	global $con;
 	$sql =
@@ -75,7 +75,7 @@ customer_id ='$customer_id' and distributor_id = '$distributor_id'";
 	return $messages;
 }
 
-function get_distributor_messages($distributor_id, $distributor_name, $customer_id)
+function db_get_distributor_messages($distributor_id, $distributor_name, $customer_id)
 {
 	global $con;
 	$sql =
@@ -98,7 +98,7 @@ distributor_id ='$distributor_id' and customer_id = '$customer_id'";
 	return $messages;
 }
 
-function get_customer_active_cart_id($customer_id)
+function db_get_customer_active_cart_id($customer_id)
 {
 	global $con;
 
@@ -108,7 +108,7 @@ function get_customer_active_cart_id($customer_id)
 	return $rows["id"];
 }
 
-function add_product_to_active_cart($product_id, $product_quantity, $active_cart_id)
+function db_add_product_to_active_cart($product_id, $product_quantity, $active_cart_id)
 {
 	global $con;
 
@@ -117,7 +117,7 @@ function add_product_to_active_cart($product_id, $product_quantity, $active_cart
 	mysqli_query($con, $sql);
 }
 
-function update_product_in_active_cart($id, $product_quantity)
+function db_update_product_in_active_cart($id, $product_quantity)
 {
 	global $con;
 
@@ -126,7 +126,7 @@ function update_product_in_active_cart($id, $product_quantity)
 }
 
 
-function get_product_in_active_cart($product_id, $cart_id) {
+function db_get_product_in_active_cart($product_id, $cart_id) {
 	global $con;
 	$sql = "select * from product_item where product_id = '$product_id' and cart_id = '$cart_id'";
 	$result = mysqli_query($con, $sql);
@@ -142,4 +142,35 @@ function get_product_in_active_cart($product_id, $cart_id) {
 	}
 
 	return $product_item;
+}
+
+function db_get_items_from_active_cart($customer_id) {
+	global $con;
+
+	$sql = "select p.*, pd.name as product_name, pd.price as product_price from product_item p
+join cart c on p.cart_id = c.id
+join product pd on pd.id = p.product_id
+where c.customer_id = '$customer_id' and c.status = 'active'";
+	$result = mysqli_query($con, $sql);
+
+	$items = array();
+
+	while ($rows = mysqli_fetch_array($result)) {
+		$item = new ProductItem(
+			$rows["id"],
+			$rows["product_id"],
+			$rows["cart_id"],
+			$rows["quantity"],
+			$rows["product_name"],
+			$rows["product_price"]);
+		array_push($items, $item);
+	}
+
+	return $items;
+}
+
+function db_delete_product_from_active_cart($id) {
+	global $con;
+	$sql = "delete from product_item where id = '$id'";
+	mysqli_query($con, $sql);
 }

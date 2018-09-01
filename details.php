@@ -718,7 +718,7 @@ include("inc/functions.php");
 
 		$.ajax({
 			method: 'POST',
-			url: 'customer/handlers/myajax.php?action=check_product_in_cart',
+			url: 'customer/handlers/requests_handler.php?action=check_product_in_cart',
 			data: JSON.stringify(message),
 			success(data) {
 				data = JSON.parse(data);
@@ -746,11 +746,12 @@ include("inc/functions.php");
 
 		$.ajax({
 			method: 'POST',
-			url: 'customer/handlers/myajax.php?action=add_to_cart',
+			url: 'customer/handlers/requests_handler.php?action=add_to_cart',
 			data: JSON.stringify(message),
 			success() {
 				alert('Продукт был добален в корзину');
 				console.log('Продукт был добален в корзину');
+				window.open("details.php", "_self");
 			}
 		});
 	}
@@ -763,11 +764,12 @@ include("inc/functions.php");
 
 		$.ajax({
 			method: 'POST',
-			url: 'customer/handlers/myajax.php?action=update_product_in_cart',
+			url: 'customer/handlers/requests_handler.php?action=update_product_in_cart',
 			data: JSON.stringify(message),
 			success() {
 				alert('Количество продука обновлено в корзине');
 				console.log('Продукт обновлен в корзине');
+				window.open("details.php", "_self");
 			}
 		});
 	}

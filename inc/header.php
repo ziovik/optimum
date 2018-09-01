@@ -102,7 +102,7 @@ include("db.php");
 						<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
 							<div class="header-btns-icon">
 								<i class="fa fa-shopping-cart"></i>
-								<span class="qty"><?php total_items(); ?></span>
+								<span id="cart_items_count" class="qty"><?php total_items(); ?></span>
 							</div>
 							<strong class="text-uppercase">Мои Заказы:</strong>
 							<br>
