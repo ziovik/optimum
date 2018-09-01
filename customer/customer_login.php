@@ -14,7 +14,7 @@
 		<h2 style="color: white; text-align: center;"><?php  echo @$_GET['logged_out']; ?></h2>
 		<h1> ВХОД</h1>
 		<form method="post">
-			<input type="text" name="login" placeholder="Логин" required="required" />
+			<input type="text" name="login" placeholder="Логин" required="required" autofocus="autofocus"/>
 			<input type="password" name="pass" placeholder="Пароль" required="required" />
 			<button type="submit" name="submit" class="btn btn-primary btn-block btn-large">Войти.</button>
 		</form>

@@ -2,9 +2,6 @@
 session_start();
 include("inc/db.php");
 include("inc/functions.php");
-//for not acceessing this page by another person who is not in admin
-
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -42,9 +39,6 @@ include("inc/functions.php");
 
 <body>
 <!-- HEADER -->
-<?php include("inc/db.php");
-
-?>
 <header>
 	<!-- top Header -->
 	<div id="top-header">
@@ -53,12 +47,10 @@ include("inc/functions.php");
 				<?php
 
 				if (isset($_SESSION['customer_id'])) {
-					include("inc/db.php");
+
 					$customer_id = $_SESSION['customer_id'];
 
-					$get_info = "select
-                                         name from customer 
-                                    where  id = '$customer_id' ";
+					$get_info = "select name from customer where  id = '$customer_id' ";
 
 					$run_name = mysqli_query($con, $get_info);
 
@@ -591,7 +583,6 @@ include("inc/functions.php");
 </div>
 <!-- /NAVIGATION -->
 
-
 <!-- HOME -->
 <div id="home">
 	<!-- container -->
@@ -614,40 +605,32 @@ include("inc/functions.php");
 			<div>
 				<!--  Product Details -->
 				<div class="product product-details clearfix">
-
-					<?php echo cart(); ?>
-
-
 					<?php
 
-					include("inc/db.php");
+					echo cart();
 
 					if (isset($_GET['pro_id'])) {
 						$product_id = $_GET['pro_id'];
 
-						$get_pro = "select * from product where id='$product_id'";
+						$sql = "select * from product where id='$product_id'";
 
-						$run_pro = mysqli_query($con, $get_pro);
+						$result = mysqli_query($con, $sql);
 
-						while ($row_pro = mysqli_fetch_array($run_pro)) {
-							$pro_id = $row_pro['id'];
-							$pro_name = $row_pro['name'];
-							$pro_price = $row_pro['price'];
-							$pro_dist = $row_pro['distributor_id'];
-							$pro_desc = $row_pro['description'];
-							$min_order = $row_pro['min_order'];
-							$pro_manu = $row_pro['manufacturer'];
-
+						while ($rows = mysqli_fetch_array($result)) {
+							$pro_id = $rows['id'];
+							$pro_name = $rows['name'];
+							$pro_price = $rows['price'];
+							$pro_dist = $rows['distributor_id'];
+							$pro_desc = $rows['description'];
+							$min_order = $rows['min_order'];
+							$pro_manu = $rows['manufacturer'];
 						}
 
-						$get_dist = "select * from company where id = '$pro_dist' ";
-						$run_dist = mysqli_query($con, $get_dist);
-						while ($row_dist = mysqli_fetch_array($run_dist)) {
-							$dist_name = $row_dist['name'];
-						}
+						$sql = "select c.name from company c where c.id = '$pro_dist' ";
+						$result = mysqli_query($con, $sql);
+						$dist_name = mysqli_fetch_array($result);
 					}
 					?>
-
 
 					<div class="col-md-6">
 						<div class="product-body">
@@ -666,38 +649,33 @@ include("inc/functions.php");
 									<i class="fa fa-star"></i>
 									<i class="fa fa-star-o empty"></i>
 								</div>
-								<a href="#"><?php echo $min_order; ?> order(s) / min</a>
+								<span id="min_order"><?php echo $min_order; ?></span> order(s) / min
 							</div>
-							<p><strong>На склад:</strong> In Stock</p>
+							<p><strong>На складе:</strong> In Stock</p>
 							<p><strong>Дистрибьютор:</strong> <?php echo $dist_name; ?></p>
 
 							<!-- adding form -->
-
-
-								<div class="product-btns">
-									<div class="qty-input">
-										<span class="text-uppercase">Количество: </span>
-										<input class="input" type="number" name="qty" >
-									</div>
-									<button class="primary-btn add-to-cart" name="add_cart"><i
-												class="fa fa-shopping-cart"></i>
-										<a style="color: #fff;"
-										   href="optimum_beauty.php?add_cart=<?php echo $pro_id ?>"> Добавить в
-											казине</a>
-									</button>
-
+							<div class="product-btns">
+								<div class="qty-input">
+									<span class="text-uppercase">Количество: </span>
+									<input id="product_id" type="hidden" name="product_id" value="<?php echo $pro_id;
+									?>">
+									<input id="product_quantity" class="input" type="number" name="product_quantity"
+										   value="1">
 								</div>
-
-
+								<button id="add_to_cart_btn" class="primary-btn add-to-cart">
+									<i class="fa fa-shopping-cart"></i>
+									<span>Добавить в корзину</span>
+								</button>
+							</div>
 							<!-- end -->
-
 						</div>
 					</div>
+
 					<div class="col-md-12">
 						<div class="product-tab">
 							<ul class="tab-nav">
 								<li class="active"><a data-toggle="tab" href="#tab1">Примечание</a></li>
-
 								<li><a data-toggle="tab" href="#tab2">Производитель/Страна пройзводителя</a></li>
 							</ul>
 							<div class="tab-content">
@@ -720,6 +698,106 @@ include("inc/functions.php");
 	</div>
 	<!-- /section -->
 
+</div>
+<?php include("inc/footer1.php"); ?>
 
-	<?php include("inc/footer1.php"); ?>
-	
+<script>
+	function checkProductInCart(productId) {
+		let newQuantity = parseInt($('#product_quantity').val());
+		let customerId = <?php echo $_SESSION["customer_id"]; ?>;
+
+		if (customerId == undefined) {
+			console.log("Id покупателя не найдено в сессии");
+			return;
+		}
+
+		let message = {
+			'product_id': productId,
+			'customer_id': customerId
+		};
+
+		$.ajax({
+			method: 'POST',
+			url: 'customer/handlers/myajax.php?action=check_product_in_cart',
+			data: JSON.stringify(message),
+			success(data) {
+				data = JSON.parse(data);
+
+				if (data.quantity > 0) {
+					let result = confirm('Такой продукт уже есть в корзине. Вы хотите увеличить количество на '
+						+ newQuantity + ' шт?');
+
+					if (result) {
+						updateProductQuantityInCart(data.id, parseInt(data.quantity) + newQuantity);
+					}
+				} else {
+					addProductToCart(productId, newQuantity, customerId);
+				}
+			}
+		});
+	}
+
+	function addProductToCart(productId, quantity, customerId) {
+		let message = {
+			'product_id': productId,
+			'customer_id': customerId,
+			'product_quantity': quantity
+		};
+
+		$.ajax({
+			method: 'POST',
+			url: 'customer/handlers/myajax.php?action=add_to_cart',
+			data: JSON.stringify(message),
+			success() {
+				alert('Продукт был добален в корзину');
+				console.log('Продукт был добален в корзину');
+			}
+		});
+	}
+
+	function updateProductQuantityInCart(id, quantity) {
+		let message = {
+			'id': id,
+			'product_quantity': quantity
+		};
+
+		$.ajax({
+			method: 'POST',
+			url: 'customer/handlers/myajax.php?action=update_product_in_cart',
+			data: JSON.stringify(message),
+			success() {
+				alert('Количество продука обновлено в корзине');
+				console.log('Продукт обновлен в корзине');
+			}
+		});
+	}
+
+	function validateProductMinQuantity() {
+		let expectedQuantity = parseInt($('#min_order').text());
+		let actualQuantity = parseInt($('#product_quantity').val());
+
+		if (actualQuantity < expectedQuantity) {
+			alert("Минимальное количество продукта должно быть больше или равно " + expectedQuantity);
+			$('#product_quantity').val(expectedQuantity);
+			return false;
+		}
+
+		return true;
+	}
+
+	function validateProductQuantity() {
+		return validateProductMinQuantity();
+	}
+
+	$(document).ready(function () {
+		$('#add_to_cart_btn').on('click', function () {
+			let productId = $('#product_id').val();
+
+			if (validateProductQuantity()) {
+				checkProductInCart(productId);
+			}
+		});
+	});
+</script>
+</body>
+</html>

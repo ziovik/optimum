@@ -159,7 +159,7 @@ $product_id = $row['product_id'];
 							<input type="hidden" name="hidden_price" value="<?php echo $pro_price; ?>"/>
 
 
-							<input type="submit" name="add_to_cart"
+							<input type="submit"
 								   style="margin-top:5px; width: 70px; height: 30px; background: #800080; font-size: 14px;"
 								   class="btn btn-success" value="Add" style="width: "/>
 						</td>

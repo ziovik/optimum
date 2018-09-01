@@ -6,8 +6,8 @@
  * Time: 1:18 PM
  */
 session_start();
-include("../../inc/functions.php");
-include("../../inc/db_functions.php");
+include_once("../../inc/functions.php");
+include_once("../../inc/db_functions.php");
 
 $customer_id = isset($_SESSION['customer_id']) ? $_SESSION['customer_id'] : null;
 $customer_name = isset($_SESSION['customer_name']) ? $_SESSION['customer_name'] : null;
@@ -39,6 +39,8 @@ function show_customer_message($message)
 
 function show_messages($messages)
 {
+	if (empty($message)) return;
+
 	foreach ($messages as $message) {
 		if ($message instanceof DistributorMessage) {
 			show_distributor_message($message);
@@ -49,15 +51,83 @@ function show_messages($messages)
 }
 
 $data = json_decode(file_get_contents('php://input'), true);
-if (!empty($data) && $data['distributor_id'] != null && $data['message'] != null) {
-	$message = $data['message'];
-	$distributor_id = $data['distributor_id'];
+
+if (isset($_GET["action"])) {
+	$action = $_GET["action"];
+
+	switch ($action) {
+		case "add_to_cart":
+			add_to_cart_request($data);
+			break;
+		case "update_product_in_cart":
+			update_product_in_cart_request($data);
+			break;
+		case "check_product_in_cart":
+			check_product_in_cart_request($data);
+			break;
+	}
+	return;
+}
+
+function check_product_in_cart_request($data) {
+	if (empty($data)) {
+		print_r("data is empty");
+		return;
+	}
+
+	if (isset($data["product_id"]) && isset($data["customer_id"])) {
+		$product_id = $data["product_id"];
+		$customer_id = $data["customer_id"];
+		$cart_id = get_customer_active_cart_id($customer_id);
+		$product_item = get_product_in_active_cart($product_id, $cart_id);
+		if (isset($product_item)){
+			$result = array("id" => $product_item->id, "quantity" => $product_item->quantity);
+			print_r(json_encode($result));
+		} else {
+			print_r(-1);
+		}
+	}
+}
+
+function add_to_cart_request($data)
+{
+	if (empty($data)) {
+		print_r("data is empty");
+		return;
+	}
+
+	if (isset($data["product_id"]) && isset($data["product_quantity"]) && isset($data["customer_id"])) {
+		$product_id = $data["product_id"];
+		$product_quantity = $data["product_quantity"];
+		$customer_id = $data["customer_id"];
+		$cart_id = get_customer_active_cart_id($customer_id);
+
+		add_product_to_active_cart($product_id, $product_quantity, $cart_id);
+		print_r("product was added into db");
+	}
+}
+
+function update_product_in_cart_request($data)
+{
+	if (empty($data)) {
+		print_r("data is empty");
+		return;
+	}
+
+	if (isset($data["id"]) && isset($data["product_quantity"])) {
+		$id = $data["id"];
+		$product_quantity = $data["product_quantity"];
+
+		update_product_in_active_cart($id, $product_quantity);
+		print_r("product was updated in db");
+	}
+}
+
+if (!empty($data) && isset($data["distributor_id"]) && isset($data["message"])) {
+	$message = $data["message"];
+	$distributor_id = $data["distributor_id"];
 	$now = date("Y-m-d H:i:s");
 	insert_customer_message($customer_id, $distributor_id, $message, $now);
-/*
-	print_r("customer_id: " . $customer_id . "\r\n");
-	print_r("distributor_id: " . $distributor_id . "\r\n");
-	print_r("now: " . $now . "\r\n");*/
 }
 
 if (!empty($_GET["action"]) && !empty($_GET["distributor_id"]) && !empty($_GET["distributor_name"])) {

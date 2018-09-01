@@ -1,6 +1,15 @@
 <?php
 include("db.php");
+include("db_functions.php");
+
 mysqli_set_charset($con, "utf8");
+
+function show_message($message) {
+	echo "<script>console.log('$message')</script>";
+}
+
+//add product to cart
+
 
 // create cart
 function cart()
@@ -157,6 +166,8 @@ function total_price()
 
 // virtual table to add cart
 
+
+
 function get_index_by_item_id($item_id)
 {
 	$array_length = count($_SESSION["shopping_cart"]);
@@ -164,7 +175,7 @@ function get_index_by_item_id($item_id)
 	if ($array_length == 0) return -1;
 
 	for ($i = 0; $i < $array_length; $i++) {
-		if ($_SESSION["shopping_cart"]["item_id"] == $item_id) {
+		if ($_SESSION["shopping_cart"][$i]["item_id"] == $item_id) {
 			return $i;
 		}
 	}
@@ -172,15 +183,20 @@ function get_index_by_item_id($item_id)
 	return -1;
 }
 
-function add_to_cart()
+/*function add_to_cart()
 {
 	if (isset($_POST["add_to_cart"])) {
+		$product_id = $_POST["product_id"];
+		$product_quantity = $_POST["product_quantity"];
 		$product = array(
-			"item_id" => $_GET["id"],
-			"item_name" => $_POST["hidden_name"],
-			"item_price" => $_POST["hidden_price"],
-			"item_quantity" => $_POST["quantity"]
+			"item_id" => $product_id,
+			"item_name" => $_POST["product_name"],
+			"item_price" => $_POST["product_price"],
+			"item_quantity" => $product_quantity
 		);
+
+		$active_cart_id = get_customer_active_cart_id($_SESSION["customer_id"]);
+
 
 		if (!isset($_SESSION["shopping_cart"])) {
 			$_SESSION["shopping_cart"] = array();
@@ -188,12 +204,19 @@ function add_to_cart()
 
 		if (empty($_SESSION["shopping_cart"])) {
 			array_push($_SESSION["shopping_cart"], $product);
+			add_product_to_active_cart($product_id, $product_quantity, $active_cart_id);
 		} else {
-			$index = get_index_by_item_id($_GET["item_id"]);
-			if ($index < 0) return;
+			$index = get_index_by_item_id($_POST["product_id"]);
 
-			$quantity = $_SESSION["shopping_cart"][$index]["item_quantity"];
-			$_SESSION["shopping_cart"][$index]["item_quantity"] = $quantity + 1;
+			if ($index < 0) {
+				array_push($_SESSION["shopping_cart"], $product);
+				add_product_to_active_cart($product_id, $product_quantity, $active_cart_id);
+			} else {
+				$quantity = $_SESSION["shopping_cart"][$index]["item_quantity"];
+				$quantity += $product_quantity;
+				$_SESSION["shopping_cart"][$index]["item_quantity"] = $quantity;
+				update_product_in_active_cart($product_id, $quantity, $active_cart_id);
+			}
 		}
 	}
 	if (isset($_GET["action"])) {
@@ -209,7 +232,7 @@ function add_to_cart()
 		}
 	}
 
-}
+}*/
 
 
 // send mail

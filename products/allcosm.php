@@ -5,8 +5,6 @@ include("../inc/functions.php");
 
 //for not acceessing this page by another person who is not in admin
 
-print_r($_SESSION);
-
 if (!isset($_SESSION['customer_id'])) {
 	echo "<script>window.open('customer/customer_login.php?not_admin=You are not signed in!','_self')</script>";
 } else {
@@ -185,7 +183,7 @@ if (!isset($_SESSION['customer_id'])) {
 						?>
 
 						<tr>
-							<form method="post" action="../cart.php?action=add&id=<?php echo $pro_id; ?>"
+							<form method="post" action="../cart.php?action=add"
 								  style="width: 100%;">
 								<th data-priority="1"
 									style="background: white; color: #400040;"><?php echo $pro_id ?></th>
@@ -208,15 +206,14 @@ if (!isset($_SESSION['customer_id'])) {
 									style="background: white; color: #400040;"><?php echo $pro_desc ?></th>
 
 								<td>
-									<input type="text" name="quantity" class="form-control" value="1"/>
+									<input type="number" name="product_quantity" class="form-control" value="1"/>
 									<!-- hidden-->
 
-									<input type="hidden" name="hidden_name" value="<?php echo $pro_name; ?>"/>
-									<input type="hidden" name="hidden_price" value="<?php echo $pro_price; ?>"/>
+									<input type="hidden" name="product_id" value="<?php echo $pro_id; ?>"/>
+									<input type="hidden" name="product_name" value="<?php echo $pro_name; ?>"/>
+									<input type="hidden" name="product_price" value="<?php echo $pro_price; ?>"/>
 
-
-									<input type="submit" name="add_to_cart"
-										   style="margin-top:5px; width: 70px; height: 30px; background: #800080; font-size: 14px;"
+									<input type="submit" style="margin-top:5px; width: 70px; height: 30px; background: #800080; font-size: 14px;"
 										   class="btn btn-success" value="Add" style="width: "/>
 								</td>
 

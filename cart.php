@@ -1,10 +1,11 @@
 <?php
 session_start();
+
 include("inc/db.php");
 include("inc/functions.php");
-//for not acceessing this page by another person who is not in admin
 
-add_to_cart();
+//add_to_cart();
+
 if (!isset($_SESSION['customer_id'])) {
 	echo "<script>window.open('customer/customer_login.php?not_admin=You are not signed in!','_self')</script>";
 } else {
@@ -197,7 +198,6 @@ if (!isset($_SESSION['customer_id'])) {
 		<!-- container -->
 	</header>
 	<!-- /HEADER -->
-
 
 	<!-- NAVIGATION -->
 	<div id="navigation">
@@ -637,15 +637,15 @@ if (!isset($_SESSION['customer_id'])) {
 			<div class="table-responsive">
 				<table class="table table-bordered">
 					<tr>
-						<th width="40%">Item Name</th>
-						<th width="10%">Quantity</th>
-						<th width="20%">Price</th>
-						<th width="15%">Total</th>
-						<th width="5%">Action</th>
+						<th width="40%">Наименование продукта</th>
+						<th width="10%">Количество</th>
+						<th width="20%">Цена (руб)</th>
+						<th width="15%">Всего</th>
+						<th width="5%">Действие</th>
 					</tr>
 					<?php
-					include("inc/db.php");
 					if (!empty($_SESSION["shopping_cart"])) {
+						print_r("NOT EMPTY");
 						$total = 0;
 						foreach ($_SESSION["shopping_cart"] as $keys => $values) {
 							?>
@@ -685,159 +685,8 @@ if (!isset($_SESSION['customer_id'])) {
 				<div class="section">
 
 
+					<button><a href="payment.php">CheckOut</a></button>
 
-
-					<form action="" method="post" enctype="multipart/form-data">
-						<table width="100%" align="center">
-
-							<tr style="text-align:center;">
-								<th style="text-align:center;">Remove</th>
-								<th style="text-align:center;">Product</th>
-								<th style="text-align:center;">Quantity</th>
-								<th style="text-align:center;"> Price</th>
-								<th style="text-align:center;"> Total of a Product</th>
-							</tr>
-
-
-							<?php
-							$total = 0;
-
-
-							global $con;
-
-
-							$customer_id = $_SESSION['customer_id'];
-
-
-							//getting cart_id
-
-							$sel_cart = "select * from cart where customer_id = '$customer_id' AND status ='active'";
-
-
-							$run_cart = mysqli_query($con, $sel_cart);
-
-							$row = mysqli_fetch_array($run_cart);
-
-							$cart_id = $row['id'];
-
-							$cart_items_sql = "select 
-						pt.product_id as product_id,
-						p.name as product_name,
-						p.price as product_price,
-						pt.quantity as quantity
-
-						from product_item pt
-						join product p on p.id = pt.product_id
-
-						where pt.cart_id = '$cart_id' ";
-
-							$cart_items_query = mysqli_query($con, $cart_items_sql);
-
-
-							while ($items = mysqli_fetch_array($cart_items_query)) {
-							$total_product_price = 0;
-							$product_name = $items['product_name'];
-							$product_price = $items['product_price'];
-							$qty = $items['quantity'];
-
-							$_SESSION['quantity'] = $qty;
-
-							$pro_id = $items['product_id'];
-
-
-							?>
-
-							<tr align="center">
-								<td><a href="cart.php?remove=<?php echo $pro_id; ?>">Remove</a></td>
-								<td><a href="details.php?pro_id=<?php echo $pro_id ?>"><?php echo $product_name; ?></a>
-								</td>
-								<td><input type="text" size="4" name="quantity"
-										   value="<?php echo $_SESSION['quantity']; ?>"></td>
-								<?php
-
-								if (isset($_POST["update_cart"])) {
-
-									if (isset($_POST["quantity"])) {
-
-
-										$qty = $_POST["quantity"];
-
-										$update_qty = "update product_item set quantity='$qty' where product_id = '$pro_id' AND cart_id = '$cart_id'";
-										$run_qty = mysqli_query($con, $update_qty);
-
-										if ($run_qty) {
-											$total_product_price = $product_price * $qty;
-											$total += $total_product_price;
-
-
-										}
-									}
-								}
-								?>
-
-								<td><?php echo $product_price; ?></td>
-								<td><?php echo $total_product_price; ?></td>
-
-
-								<?php } ?>
-
-								<td colspan="4">Net Total</td>
-								<td><?php echo $total; ?></td>
-							</tr>
-
-
-							<tr align="center">
-								<td colspan="2"><input type="submit" name="update_cart" value="Update Cart"></td>
-								<td>
-									<button><a href='optimum_beauty.php'>Continue Shopping</a></button>
-								</td>
-								<td>
-									<button><a href="payment.php">CheckOut</a></button>
-								</td>
-							</tr>
-
-						</table>
-
-					</form>
-
-					<?php
-
-
-					if (isset($_GET['remove'])) {
-
-						$remove_id = $_GET['remove'];
-
-						$customer_id = $_SESSION['customer_id'];
-
-
-//getting cart_id
-
-						$sel_cart = "select * from cart where customer_id = '$customer_id' AND status = 'active'";
-
-
-						$run_cart = mysqli_query($con, $sel_cart);
-						if (!$run_cart) {
-							printf("Error: %s\n", mysqli_error($con));
-							exit();
-						}/// helps to check error
-
-						$row = mysqli_fetch_array($run_cart);
-
-						$cart_id = $row['id'];
-
-
-						$delete_item = "delete from product_item where product_id = '$remove_id' AND cart_id ='$cart_id' ";
-
-						$run_delete_item = mysqli_query($con, $delete_item);
-
-
-						echo "<script>alert('Product deleted')</script>";
-						echo "<script>window.open('cart.php','_self')</script>";
-
-					}
-
-
-					?>
 
 					<br>
 

@@ -351,15 +351,15 @@ create table product (
     on update cascade
 );
 
-insert into product (id, name, description, manufacturer, keyword, price, distributor_id, sub_category_id) value
-  (1, 'Крем для бритья', null, null, null, 100, 2, 1),
-  (2, 'Крем для рук', null, null, null, 8, 2, 1),
+insert into product (id, name, description, manufacturer, keyword, price, min_order, distributor_id, sub_category_id) value
+  (1, 'Крем для бритья', null, null, null, 100, 1, 2, 1),
+  (2, 'Крем для рук', null, null, null, 8, 1, 2, 1),
 
-  (3, 'iPhone 10', null, null, null, 300, 1, 3),
-  (4, 'iMac', null, null, null, 1000, 1, 4),
+  (3, 'iPhone 10', null, null, null, 300, 1, 1, 3),
+  (4, 'iMac', null, null, null, 1000, 1, 1, 4),
 
-  (5, 'Крутая красная футболка', null, null, null, 100, 3, 5),
-  (6, 'Очень классные синие кроссовки', null, null, null, 80, 3, 6);
+  (5, 'Крутая красная футболка', null, null, null, 100, 1, 3, 5),
+  (6, 'Очень классные синие кроссовки', null, null, null, 80, 1, 3, 6);
 
 -- cart table --
 create table cart (

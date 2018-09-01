@@ -10,13 +10,7 @@ include 'db.php';
 
 include $_SERVER['DOCUMENT_ROOT'] . "/db_objects/DistributorMessage.php";
 include $_SERVER['DOCUMENT_ROOT'] . "/db_objects/CustomerMessage.php";
-
-function add_product_in_cart($cart_id, $product_id, $quantity)
-{
-	global $con;
-	$sql = "insert into product_item (cart_id, product_id, quantity) values ('$cart_id', '$product_id', '$quantity')";
-	mysqli_query($con, $sql);
-}
+include $_SERVER['DOCUMENT_ROOT'] . "/db_objects/ProductItem.php";
 
 
 function create_cart_for_customer($customer_id)
@@ -102,4 +96,50 @@ distributor_id ='$distributor_id' and customer_id = '$customer_id'";
 	}
 
 	return $messages;
+}
+
+function get_customer_active_cart_id($customer_id)
+{
+	global $con;
+
+	$sql = "select id from cart where customer_id = '$customer_id' and status = 'active'";
+	$result = mysqli_query($con, $sql);
+	$rows = mysqli_fetch_array($result);
+	return $rows["id"];
+}
+
+function add_product_to_active_cart($product_id, $product_quantity, $active_cart_id)
+{
+	global $con;
+
+	$sql = "insert into product_item (product_id, quantity, cart_id, onscreen_status) 
+    		values ('$product_id', '$product_quantity', '$active_cart_id', 'Отправил')";
+	mysqli_query($con, $sql);
+}
+
+function update_product_in_active_cart($id, $product_quantity)
+{
+	global $con;
+
+	$sql = "update product_item set quantity = '$product_quantity' where id ='$id'";
+	mysqli_query($con, $sql);
+}
+
+
+function get_product_in_active_cart($product_id, $cart_id) {
+	global $con;
+	$sql = "select * from product_item where product_id = '$product_id' and cart_id = '$cart_id'";
+	$result = mysqli_query($con, $sql);
+
+	$product_item = null;
+
+	while ($rows = mysqli_fetch_array($result)) {
+		$product_item = new ProductItem(
+			$rows["id"],
+			$rows["product_id"],
+			$rows["cart_id"],
+			$rows["quantity"]);
+	}
+
+	return $product_item;
 }
